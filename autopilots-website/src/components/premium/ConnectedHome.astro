@@ -1,0 +1,8 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ConnectedStory from './ConnectedStory.astro';
+const neutral=Astro.url.pathname==='/';
+---
+<BaseLayout title={neutral ? 'Autopilots | Bouw wat jouw bedrijf nodig heeft' : 'Autopilots | AI-medewerkers, maatwerksoftware & websites'} description="Wij bouwen AI-medewerkers, maatwerksoftware en websites voor het mkb. Los inzetbaar. Sterker wanneer ze samenwerken." canonical={neutral ? '/' : '/nl/'} locale="nl" contentId="page.home" customChrome>
+  <ConnectedStory />
+</BaseLayout>

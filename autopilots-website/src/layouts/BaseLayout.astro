@@ -19,6 +19,7 @@ interface Props {
   schema?: object | object[];
   locale?: SupportedLocale;
   contentId?: string;
+  customChrome?: boolean;
 }
 
 const {
@@ -29,6 +30,7 @@ const {
   lang,
   noindex = false,
   schema,
+  customChrome = false,
   locale = getLocaleFromPath(Astro.url.pathname) ?? defaultLocale,
   contentId = contentIdFromPath(Astro.url.pathname)
 } = Astro.props;
@@ -83,11 +85,11 @@ const schemaItems = [...globalSchema, ...(schema ? (Array.isArray(schema) ? sche
   </head>
   <body class="ap-autoreviews-clean">
     <a class="ap-skip-link" href="#main-content">{ui.system.skipToContent}</a>
-    <Header locale={locale} contentId={contentId} />
+    {!customChrome && <Header locale={locale} contentId={contentId} />}
     <main id="main-content">
       <slot />
     </main>
-    <Footer locale={locale} />
+    {!customChrome && <Footer locale={locale} />}
     <ConsentManager locale={locale} />
     <script is:inline>
       (() => {

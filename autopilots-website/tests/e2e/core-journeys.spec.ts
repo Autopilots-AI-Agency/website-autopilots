@@ -22,11 +22,11 @@ for (const route of routes)
     expect(overflow).toBeLessThanOrEqual(1);
   });
 
-test("homepage naar afspraak en bestelling", async ({ page }) => {
+test("homepage naar AI-scan en bestaande bestelling", async ({ page }) => {
   await page.goto("/nl/");
-  await page.locator('a[href^="/nl/afspraak/"]:visible').first().click();
-  await expect(page).toHaveURL(/\/nl\/afspraak\//);
-  await expect(page.locator("[data-ghl-embed]")).toBeVisible();
+  await page.locator("[data-quiz-cta]:visible").first().click();
+  await expect(page).toHaveURL(/\/ontwerpen\/intake\//);
+  await expect(page.locator("#intake-questions")).toBeVisible();
   await page.goto("/nl/bestel-direct/?product=ai-telefoniste");
   await expect(page.locator("[data-order-product]")).toContainText(
     "AI Telefoniste",

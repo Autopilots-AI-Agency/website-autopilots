@@ -1,0 +1,46 @@
+---
+import { supportedLocales } from '../../i18n/languages';
+const suggestions = {nl:'Bekijk in het Nederlands',en:'View in English',de:'Auf Deutsch ansehen',fr:'Voir en français',es:'Ver en español',it:'Visualizza in italiano'};
+---
+<div class="home-language" id="home-language">
+  <details>
+    <summary aria-label="Taal wijzigen">NL <span aria-hidden="true">⌄</span></summary>
+    <nav aria-label="Taal kiezen">
+      {supportedLocales.map(item=><a href={item.path} lang={item.tag} hreflang={item.tag} data-home-locale={item.code} data-suggestion={suggestions[item.code]} aria-current={item.code==='nl'?'page':undefined}>{item.name}</a>)}
+    </nav>
+  </details>
+  <aside class="home-language-hint" hidden aria-label="Taalsuggestie"><a href="/en/" data-language-suggestion>View in English</a><button type="button" aria-label="Taalsuggestie sluiten">×</button></aside>
+</div>
+<script>
+ const menu=document.querySelector<HTMLElement>('#home-language');
+ if(menu){
+  const links=[...menu.querySelectorAll<HTMLAnchorElement>('[data-home-locale]')];
+  let saved='';try{saved=localStorage.getItem('autopilots_locale')||'';}catch{}
+  const preferences=[saved,...navigator.languages.map(lang=>lang.toLowerCase().split('-')[0])].filter(Boolean);
+  const preferred=preferences.map(lang=>links.find(link=>link.dataset.homeLocale===lang)).find(Boolean);
+  const hint=menu.querySelector<HTMLElement>('.home-language-hint')!;
+  let dismissed=false;try{dismissed=sessionStorage.getItem('autopilots_language_hint_dismissed')==='true';}catch{}
+  // Explicit language URLs never redirect or suggest a different locale.
+  if(location.pathname==='/'&&preferred&&preferred.dataset.homeLocale!=='nl'&&!dismissed){
+   const suggestion=menu.querySelector<HTMLAnchorElement>('[data-language-suggestion]')!;
+   suggestion.href=preferred.href;suggestion.textContent=preferred.dataset.suggestion!;
+   suggestion.dataset.homeLocale=preferred.dataset.homeLocale;hint.hidden=false;
+  }
+  menu.addEventListener('click',event=>{const target=event.target as Element;const link=target.closest<HTMLAnchorElement>('[data-home-locale]');if(link)try{localStorage.setItem('autopilots_locale',link.dataset.homeLocale!);}catch{}});
+  hint.querySelector('button')!.addEventListener('click',()=>{hint.hidden=true;try{sessionStorage.setItem('autopilots_language_hint_dismissed','true');}catch{}});
+  document.addEventListener('click',event=>{if(!menu.contains(event.target as Node))menu.querySelector('details')!.open=false;});
+  menu.addEventListener('keydown',event=>{if(event.key==='Escape'){menu.querySelector('details')!.open=false;menu.querySelector('summary')!.focus();}});
+ }
+</script>
+<style>
+ #home-language{position:relative;margin-left:auto;z-index:30}
+ #home-language summary{display:flex;align-items:center;gap:9px;cursor:pointer;list-style:none;border:1px solid #bd875d55;border-radius:6px;padding:12px;color:#f6f1e9;font-size:12px}
+ #home-language summary::-webkit-details-marker{display:none}
+ #home-language nav{position:absolute;top:calc(100% + 8px);right:0;width:170px;padding:8px;display:grid!important;gap:0;background:#1a2d36;border:1px solid #bd875d55;border-radius:8px;box-shadow:0 15px 40px #0006}
+ #home-language nav a{display:block;color:#f6f1e9;padding:11px;font-size:13px;border-radius:4px}
+ #home-language nav a:hover,#home-language nav a[aria-current]{background:#bd875d22;color:#d8b394}
+ #home-language :focus-visible{outline:2px solid #d8b394;outline-offset:3px}
+ #home-language .home-language-hint{position:absolute;right:0;top:calc(100% + 12px);width:max-content;max-width:260px;background:#1a2d36;color:#f6f1e9;border:1px solid #bd875d55;border-radius:6px;padding:12px;display:flex;gap:18px;align-items:center;font-size:12px}
+ #home-language .home-language-hint[hidden]{display:none}
+ #home-language .home-language-hint button{border:0;background:none;color:#d8b394;font-size:20px;cursor:pointer}
+</style>
