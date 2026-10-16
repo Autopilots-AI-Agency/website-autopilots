@@ -5,8 +5,9 @@ import { defaultLocale, type SupportedLocale } from "../../i18n/languages";
 import { localizedPath } from "../../i18n/routes";
 import { uiCopy } from "../../i18n/ui";
 import { localizedNiche } from "../../i18n/catalog";
-interface Props { locale?: SupportedLocale }
-const { locale = defaultLocale } = Astro.props;
+interface Props { locale?: SupportedLocale; editorial?: boolean }
+const { locale = defaultLocale, editorial = false } = Astro.props;
+const scanLabels={nl:'Start de AI-scan',en:'Start the AI scan',de:'KI-Scan starten',fr:'Lancer le diagnostic IA',es:'Iniciar el análisis de IA',it:'Avvia l’analisi IA'};
 const copy = uiCopy[locale];
 const productPath = (slug: string) => localizedPath(`product.${slug}`, locale);
 const nichePath = (slug: string) => localizedPath(`niche.${slug}`, locale);
@@ -18,7 +19,7 @@ const year = new Date().getFullYear();
 <footer class="ap-footer" id="footer">
   <div class="ap-container">
     <div class="ap-footer-box">
-      <div class="ap-footer-brand"><div class="ap-kicker">Autopilots</div><h2>{copy.footer.title}</h2><p>{copy.footer.text}</p><div class="ap-footer-actions"><a class="ap-button ap-button-primary" href={localizedPath("page.appointment", locale)}>{copy.footer.analysis}</a><a href={localizedPath("page.order", locale)}>{copy.navigation.order} →</a></div></div>
+      <div class="ap-footer-brand"><div class="ap-kicker">Autopilots</div><h2>{copy.footer.title}</h2><p>{copy.footer.text}</p><div class="ap-footer-actions"><a class="ap-button ap-button-primary" href={editorial ? '/ontwerpen/intake/' : localizedPath("page.appointment", locale)}>{editorial ? scanLabels[locale] : copy.footer.analysis}</a><a href={localizedPath("page.order", locale)}>{copy.navigation.order} →</a></div></div>
       <nav class="ap-footer-column" aria-label={copy.navigation.products}><strong>{copy.navigation.products}</strong>{products.map((product)=><a href={productPath(product.slug)}>{copy.products[product.slug]}</a>)}</nav>
       <nav class="ap-footer-column" aria-label={copy.navigation.niches}><strong>{copy.navigation.niches}</strong>{niches.slice(0,8).map((niche)=><a href={nichePath(niche.slug)}>{nicheName(niche.slug, niche.name)}</a>)}<a href={localizedPath("page.niches", locale)}>{copy.footer.allNiches}</a></nav>
       <nav class="ap-footer-column" aria-label={copy.footer.company}><strong>{copy.footer.company}</strong><a href={localizedPath("page.process", locale)}>{copy.navigation.process}</a><a href={localizedPath("page.crew", locale)}>{copy.navigation.crew}</a><a href={localizedPath("page.knowledge", locale)}>{copy.navigation.knowledge}</a><a href={localizedPath("page.contact", locale)}>Contact</a><a href={localizedPath("page.order", locale)}>{copy.navigation.order}</a><a href={localizedPath("page.privacy", locale)}>{copy.footer.privacy}</a><a href={localizedPath("page.terms", locale)}>{copy.footer.terms}</a></nav>

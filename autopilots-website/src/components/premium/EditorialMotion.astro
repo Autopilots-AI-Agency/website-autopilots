@@ -1,0 +1,16 @@
+<script>
+ const page=document.querySelector<HTMLElement>('#ap-editorial-site');
+ if(page){
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+  const track=page.querySelector<HTMLElement>('.ed-reading-track i');
+  let frame=0;
+  const update=()=>{frame=0;const distance=document.documentElement.scrollHeight-innerHeight;if(track)track.style.transform=`scaleX(${distance>0?Math.min(1,scrollY/distance):0})`;};
+  addEventListener('scroll',()=>{if(!frame)frame=requestAnimationFrame(update);},{passive:true});
+  addEventListener('resize',update);update();
+  // Content remains visible without JavaScript or motion support.
+  if(!reduced.matches&&'IntersectionObserver' in window){
+   const observer=new IntersectionObserver(entries=>{for(const entry of entries){if(!entry.isIntersecting)continue;observer.unobserve(entry.target);if(reduced.matches)continue;(entry.target as HTMLElement).animate([{opacity:.75,transform:'translateY(16px)'},{opacity:1,transform:'translateY(0)'}],{duration:650,easing:'cubic-bezier(.22,1,.36,1)'});}},{threshold:.08});
+   page.querySelectorAll('.ap-section-head,.ap-blog-summary,.ap-card,.ap-library-card,.ap-final-card,.ap-feature-card').forEach(el=>observer.observe(el));
+  }
+ }
+</script>

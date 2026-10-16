@@ -2,6 +2,9 @@
 import "../styles/global.css";
 import "../styles/ecosystem.css";
 import "../styles/autoreviews-clean.css";
+import "../styles/editorial-site.css";
+import EditorialHeader from "../components/premium/EditorialHeader.astro";
+import EditorialMotion from "../components/premium/EditorialMotion.astro";
 import Header from "../components/layout/Header.astro";
 import Footer from "../components/layout/Footer.astro";
 import { contentIdFromPath, localizedAlternates } from "../i18n/routes";
@@ -40,6 +43,7 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? Astro.url.origin).toString();
 const siteUrl = new URL("/", Astro.site ?? Astro.url.origin).toString();
 const localeConfig = getLocale(locale);
 const ui = uiCopy[locale];
+const editorial = !customChrome && !contentId?.startsWith('landing.') && !Astro.url.pathname.startsWith('/ontwerpen/');
 const legacyDutchRoute = locale === "nl" && Astro.url.pathname !== "/" && !Astro.url.pathname.startsWith("/nl/") && !Astro.url.pathname.startsWith("/lp/") && !Astro.url.pathname.startsWith("/voorstel/");
 const effectiveNoindex = noindex || legacyDutchRoute;
 // Route-family parity is explicit: every localized sibling is emitted so crawlers and
@@ -83,13 +87,14 @@ const schemaItems = [...globalSchema, ...(schema ? (Array.isArray(schema) ? sche
     <script type="application/ld+json" set:html={JSON.stringify(schemaItems).replaceAll("<", "\\u003c")} />
     <slot name="head" />
   </head>
-  <body class="ap-autoreviews-clean">
+  <body class="ap-autoreviews-clean" id={editorial ? 'ap-editorial-site' : undefined}>
     <a class="ap-skip-link" href="#main-content">{ui.system.skipToContent}</a>
-    {!customChrome && <Header locale={locale} contentId={contentId} />}
+    {!customChrome && (editorial ? <EditorialHeader locale={locale} contentId={contentId}/> : <Header locale={locale} contentId={contentId} />)}
     <main id="main-content">
       <slot />
     </main>
-    {!customChrome && <Footer locale={locale} />}
+    {!customChrome && <Footer locale={locale} editorial={editorial} />}
+    {editorial && <EditorialMotion/>}
     <ConsentManager locale={locale} />
     <script is:inline>
       (() => {
