@@ -36,11 +36,11 @@
 @keyframes us-flow{to{stroke-dashoffset:-264}}
 @media(max-width:700px){
  #ap-connected .us-story{height:460svh}
- #ap-connected .us-sticky{min-height:580px;padding:22px 0 16px}
+ #ap-connected .us-sticky{min-height:0;padding:22px 0 max(16px,env(safe-area-inset-bottom))}
  #ap-connected .us-caption h2{font-size:27px;max-width:340px;margin:auto}
  #ap-connected .us-caption p{font-size:12px;line-height:1.5;min-height:38px;max-width:330px}
  #ap-connected .us-caption .cs-eyebrow{font-size:8px;margin-bottom:13px}
- #ap-connected .us-world{min-height:355px;max-height:none}
+ #ap-connected .us-world{min-height:0;max-height:none;overflow:hidden}
  #ap-connected .us-panel{width:345px;max-width:90vw}
  #ap-connected .us-panel .cs-agent-demo,#ap-connected .us-panel .cs-workspace,#ap-connected .us-panel .cs-web-demo{padding:12px 16px}
  #ap-connected .us-panel .cs-chat p{font-size:11px;padding:9px 12px}
@@ -51,7 +51,7 @@
  #ap-connected .us-panel .cs-web-body h3{font-size:23px;margin:12px 0}
  #ap-connected .us-panel .cs-backend{padding:12px}
  #ap-connected .us-panel .cs-backend .cs-eyebrow{margin-bottom:8px}
- #ap-connected .us-controls{gap:12px;padding:8px 12px}
+ #ap-connected .us-controls{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));width:100%;gap:8px;padding:12px 16px 8px;box-sizing:border-box;background:var(--bg)}
  #ap-connected .us-controls button{font-size:9px;padding:8px 0}
  #ap-connected .us-controls button span{display:none}
  #ap-connected .us-note{font-size:8px}

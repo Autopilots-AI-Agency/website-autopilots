@@ -68,9 +68,13 @@ if(root){
   panels.forEach((panel,i)=>{
    const from=states[index][i],to=states[index+1][i];const v=from.map((n,j)=>n+(to[j]-n)*eased);
    // Keep the demo inside its stage, clear of the heading and navigation.
-   const fitScale=Math.max(.25,(world.clientHeight-48)/Math.max(1,panel.offsetHeight));
+   const radians=Math.abs(v[3])*Math.PI/180;
+   const rotatedHeight=panel.offsetHeight*Math.cos(radians)+panel.offsetWidth*Math.sin(radians);
+   const fitScale=Math.max(.1,(world.clientHeight-32)/Math.max(1,rotatedHeight));
    const scale=Math.min(v[2],.92,fitScale);
-   panel.style.left=`${v[0]}%`;panel.style.top=`${v[1]}%`;panel.style.transform=`translate(-50%,-50%) scale(${scale}) rotate(${v[3]}deg)`;
+   const halfHeight=rotatedHeight*scale/2;
+   const centerY=Math.max(halfHeight+16,Math.min(world.clientHeight-halfHeight-16,world.clientHeight*v[1]/100));
+   panel.style.left=`${v[0]}%`;panel.style.top=`${centerY}px`;panel.style.transform=`translate(-50%,-50%) scale(${scale}) rotate(${v[3]}deg)`;
    const focused=active===0||active===4||active===i+1;
    panel.style.opacity=focused?'1':'.28';panel.style.zIndex=active===i+1?'5':String(i+1);
    panel.inert=!staticMode&&!focused;panel.classList.toggle('cs-visible',focused);
