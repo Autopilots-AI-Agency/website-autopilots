@@ -1,6 +1,5 @@
 ---
 import { supportedLocales } from "../../i18n/languages";
-import LocalizedHome from "../../components/i18n/LocalizedHome.astro";
 import ConnectedHome from "../../components/premium/ConnectedHome.astro";
 
 export function getStaticPaths() {
@@ -12,4 +11,4 @@ const locale = supportedLocales.find((item) => item.code === lang)?.code;
 if (!locale) return Astro.redirect("/", 302);
 ---
 
-{locale === 'nl' ? <ConnectedHome /> : <LocalizedHome locale={locale} />}
+<ConnectedHome locale={locale} />

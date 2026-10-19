@@ -1,15 +1,19 @@
 ---
 import { supportedLocales } from '../../i18n/languages';
+import type { SupportedLocale } from '../../i18n/languages';
+import { translator } from './showcase-i18n';
+const {locale='nl'}=Astro.props as {locale?:SupportedLocale};
+const t=translator(locale);
 const suggestions = {nl:'Bekijk in het Nederlands',en:'View in English',de:'Auf Deutsch ansehen',fr:'Voir en français',es:'Ver en español',it:'Visualizza in italiano'};
 ---
 <div class="home-language" id="home-language">
   <details>
-    <summary aria-label="Taal wijzigen">NL <span aria-hidden="true">⌄</span></summary>
-    <nav aria-label="Taal kiezen">
-      {supportedLocales.map(item=><a href={item.path} lang={item.tag} hreflang={item.tag} data-home-locale={item.code} data-suggestion={suggestions[item.code]} aria-current={item.code==='nl'?'page':undefined}>{item.name}</a>)}
+    <summary aria-label={t('Taal wijzigen')}>{locale.toUpperCase()} <span aria-hidden="true">⌄</span></summary>
+    <nav aria-label={t('Taal kiezen')}>
+      {supportedLocales.map(item=><a href={item.path} lang={item.tag} hreflang={item.tag} data-home-locale={item.code} data-suggestion={suggestions[item.code]} aria-current={item.code===locale?'page':undefined}>{item.name}</a>)}
     </nav>
   </details>
-  <aside class="home-language-hint" hidden aria-label="Taalsuggestie"><a href="/en/" data-language-suggestion>View in English</a><button type="button" aria-label="Taalsuggestie sluiten">×</button></aside>
+  <aside class="home-language-hint" hidden aria-label={t('Taalsuggestie')}><a href="/en/" data-language-suggestion>View in English</a><button type="button" aria-label={t('Taalsuggestie sluiten')}>×</button></aside>
 </div>
 <script>
  const menu=document.querySelector<HTMLElement>('#home-language');

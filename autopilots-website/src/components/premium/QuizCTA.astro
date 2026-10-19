@@ -1,9 +1,11 @@
 ---
 import { intake } from '../../config/intake';
-interface Props { light?: boolean; compact?: boolean; label?: string }
-const { light = false, compact = false, label } = Astro.props;
+import { translator } from './showcase-i18n';
+import type { SupportedLocale } from '../../i18n/languages';
+interface Props { light?: boolean; compact?: boolean; label?: string; locale?:SupportedLocale }
+const { light = false, compact = false, label, locale='nl' } = Astro.props;
 ---
-<a href={intake.path} class:list={['p-cta', { 'is-light': light, 'is-compact': compact }]} data-quiz-cta data-ap-event="intake_started">{label || (compact ? intake.compactLabel : intake.label)}<span aria-hidden="true">↗</span></a>
+<a href={intake.path} title={locale==='nl'?undefined:translator(locale)('De AI-scan is momenteel in het Nederlands.')} class:list={['p-cta', { 'is-light': light, 'is-compact': compact }]} data-quiz-cta data-ap-event="intake_started">{label || (compact ? intake.compactLabel : intake.label)}<span aria-hidden="true">↗</span></a>
 <script>
   import { withCampaign } from '../../config/intake';
   document.querySelectorAll<HTMLAnchorElement>('[data-quiz-cta]').forEach(link => {

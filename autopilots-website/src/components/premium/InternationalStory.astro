@@ -1,0 +1,32 @@
+---
+import HomeLanguage from './HomeLanguage.astro';
+import QuizCTA from './QuizCTA.astro';
+import ScrollNarrative from './UnifiedStory.astro';
+import ShowcasePicker from './ShowcasePicker.astro';
+import { translator } from './showcase-i18n';
+import { localizedPath } from '../../i18n/routes';
+import type { SupportedLocale } from '../../i18n/languages';
+import '../../styles/connected-story.css';
+import '../../styles/unified-story.css';
+import '../../styles/showcase-scenes.css';
+const {locale}=Astro.props as {locale:SupportedLocale};
+const t=translator(locale);
+const chapters=[['medewerkers','AI-medewerkers','Een extra collega. Voor jouw klanten.','Telefonie en chat, met afgesproken acties en jouw team aan het roer.'],['software','Maatwerksoftware','Jouw werkwijze. In eigen software.','Van planning tot klantportaal. Gebouwd rondom jouw processen.'],['websites','Websites & backends','Een website die verder werkt.','Een sterke voorkant, met een eigen backend en passende koppelingen.']];
+---
+<div id="ap-connected">
+ <ScrollNarrative/><ShowcasePicker locale={locale}/>
+ <header class="cs-header cs-wrap"><a class="cs-logo" href={`/${locale}/`} aria-label="Autopilots home">AUTOPILOTS</a><HomeLanguage locale={locale}/><QuizCTA label={t('Start de AI-scan')} compact locale={locale}/></header>
+ <div class="cs-content">
+ <section class="cs-hero cs-wrap" id="vertrek"><div class="cs-eyebrow"><i></i>{t('MAATWERK VOOR HET MKB')}</div><h1>{t('Je bedrijf kan meer.')}<br/><em>{t('Bouw wat daarvoor nodig is.')}</em></h1><p class="cs-intro">{t('Wij bouwen AI-medewerkers, maatwerksoftware en websites voor het mkb.')} <span>{t('Los inzetbaar. Sterker wanneer ze samenwerken.')}</span></p><a class="cs-discover" href="#medewerkers">{t('Ontdek jouw mogelijkheden')} <span>↓</span></a></section>
+ {chapters.map((chapter,index)=><section class="cs-chapter" id={chapter[0]} data-chapter={index}><div class="cs-scene cs-wrap"><div class="cs-copy"><p class="cs-eyebrow">0{index+1} / {t(chapter[1])}</p><h2>{t(chapter[2])}</h2><p>{t(chapter[3])}</p></div><div class={`cs-visual visual-${index}`}><div class="cs-windowbar">AUTOPILOTS / {t(chapter[1])}</div><p class="cs-footnote">{t(chapter[3])}</p></div></div></section>)}
+ <section class="cs-connected-section cs-wrap" id="verbonden"><h2>{t('Los inzetbaar. Sterker samen.')}</h2><p>{t('Wij verbinden wat je nodig hebt. Ook met de systemen die je al gebruikt.')}</p></section>
+ <section class="cs-approach cs-wrap" id="aanpak"><div><p class="cs-eyebrow">{t('05 / VAN IDEE NAAR PRAKTIJK')}</p><h2>{t('Groot denken.')}<br/><em>{t('Helder beginnen.')}</em></h2><p>{t('Een maatwerktraject begint niet met software. Het begint met begrijpen wat jouw bedrijf nodig heeft.')}</p></div><ol>{[['Begrijpen','We onderzoeken je werkwijze, doelen en bestaande systemen.'],['Bouwen','We ontwerpen, ontwikkelen en testen. Jij kijkt en beslist mee.'],['Doorontwikkelen','We begeleiden de start en spreken beheer en verbeteringen af.']].map((p,i)=><li><span>0{i+1}</span><div><h3>{t(p[0])}</h3><p>{t(p[1])}</p></div></li>)}</ol></section>
+ <section class="cs-cta cs-wrap" id="aanvraag"><span class="cs-eyebrow">{t('JOUW BEDRIJF. JOUW VOLGENDE STAP.')}</span><h2>{t('En hoe zou dit')}<br/><em>{t('voor jouw bedrijf werken?')}</em></h2><p>{t('Vertel ons waar je naartoe wilt. Ontdek waar AI-medewerkers, software of een betere website kunnen helpen.')}</p><QuizCTA label={t('Start de AI-scan')} locale={locale}/><small>{t('Een eerste richting op basis van jouw antwoorden.')}<br/>{t('Geen definitief technisch advies of offerte.')}<br/>{t('De AI-scan is momenteel in het Nederlands.')}</small></section>
+ </div><footer class="cs-footer cs-wrap"><a class="cs-logo" href={`/${locale}/`}>AUTOPILOTS</a><span>{t('Los inzetbaar. Sterker samen.')}</span>{[['page.niches','Branches'],['page.products','Oplossingen'],['page.privacy','Privacy'],['page.knowledge','Kennisbank']].map(([id,label])=><a href={localizedPath(id,locale)}>{t(label)}</a>)}<button type="button" data-cs-motion aria-pressed="false">{t('Minder beweging')}</button></footer>
+</div>
+<script>
+import { translator, pageLocale } from './showcase-i18n';
+const root=document.querySelector<HTMLElement>('#ap-connected');
+const t=translator(pageLocale());
+root?.querySelector('[data-cs-motion]')?.addEventListener('click',event=>{const button=event.currentTarget as HTMLButtonElement;const quiet=button.getAttribute('aria-pressed')!=='true';button.setAttribute('aria-pressed',String(quiet));button.textContent=t(quiet?'Beweging uit':'Minder beweging');root.classList.toggle('cs-quiet',quiet);});
+</script>

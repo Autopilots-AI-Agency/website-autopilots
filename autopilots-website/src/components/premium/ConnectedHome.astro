@@ -1,8 +1,13 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ConnectedStory from './ConnectedStory.astro';
+import InternationalStory from './InternationalStory.astro';
+import { translator } from './showcase-i18n';
+import type { SupportedLocale } from '../../i18n/languages';
+const {locale='nl'}=Astro.props as {locale?:SupportedLocale};
+const t=translator(locale);
 const neutral=Astro.url.pathname==='/';
 ---
-<BaseLayout title={neutral ? 'Autopilots | Bouw wat jouw bedrijf nodig heeft' : 'Autopilots | AI-medewerkers, maatwerksoftware & websites'} description="Wij bouwen AI-medewerkers, maatwerksoftware en websites voor het mkb. Los inzetbaar. Sterker wanneer ze samenwerken." canonical={neutral ? '/' : '/nl/'} locale="nl" contentId="page.home" customChrome>
-  <ConnectedStory />
+<BaseLayout title={neutral ? 'Autopilots | Bouw wat jouw bedrijf nodig heeft' : `Autopilots | ${t('AI-medewerkers')}, ${t('Maatwerksoftware')} & ${locale==='nl'?'websites':t('Websites & backends')}`} description={`${t('Wij bouwen AI-medewerkers, maatwerksoftware en websites voor het mkb.')} ${t('Los inzetbaar. Sterker wanneer ze samenwerken.')}`} canonical={neutral ? '/' : `/${locale}/`} locale={locale} contentId="page.home" customChrome>
+  {locale==='nl'?<ConnectedStory />:<InternationalStory locale={locale}/>}
 </BaseLayout>

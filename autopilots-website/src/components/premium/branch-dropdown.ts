@@ -1,7 +1,15 @@
+import { pageLocale, translator } from "./showcase-i18n";
+
 export function setupBranchDropdown(
   form: HTMLFormElement,
   select: HTMLSelectElement,
 ) {
+  const t = translator(pageLocale());
+  const normalize = (text: string) =>
+    text
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLocaleLowerCase(pageLocale());
   const root = form.querySelector<HTMLElement>(".sp-dropdown")!;
   const trigger = root.querySelector<HTMLButtonElement>(
     ".sp-dropdown-trigger",
@@ -15,15 +23,15 @@ export function setupBranchDropdown(
   const count = root.querySelector<HTMLElement>(".sp-search-count")!;
   const visible = () => options.filter((option) => !option.hidden);
   function filter() {
-    const query = search.value.trim().toLocaleLowerCase("nl");
+    const query = normalize(search.value.trim());
     options.forEach(
       (option) =>
-        (option.hidden = !option.dataset
-          .branch!.toLocaleLowerCase("nl")
-          .includes(query)),
+        (option.hidden = !normalize(option.textContent || "").includes(query)),
     );
     empty.hidden = visible().length > 0;
-    count.textContent = `${visible().length} branches gevonden`;
+    count.textContent = t("Branches gevonden: {count}", {
+      count: visible().length,
+    });
   }
   function close(restore = false) {
     panel.hidden = true;
@@ -95,8 +103,9 @@ export function setupBranchDropdown(
     close,
     focus: () => trigger.focus({ preventScroll: true }),
     sync(branch: string) {
-      root.querySelector("#sp-branch-value")!.textContent =
-        branch || "Zoek jullie branche in de lijst";
+      root.querySelector("#sp-branch-value")!.textContent = t(
+        branch || "Zoek jullie branche in de lijst",
+      );
       options.forEach((option) =>
         option.setAttribute(
           "aria-pressed",

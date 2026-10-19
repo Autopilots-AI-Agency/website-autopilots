@@ -33,6 +33,18 @@ test("translated homepages and SEO entry points remain available", () => {
   for (const locale of ["nl", "en", "es", "de", "it", "fr"]) {
     assert.ok(existsSync(`dist/${locale}/index.html`));
     assert.ok(existsSync(`dist/sitemap-${locale}.xml`));
+    const html = readFileSync(`dist/${locale}/index.html`, "utf8");
+    assert.match(html, /id="ap-connected"/);
+    assert.match(html, /id="jouw-bedrijf"/);
+    assert.match(
+      html,
+      new RegExp(`data-home-locale="${locale}"[^>]*aria-current="page"`),
+    );
+    if (locale !== "nl") {
+      assert.doesNotMatch(html, /Je bedrijf kan meer\.|Kies jullie branche/);
+      assert.match(html, /id="aanpak"/);
+      assert.match(html, /id="aanvraag"/);
+    }
   }
   for (const path of [
     "nl/voor-wie",

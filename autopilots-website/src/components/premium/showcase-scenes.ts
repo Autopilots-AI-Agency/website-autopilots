@@ -1,4 +1,6 @@
 import { escapeMarkup, type ShowcaseProfile } from "./showcase-profiles";
+import { translateDemoHtml } from "./showcase-i18n";
+import type { SupportedLocale } from "../../i18n/languages";
 const wave = Array.from(
   { length: 21 },
   (_, i) => `<i style="height:${12 + Math.sin(i * 1.7) ** 2 * 26}px"></i>`,
@@ -14,7 +16,10 @@ export const showcaseExamples = [
 
 // Replace whole template tokens in a single pass: user text can never become markup
 // or accidentally match a later replacement. The original no-JS demo stays intact.
-export function renderShowcase(profile: ShowcaseProfile): string[] {
+export function renderShowcase(
+  profile: ShowcaseProfile,
+  locale: SupportedLocale = "nl",
+): string[] {
   const siteAction: Record<string, string> = {
     automotive: "Vraag een proefrit aan",
     construction: "Bespreek je verbouwplan",
@@ -53,7 +58,11 @@ export function renderShowcase(profile: ShowcaseProfile): string[] {
     "Bijzonder wonen.": profile.title,
     "Van nature.": profile.emphasis,
     "Van eerste lijn tot een plek die helemaal klopt.": profile.description,
-    "Driedimensionale villa die tijdens het scrollen wordt opgebouwd": `Driedimensionaal ${profile.label.toLocaleLowerCase("nl")}-voorbeeld dat zich opbouwt tijdens het scrollen`,
+    "Driedimensionale villa die tijdens het scrollen wordt opgebouwd":
+      locale === "nl"
+        ? `Driedimensionaal ${profile.label.toLocaleLowerCase("nl")}-voorbeeld dat zich opbouwt tijdens het scrollen`
+        : `${profile.label}: ${profile.phases.join(", ")}`,
+    "Van eerste lijn tot thuis": profile.phases[0],
     "Contour → constructie → gevel → glas → landschap":
       profile.phases.join(" → "),
     "DUINLANDSCHAP / NEDERLAND": profile.label.toLocaleUpperCase("nl"),
@@ -67,6 +76,9 @@ export function renderShowcase(profile: ShowcaseProfile): string[] {
     "g",
   );
   return showcaseExamples.map((template) =>
-    template.replace(pattern, (key) => escapeMarkup(replacements[key])),
+    translateDemoHtml(
+      template.replace(pattern, (key) => escapeMarkup(replacements[key])),
+      locale,
+    ),
   );
 }

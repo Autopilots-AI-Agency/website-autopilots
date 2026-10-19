@@ -2,11 +2,12 @@
 
 ## Scope
 
-De root- en Nederlandse homepage krijgen een optionele branchekeuze vóór de
+De root- en alle zes taalhomepages krijgen een optionele branchekeuze vóór de
 bestaande scrollshowcase. Zes redactioneel beheerde profielen veranderen de
 voorbeeldgesprekken, software-inhoud, conceptwebsite, driedimensionale scène,
-beheeromgeving en verbindingsstappen samen. Andere talen en SEO-routes behouden
-hun bestaande inhoud. Geen wijzigingen aan providerconfiguratie of e-mail.
+beheeromgeving en verbindingsstappen samen. NL, EN, ES, DE, IT en FR gebruiken
+dezelfde scroll-engine, visuals en bediening met vertaalde inhoud. Overige
+SEO-routes behouden hun bestaande inhoud. Geen wijzigingen aan providerconfiguratie of e-mail.
 
 Profielen: autobedrijven, bouw & renovatie, installatiebedrijven, vastgoed &
 makelaars, zakelijke dienstverlening en beauty & salons. De bestaande
@@ -32,6 +33,14 @@ gesuggereerd. Alle scènes zijn illustratieve demo's, geen echte aanvragen.
 - Algemeen voorbeeld en later wijzigen blijven altijd beschikbaar. Bij minder
   beweging verschijnen de uitgewerkte scènes zonder scroll-afhankelijke reveal;
   de handmatige bediening blijft werken.
+- Taalwisselen behoudt de canonieke branchewaarde in dezelfde tab. Zichtbare
+  branchenamen en zoekresultaten zijn vertaald; de bestaande intakeparameter
+  verandert niet. Zoeken is hoofdletter- en accentongevoelig.
+- De AI-scan zelf blijft Nederlandstalig. Anderstalige homepageknoppen en de
+  afsluitende CTA vermelden dit; er wordt geen vertaalde scan beloofd.
+- `showcase-i18n.ts` beheert vaste interfacecopy, `showcase-profile-i18n.ts`
+  de zes branchevoorbeelden plus het algemene voorbeeld. Alleen beheerde
+  demotemplates worden vertaald; door bezoekers aangepaste titels niet.
 
 ## Controle
 
@@ -40,6 +49,10 @@ uitkomsten, opnieuw koppelen van knoppen na wisselen, keyboard/toegankelijkheid,
 mobiel, CSS-overlap, het verwijderen van oude bedrijfsnaamgegevens, sessieherstel, ontbrekende
 storage, algemene fallback en branche-overdracht naar de scan. Bestaande
 scroll-, flip-, route-, link-, metadata- en releasecontroles blijven verplicht.
+De meertalige browsertests controleren bovendien alle zeven profielen per taal,
+taalwisseling, fallback, websitebewerking, vertaalde statusmeldingen, zoekbediening,
+toegankelijkheid van de branchekeuze en overlapvrije scrolltransities op desktop
+en mobiel. Canonicals, hreflang, taalroutes en sitemaps blijven ongewijzigd.
 
 Publicatie alleen via de gewone pull-request/releaseprocedure. Deze notitie
 is geen bewijs dat de wijziging al live staat; daarvoor moet de live
