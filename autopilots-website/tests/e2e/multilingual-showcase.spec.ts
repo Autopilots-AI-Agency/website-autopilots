@@ -108,41 +108,32 @@ for (const locale of languages) {
     expect(audit.violations).toEqual([]);
   });
 
-  test(`${locale}: localized dropdown search, fallback and language switching preserve selection`, async ({
+  test(`${locale}: only featured choices remain and language switching preserves selection`, async ({
     page,
   }) => {
     await page.goto(`/${locale}/`);
     await page.locator("[data-consent-reject]").click();
-    await page.locator(".sp-dropdown-trigger").click();
-    await page.locator(".sp-branch-search").fill(t("Tandartsen"));
-    await expect(page.locator(".sp-branch-choice:visible")).toHaveCount(1);
-    await page.locator(".sp-branch-search").press("Enter");
-    await expect(page.locator(".sp-dropdown-trigger")).toContainText(
-      t("Tandartsen"),
-    );
-    await expect(page.locator(".sp-feedback")).toHaveText(
-      t(
-        "Voor {branch} tonen we nu het algemene voorbeeld. Jouw maatwerk werken we samen uit.",
-        { branch: t("Tandartsen") },
-      ),
-    );
+    await expect(page.locator(".sp-option")).toHaveCount(6);
+    await expect(
+      page.locator(".sp-dropdown, .sp-feedback, [name='showcase-other']"),
+    ).toHaveCount(0);
+    const choice = page.locator('.sp-option input[value="Autobedrijven"]');
+    await choice.check();
     await expect(page.locator(".cs-header [data-quiz-cta]")).toHaveAttribute(
       "href",
-      /branche=Tandartsen/,
+      /branche=Autobedrijven/,
     );
     await page.locator("#home-language summary").click();
     await page.locator('[data-home-locale="nl"]').click();
-    await expect(page.locator(".sp-dropdown-trigger")).toContainText(
-      "Tandartsen",
-    );
+    await expect(choice).toBeChecked();
     await page.locator("#home-language summary").click();
     await page.locator(`[data-home-locale="${locale}"]`).click();
-    await expect(page.locator(".sp-dropdown-trigger")).toContainText(
-      t("Tandartsen"),
-    );
+    await expect(choice).toBeChecked();
     await page.reload();
-    await expect(page.locator(".sp-dropdown-trigger")).toContainText(
-      t("Tandartsen"),
+    await expect(choice).toBeChecked();
+    await expect(page.locator(".us-story")).toHaveAttribute(
+      "data-profile",
+      "automotive",
     );
   });
 
