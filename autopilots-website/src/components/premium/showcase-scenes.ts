@@ -14,11 +14,7 @@ export const showcaseExamples = [
 
 // Replace whole template tokens in a single pass: user text can never become markup
 // or accidentally match a later replacement. The original no-JS demo stays intact.
-export function renderShowcase(
-  profile: ShowcaseProfile,
-  company = "",
-): string[] {
-  const name = company.trim().slice(0, 60);
+export function renderShowcase(profile: ShowcaseProfile): string[] {
   const siteAction: Record<string, string> = {
     automotive: "Vraag een proefrit aan",
     construction: "Bespreek je verbouwplan",
@@ -48,10 +44,10 @@ export function renderShowcase(
     "Ontwerp voorbereiden": profile.preparation,
     Architectuur: profile.label,
     "Je project is gestart.": profile.portal,
-    "JOUW BEDRIJF / PROJECTEN": `${name || "JOUW BEDRIJF"} / ${profile.module.toLocaleUpperCase("nl")}`,
+    "JOUW BEDRIJF / PROJECTEN": `JOUW BEDRIJF / ${profile.module.toLocaleUpperCase("nl")}`,
     Projecten: profile.module,
-    "ATELIER NOORD · CONCEPTWEBSITE": `${name || profile.brand} · CONCEPTWEBSITE`,
-    NOORD: name || profile.brand,
+    "ATELIER NOORD · CONCEPTWEBSITE": `${profile.brand} · CONCEPTWEBSITE`,
+    NOORD: profile.brand,
     "Architectuur voor een andere manier van leven.": profile.tagline,
     "ONTWORPEN VOOR HET LEVEN.": profile.label.toLocaleUpperCase("nl"),
     "Bijzonder wonen.": profile.title,
