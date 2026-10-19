@@ -1,5 +1,6 @@
 // A small, scroll-driven 3D scene. Native canvas, no runtime/CDN dependency.
 // World coordinates are projected and faces depth-sorted on every changed frame.
+import type { VisualKind } from "./showcase-profiles";
 type Point = [number, number, number];
 type Face = { points: Point[]; color: string; depth: number };
 type Block = {
@@ -9,7 +10,10 @@ type Block = {
   at: number;
   glass?: boolean;
 };
-export function createHouseScene(canvas: HTMLCanvasElement) {
+export function createHouseScene(
+  canvas: HTMLCanvasElement,
+  kind: VisualKind = "house",
+) {
   const ctx = canvas.getContext("2d");
   if (!ctx) return () => {};
   const context = ctx;
@@ -45,6 +49,87 @@ export function createHouseScene(canvas: HTMLCanvasElement) {
   box([-3.8, 0.18, 2.6], [1.4, 0.5, 0.5], "#697958", 0.76);
   box([3.8, 0.22, -1.8], [0.65, 0.6, 2.6], "#748065", 0.8);
   box([0.85, 2.09, 1.85], [4.1, 0.025, 0.025], "#f4c780", 0.91);
+  if (kind === "energy") {
+    // Solar panels, an outdoor heat pump and a copper connection to the home.
+    for (let x = -2; x <= 2; x += 1.4) {
+      box([x, 2.49, -0.5], [1.25, 0.12, 1.6], "#304c67", 0.42);
+      for (let z = -1.1; z < 0.3; z += 0.35)
+        box([x, 2.56, z], [1.2, 0.015, 0.025], "#8cbbc9", 0.5);
+    }
+    box([4.1, 0.65, 1], [1.2, 1.3, 1.1], "#d9ddce", 0.2);
+    for (let y = 0.25; y < 1.2; y += 0.13)
+      box([4.1, y, 1.57], [0.95, 0.04, 0.04], "#53666b", 0.3);
+    box([3.55, 0.25, 1], [0.7, 0.09, 0.09], "#c5915d", 0.65);
+    box([3.21, 0.65, 1], [0.09, 0.9, 0.09], "#c5915d", 0.7);
+  }
+  if (kind === "car") {
+    blocks.length = 0;
+    box([0, -0.2, 0], [9, 0.16, 6], "#c5c5bd", 0);
+    box([0, 0.55, 0], [6.5, 0.55, 2.7], "#273e50", 0.08);
+    box([0, 1.05, 0], [6.3, 0.7, 2.6], "#54788f", 0.28);
+    box([-0.35, 1.8, 0], [3.4, 1.1, 2.35], "#365365", 0.42);
+    box([-0.35, 1.91, 1.2], [3.05, 0.75, 0.035], "#132c39", 0.55, true);
+    box([1.38, 1.8, 0], [0.06, 0.82, 2.1], "#193442", 0.56, true);
+    box([-0.4, 2.38, 0], [3.55, 0.12, 2.4], "#7496aa", 0.64);
+    box([3.18, 1.02, 0], [0.1, 0.17, 2.15], "#f4edcf", 0.78);
+    box([-3.18, 1.02, 0], [0.08, 0.16, 2.1], "#c0644e", 0.8);
+    for (const x of [-2, 2])
+      for (const z of [-1.4, 1.4]) {
+        // Faceted circular wheels built around the axle, rather than square blocks.
+        for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 10) {
+          box(
+            [x + Math.cos(angle) * 0.48, 0.52 + Math.sin(angle) * 0.48, z],
+            [0.22, 0.22, 0.32],
+            "#263036",
+            0.14,
+          );
+        }
+        box([x, 0.52, z], [0.45, 0.45, 0.35], "#bdc6c7", 0.72);
+      }
+  }
+  if (["interior", "office", "salon"].includes(kind)) {
+    blocks.length = 0;
+    box([0, -0.1, 0], [8.5, 0.2, 6.5], "#c6b69e", 0);
+    for (let x = -4; x < 4; x += 0.4)
+      box([x, 0.015, 0], [0.025, 0.02, 6.2], "#b5a58d", 0.05);
+    box([0, 1.6, -3], [8.5, 3.2, 0.2], "#e6dcc9", 0.15);
+    box([-4.15, 1.6, 0], [0.2, 3.2, 6.5], "#d8cbb5", 0.19);
+    box([-1.6, 1.8, -2.87], [3.7, 1.8, 0.04], "#a2b6b0", 0.3, true);
+    if (kind === "interior") {
+      box([1.8, 0.5, -1.8], [3.6, 0.65, 1.6], "#8e9b82", 0.38);
+      box([1.8, 1.05, -2.4], [3.6, 0.8, 0.3], "#738568", 0.44);
+      box([1.7, 0.35, 0.6], [2.7, 0.14, 1.6], "#927857", 0.58);
+      box([-2, 0.3, 1.8], [2, 0.55, 1.3], "#d5c9ae", 0.65);
+      box([1.7, 0.48, 0.6], [0.65, 0.12, 0.45], "#e5dbc8", 0.8);
+    } else if (kind === "office") {
+      box([0, 0.9, 0], [5, 0.16, 2.2], "#967958", 0.35);
+      for (const x of [-1.5, 1.5])
+        for (const z of [-1.6, 1.6]) {
+          box([x, 0.55, z], [1, 0.15, 0.85], "#536171", 0.45);
+          box(
+            [x, 0.95, z + (z < 0 ? -0.35 : 0.35)],
+            [1, 0.85, 0.14],
+            "#536171",
+            0.5,
+          );
+          box([x, 0.27, z], [0.1, 0.5, 0.1], "#35454b", 0.52);
+        }
+      for (const x of [-1.4, 1.4])
+        box([x, 1.15, 0], [0.9, 0.5, 0.08], "#314856", 0.67);
+      box([2.8, 2.1, -2.85], [1.5, 1.1, 0.1], "#bf986d", 0.75);
+    } else {
+      for (const x of [-2, 1.4]) {
+        box([x, 1.8, -2.85], [1.8, 2.25, 0.1], "#bd946c", 0.3);
+        box([x, 1.8, -2.77], [1.6, 2.05, 0.04], "#a8bab8", 0.4, true);
+        box([x, 0.9, -2], [2, 0.12, 1.1], "#e6daca", 0.5);
+        box([x, 0.6, -0.4], [1.15, 0.4, 1.1], "#ae8280", 0.58);
+        box([x, 1.15, 0.08], [1.15, 1, 0.16], "#986b6b", 0.65);
+        box([x, 0.25, -0.4], [0.15, 0.5, 0.15], "#bc9666", 0.7);
+      }
+    }
+    box([3.35, 0.35, 2.1], [0.65, 0.65, 0.65], "#ad8b69", 0.78);
+    box([3.35, 1, 2.1], [0.9, 1, 0.85], "#667d58", 0.85);
+  }
   let previous = -1,
     width = 0,
     height = 0;

@@ -36,7 +36,7 @@ const steps=[
 ];
 let current=0;const answers:Record<string,string|string[]>={};let report:any=null;let analysisId='';let requestId='';
 const preselectedBranch=validIntakeBranch(new URLSearchParams(location.search).get('branche'));
-if(preselectedBranch)answers.sector=preselectedBranch;
+if(preselectedBranch){answers.sector=preselectedBranch;current=1;}
 const el=<T extends HTMLElement=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
 const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
 let submittingAnalysis=false;let navigating=false;let waitingTimer:ReturnType<typeof setInterval>|undefined;

@@ -2,6 +2,7 @@
 import QuizCTA from './QuizCTA.astro';
 import HomeLanguage from './HomeLanguage.astro';
 import ScrollNarrative from './UnifiedStory.astro';
+import ShowcasePicker from './ShowcasePicker.astro';
 import '../../styles/connected-story.css';
 import '../../styles/unified-story.css';
 import '../../styles/showcase-scenes.css';
@@ -13,6 +14,7 @@ const chapters = [
 ---
 <div id="ap-connected">
  <ScrollNarrative/>
+ <ShowcasePicker/>
  <header class="cs-header cs-wrap"><a class="cs-logo" href="/nl/" aria-label="Autopilots home">AUTOPILOTS</a><HomeLanguage/><QuizCTA label="Start de AI-scan" compact/></header>
  <div class="cs-content">
  <section class="cs-hero cs-wrap" id="vertrek"><div class="cs-eyebrow"><i></i> MAATWERK VOOR HET MKB</div><h1>Je bedrijf kan meer.<br/><em>Bouw wat daarvoor nodig is.</em></h1><p class="cs-intro">Wij bouwen AI-medewerkers, maatwerksoftware en websites voor het mkb. <span>Los inzetbaar. Sterker wanneer ze samenwerken.</span></p><a class="cs-discover" href="#medewerkers">Ontdek jouw mogelijkheden <span>↓</span></a>
