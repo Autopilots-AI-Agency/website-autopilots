@@ -7,7 +7,22 @@ import '../../styles/showcase-picker.css';
  <div class="sp-intro"><h2 id="sp-title">Kies jullie branche<br/><em>en zie wat wij kunnen betekenen.</em></h2><p>Wij bouwen AI-medewerkers, software &amp; websites.</p></div>
  <form class="sp-form">
   <fieldset><legend>Kies jullie branche</legend><div class="sp-options">{showcaseProfiles.map(profile=><label class="sp-option"><input type="radio" name="showcase-branch" value={profile.branch}/><span class="sp-icon" aria-hidden="true">{profile.icon}</span><strong>{profile.label}</strong><span class="sp-check" aria-hidden="true">↗</span></label>)}</div></fieldset>
-  <div class="sp-fields"><label>Een andere branche<select name="showcase-other"><option value="">Zoek jullie branche in de lijst</option>{intakeBranches.map(branch=><option value={branch}>{branch}</option>)}</select></label></div>
+  <div class="sp-fields">
+   <div class="sp-dropdown">
+    <span class="sp-field-label" id="sp-other-label">Een andere branche</span>
+    <button class="sp-dropdown-trigger" type="button" aria-expanded="false" aria-controls="sp-branch-panel" aria-labelledby="sp-other-label sp-branch-value">
+     <span id="sp-branch-value">Zoek jullie branche in de lijst</span>
+     <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></svg>
+    </button>
+    <div class="sp-dropdown-panel" id="sp-branch-panel" role="region" aria-labelledby="sp-other-label" hidden>
+     <div class="sp-search-wrap"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg><input class="sp-branch-search" type="search" aria-label="Zoek een branche" placeholder="Typ jullie branche…" autocomplete="off"/></div>
+     <div class="sp-branch-list" role="group" aria-label="Branches">{intakeBranches.map(branch=><button type="button" class="sp-branch-choice" data-branch={branch} aria-pressed="false"><span>{branch}</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></button>)}</div>
+     <p class="sp-branch-empty" role="status" hidden>Geen branche gevonden. Probeer een andere zoekterm.</p>
+     <span class="sp-search-count" role="status" aria-live="polite"></span>
+    </div>
+   </div>
+   <select name="showcase-other" hidden aria-hidden="true" tabindex="-1"><option value="">Zoek jullie branche in de lijst</option>{intakeBranches.map(branch=><option value={branch}>{branch}</option>)}</select>
+  </div>
   <p class="sp-feedback" role="status" aria-live="polite">Drie voorbeelden. Afgestemd op jouw wereld.</p>
   <div class="sp-actions"><button class="sp-start" type="submit">Bekijk jouw mogelijkheden <span>↓</span></button><button class="sp-skip" type="button">Bekijk het algemene voorbeeld →</button></div>
   <small class="sp-privacy">Geen gegevens versturen. Geen account. Alleen een voorbeeld voor jouw branche.</small>
