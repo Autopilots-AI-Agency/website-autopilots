@@ -22,6 +22,10 @@ for (const locale of ["nl", "en", "es", "de", "it", "fr"]) {
       const errors: string[] = [];
       page.on("pageerror", (e) => errors.push(e.message));
       let received: any;
+      let showAdvice!: () => void;
+      const loadingGate = new Promise<void>((resolve) => {
+        showAdvice = resolve;
+      });
       await page.route(
         "**/.netlify/functions/website-analysis",
         async (request) => {
@@ -32,6 +36,7 @@ for (const locale of ["nl", "en", "es", "de", "it", "fr"]) {
           expect(request.request().headers()["x-autopilots-locale"]).toBe(
             locale,
           );
+          if (route === "website") await loadingGate;
           await request.fulfill({
             json: {
               locale,
@@ -144,6 +149,30 @@ for (const locale of ["nl", "en", "es", "de", "it", "fr"]) {
       );
       await page.locator(".website-form [name=consent]").check();
       await page.locator(".website-form button").click();
+      if (route === "website") {
+        await expect(page.locator(".loading-view")).toBeVisible();
+        await expect(page.locator(".loading-view .main-title")).toContainText(
+          t("Schenk gerust"),
+        );
+        await expect(page.locator(".coffee-scene")).toBeInViewport({
+          ratio: 1,
+        });
+        const alignment = await page.locator(".loading-view").evaluate((el) => {
+          const parent = el.getBoundingClientRect();
+          return [
+            ...el.querySelectorAll(
+              ".coffee-scene, .main-title, .waiting-intro, .waiting-note p",
+            ),
+          ].map((child) => {
+            const box = child.getBoundingClientRect();
+            return Math.abs(
+              box.x + box.width / 2 - parent.x - parent.width / 2,
+            );
+          });
+        });
+        expect(alignment.every((offset) => offset < 2)).toBe(true);
+        showAdvice();
+      }
       await expect(page.locator(".result-view")).toBeVisible();
       await expect(page.locator(".recommendation small")).toContainText(
         t("Website op maat"),
