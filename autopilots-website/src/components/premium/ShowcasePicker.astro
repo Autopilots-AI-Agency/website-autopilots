@@ -1,0 +1,15 @@
+---
+import { intakeBranches } from '../../data/intakeBranches';
+import { showcaseProfiles } from './showcase-profiles';
+import '../../styles/showcase-picker.css';
+---
+<section class="sp-picker cs-wrap" id="jouw-bedrijf" hidden aria-labelledby="sp-title">
+ <div class="sp-intro"><span class="cs-eyebrow">NIET ZOMAAR EEN DEMO. JOUW WERELD.</span><h2 id="sp-title">Wat voor bedrijf<br/><em>heb jij?</em></h2><p>Kies je branche. Zie vervolgens wat wij voor jouw klanten, je team en je website kunnen bouwen.</p></div>
+ <form class="sp-form">
+  <fieldset><legend>Kies je branche</legend><div class="sp-options">{showcaseProfiles.map(profile=><label class="sp-option"><input type="radio" name="showcase-branch" value={profile.branch}/><span class="sp-icon" aria-hidden="true">{profile.icon}</span><strong>{profile.label}</strong><span class="sp-check" aria-hidden="true">↗</span></label>)}</div></fieldset>
+  <div class="sp-fields"><label>Een andere branche<select name="showcase-other"><option value="">Zoek jouw branche in de lijst</option>{intakeBranches.map(branch=><option value={branch}>{branch}</option>)}</select></label><label>Je bedrijfsnaam <span>optioneel</span><input name="showcase-company" maxlength="60" placeholder="Bijvoorbeeld: jouw bedrijfsnaam" autocomplete="organization"/></label></div>
+  <p class="sp-feedback" role="status" aria-live="polite">Drie voorbeelden. Afgestemd op jouw wereld.</p>
+  <div class="sp-actions"><button class="sp-start" type="submit">Bekijk jouw mogelijkheden <span>↓</span></button><button class="sp-skip" type="button">Bekijk het algemene voorbeeld →</button></div>
+  <small class="sp-privacy">Geen gegevens versturen. Geen account. Alleen een voorbeeld voor jouw branche.</small>
+ </form>
+</section>

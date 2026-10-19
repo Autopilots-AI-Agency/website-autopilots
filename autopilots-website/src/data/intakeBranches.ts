@@ -2,7 +2,14 @@ import { niches } from "./niches";
 
 // Shared by the homepage and intake: a displayed animation is never a selection.
 export const intakeBranches = [
-  ...new Set([...niches.map((niche) => niche.name), "Architecten", "Coaching"]),
+  ...new Set([
+    ...niches.map((niche) => niche.name),
+    "Architecten",
+    "Coaching",
+    "Bouw & renovatie",
+    "Zakelijke dienstverlening",
+    "Beauty & salons",
+  ]),
 ].sort((a, b) => a.localeCompare(b, "nl"));
 
 export function validIntakeBranch(value: string | null): string | undefined {
