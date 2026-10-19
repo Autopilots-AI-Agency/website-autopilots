@@ -1,0 +1,925 @@
+/* Full-size, coordinated product scenes inside the existing scroll stage. */
+#ap-connected .us-story {
+  height: 680svh;
+}
+#ap-connected .us-sticky {
+  padding: 20px 0 10px;
+  min-height: 0;
+}
+#ap-connected .us-caption h2 {
+  font-size: clamp(25px, 2.7vw, 40px);
+}
+#ap-connected .us-caption p {
+  min-height: 0;
+  margin-top: 10px;
+}
+#ap-connected .us-caption .cs-eyebrow {
+  font-size: 9px;
+  margin-bottom: 10px;
+}
+#ap-connected .us-world {
+  min-height: 0;
+  max-height: 720px;
+  width: min(1500px, 100%);
+  margin: 24px auto 0;
+}
+#ap-connected .us-panel {
+  width: 900px;
+  max-width: 94vw;
+  border-radius: 18px;
+}
+#ap-connected .us-panel-label {
+  display: none;
+}
+#ap-connected .dx-demo {
+  padding: 18px;
+  background: linear-gradient(135deg, #223944, #13262e);
+  border-radius: 18px;
+}
+#ap-connected .dx-bottom {
+  margin-top: 12px;
+}
+#ap-connected .dx-disclaimer {
+  font-size: 9px;
+  margin-top: 7px;
+}
+#ap-connected .dx-demo:after {
+  display: none;
+}
+#ap-connected .sx-scene {
+  min-height: 405px;
+}
+#ap-connected .sx-agent {
+  display: grid;
+  grid-template-columns: 265px 1fr;
+  gap: 42px;
+  align-items: center;
+  padding: 8px 30px;
+}
+#ap-connected .sx-phone {
+  position: relative;
+  padding: 25px 19px 18px;
+  border: 5px solid #52636a;
+  border-radius: 38px;
+  background: radial-gradient(ellipse at 50% 20%, #354c52, #0d1a21 70%);
+  box-shadow:
+    inset 0 0 0 2px #0b171e,
+    14px 20px 45px #0005;
+  transform: perspective(1000px) rotateY(calc(-9deg + var(--demo) * 9deg));
+  color: #f8f4ec;
+}
+#ap-connected .sx-island {
+  position: absolute;
+  top: 9px;
+  left: 36%;
+  width: 28%;
+  height: 12px;
+  background: #081217;
+  border-radius: 20px;
+}
+#ap-connected .sx-phone-time {
+  font-size: 10px;
+}
+#ap-connected .sx-contact {
+  text-align: center;
+  margin: 12px 0;
+}
+#ap-connected .sx-contact > span {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  margin: auto auto 13px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ddb994, #885a3d);
+  color: #18282f;
+  font:
+    600 18px Syne,
+    sans-serif;
+  box-shadow:
+    0 0 0 9px #bd875d0c,
+    0 0 0 18px #bd875d08;
+}
+#ap-connected .sx-contact small {
+  display: block;
+  font-size: 7px;
+  letter-spacing: 0.15em;
+  color: #aebfc3;
+  margin-bottom: 7px;
+}
+#ap-connected .sx-contact strong {
+  font-size: 19px;
+  font-weight: 500;
+}
+#ap-connected .sx-contact p {
+  font-size: 10px;
+  margin: 7px 0;
+  color: #b6c9c4;
+}
+#ap-connected .sx-voice {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  margin: 8px 0;
+}
+#ap-connected .sx-voice i {
+  width: 3px;
+  border-radius: 4px;
+  background: #d8b394;
+  transform: scaleY(calc(0.35 + var(--demo) * 0.65));
+}
+#ap-connected .sx-phone .dx-switch {
+  justify-content: center;
+  margin: 8px 0;
+}
+#ap-connected .sx-phone .dx-switch button {
+  font-size: 10px;
+  padding: 7px 12px;
+}
+#ap-connected .sx-transcript {
+  padding: 11px;
+  border: 1px solid #ffffff13;
+  border-radius: 12px;
+  background: #ffffff04;
+}
+#ap-connected .sx-transcript small {
+  font-size: 7px;
+  letter-spacing: 0.07em;
+  color: #d8b394;
+}
+#ap-connected .sx-transcript p {
+  font-size: 11px;
+  line-height: 1.5;
+  color: #f1eee5;
+  margin: 4px 0 8px;
+}
+#ap-connected .sx-call-end {
+  margin: 12px auto 0;
+  background: #a4473e;
+  color: white;
+  border-radius: 30px;
+  width: 34px;
+  height: 25px;
+  display: grid;
+  place-items: center;
+}
+#ap-connected .sx-console-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  color: #b9c9cb;
+}
+#ap-connected .sx-console-head small {
+  margin-left: auto;
+  font-size: 7px;
+  color: #91a3a9;
+}
+#ap-connected .sx-live-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #c4d5bc;
+  display: inline-block;
+  box-shadow: 0 0 10px #c4d5bc44;
+}
+#ap-connected .sx-agent-work > h3 {
+  font-size: 39px;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  margin: 15px 0 18px;
+}
+#ap-connected .sx-agent-work > h3 em,
+#ap-connected .sx-workspace-title em {
+  font-style: normal;
+  color: #d8b394;
+}
+#ap-connected .sx-intelligence {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 0;
+  border-top: 1px solid #ffffff14;
+}
+#ap-connected .sx-step {
+  font:
+    500 11px Syne,
+    sans-serif;
+  color: #d8b394;
+}
+#ap-connected .sx-intelligence small {
+  font-size: 7px;
+  letter-spacing: 0.12em;
+  color: #b2c3c8;
+}
+#ap-connected .sx-intelligence strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 4px;
+}
+#ap-connected .sx-intelligence p {
+  font-size: 10px;
+  line-height: 1.4;
+  margin: 5px 0 0;
+  color: #a6b9bf;
+}
+#ap-connected .sx-intelligence > b {
+  margin-left: auto;
+  color: #c4d5bc;
+  font-weight: 400;
+}
+#ap-connected .sx-control-note {
+  font-size: 9px;
+  color: #a8bec4;
+  margin: 12px 0 0;
+}
+#ap-connected .sx-software.dx-planner {
+  padding: 0;
+  display: grid;
+  grid-template-columns: 125px 1fr;
+  overflow: hidden;
+  background: #11232c;
+  border: 1px solid #ffffff19;
+  border-radius: 10px;
+}
+#ap-connected .sx-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 23px 12px;
+  background: #0d1c23;
+  border-right: 1px solid #ffffff12;
+  font-size: 10px;
+  color: #b0c0c5;
+}
+#ap-connected .sx-sidebar > b {
+  font:
+    600 25px Syne,
+    sans-serif;
+  color: #e7d3be;
+  margin-bottom: 12px;
+}
+#ap-connected .sx-sidebar > b span {
+  font:
+    500 6px "Public Sans",
+    sans-serif;
+}
+#ap-connected .sx-sidebar > small {
+  margin-top: auto;
+  font-size: 6px;
+  letter-spacing: 0.1em;
+  line-height: 1.7;
+}
+#ap-connected .sx-side-active {
+  color: #e9bd98;
+  background: #bd875d16;
+  padding: 9px;
+  border-left: 2px solid #bd875d;
+  margin-left: -2px;
+}
+#ap-connected .sx-workspace {
+  padding: 22px;
+  min-width: 0;
+}
+#ap-connected .sx-workspace > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: #a2b4bc;
+}
+#ap-connected .sx-workspace > header > b {
+  border-radius: 50%;
+  padding: 8px;
+  background: #bd875d19;
+  color: #d8b394;
+  font-size: 9px;
+}
+#ap-connected .sx-workspace-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 15px 0 22px;
+}
+#ap-connected .sx-workspace-title h3 {
+  font-size: 27px;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+}
+#ap-connected .sx-module-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+  margin-bottom: 20px;
+}
+#ap-connected .sx-module-row > div {
+  padding: 13px;
+  background: #233840;
+  border: 1px solid #ffffff13;
+  border-radius: 6px;
+  min-width: 0;
+}
+#ap-connected .sx-module-row small {
+  font-size: 7px;
+  letter-spacing: 0.12em;
+  color: #c7a78c;
+}
+#ap-connected .sx-module-row strong {
+  display: block;
+  font-size: 12px;
+  margin: 9px 0 6px;
+  font-weight: 500;
+}
+#ap-connected .sx-module-row span {
+  font-size: 9px;
+  color: #a7bcc1;
+}
+#ap-connected .sx-board-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 13px;
+}
+#ap-connected .sx-board-head strong {
+  font-size: 12px;
+  font-weight: 500;
+}
+#ap-connected .sx-board-head > span {
+  font-size: 6px;
+  letter-spacing: 0.1em;
+  color: #9fb4bc;
+}
+#ap-connected .sx-board-columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+#ap-connected .sx-board-columns > div > small {
+  font-size: 7px;
+  color: #a7bac1;
+}
+#ap-connected .sx-board-columns article {
+  margin-top: 9px;
+  padding: 13px 10px;
+  background: #1c333e;
+  border: 1px solid #ffffff14;
+  min-height: 125px;
+  border-radius: 7px;
+}
+#ap-connected .sx-board-columns article > i {
+  font:
+    normal 9px Syne,
+    sans-serif;
+  display: grid;
+  place-items: center;
+  width: 23px;
+  height: 23px;
+  background: #bd875d29;
+  border-radius: 50%;
+  color: #d8b394;
+  margin-bottom: 8px;
+}
+#ap-connected .sx-board-columns strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+#ap-connected .sx-board-columns p {
+  font-size: 9px;
+  line-height: 1.5;
+  margin: 7px 0 12px;
+}
+#ap-connected .sx-board-columns article > span {
+  font-size: 7px;
+  color: #c8d7d3;
+}
+#ap-connected .sx-avatars {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+#ap-connected .sx-avatars i {
+  font-style: normal;
+  font-size: 7px;
+  border-radius: 50%;
+  background: #bd875d35;
+  padding: 5px;
+  margin-right: -4px;
+  border: 1px solid #192e38;
+}
+#ap-connected .sx-avatars span {
+  font-size: 6px;
+  margin-left: 10px;
+}
+#ap-connected .sx-mini-progress {
+  height: 3px;
+  background: #ffffff17;
+  margin-top: 13px;
+}
+#ap-connected .sx-mini-progress i {
+  display: block;
+  background: #d8b394;
+  width: 65%;
+  height: 100%;
+}
+#ap-connected .sx-board-columns .sx-customer-portal {
+  background: #e8e4d8;
+  color: #20352d;
+  border-color: #e8e4d8;
+}
+#ap-connected .sx-customer-portal small {
+  font-size: 6px;
+  color: #5b6d56;
+}
+#ap-connected .sx-customer-portal strong {
+  margin-top: 10px;
+}
+#ap-connected .sx-customer-portal p,
+#ap-connected .sx-customer-portal span {
+  color: #526449 !important;
+}
+#ap-connected .sx-sync {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid #ffffff18;
+  padding-top: 16px;
+  margin-top: 20px;
+}
+#ap-connected .sx-sync > span {
+  color: #d8b394;
+}
+#ap-connected .sx-sync strong {
+  font-size: 10px;
+  font-weight: 500;
+}
+#ap-connected .sx-sync small {
+  font-size: 8px;
+  margin-left: auto;
+  color: #b1c4c5;
+}
+#ap-connected .sx-site-label {
+  display: none;
+}
+#ap-connected .sx-architecture .dx-atelier-nav {
+  padding: 13px 22px;
+}
+#ap-connected .sx-architecture .dx-atelier-nav > b {
+  font-size: 23px;
+}
+#ap-connected .sx-architecture .dx-atelier-nav > i {
+  font-size: 8px;
+  letter-spacing: 0.12em;
+}
+#ap-connected .sx-architecture .dx-atelier-copy {
+  padding: 16px 24px 0;
+  position: relative;
+  z-index: 1;
+}
+#ap-connected .sx-architecture .dx-atelier-copy h4 {
+  font-size: 38px;
+  line-height: 1;
+  margin-top: 10px;
+  letter-spacing: -0.04em;
+}
+#ap-connected .sx-architecture .dx-atelier-copy > p {
+  font-size: 9px;
+  margin-top: 9px;
+  color: #63705f;
+}
+#ap-connected .sx-architecture-hero {
+  position: relative;
+  background: #eee9df;
+  display: grid;
+  grid-template-columns: 36% 64%;
+}
+#ap-connected .sx-architecture .dx-atelier-copy {
+  align-self: center;
+  padding: 24px;
+}
+#ap-connected .sx-house-stage {
+  height: 310px;
+  position: relative;
+  margin-top: 0;
+  overflow: hidden;
+}
+#ap-connected .sx-project-details {
+  grid-column: 1/-1;
+}
+#ap-connected [data-house-canvas] {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+#ap-connected .sx-house-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #b1bcae, #e0d7bd);
+  font:
+    italic 18px Georgia,
+    serif;
+  color: #314235;
+}
+#ap-connected .sx-canvas-ready .sx-house-fallback {
+  display: none;
+}
+#ap-connected .sx-house-index {
+  position: absolute;
+  bottom: 17px;
+  left: 24px;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  color: #24392e;
+}
+#ap-connected .sx-house-phase {
+  position: absolute;
+  right: 20px;
+  bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 8px;
+  background: #f6f2e3d9;
+  padding: 7px 10px;
+  border-radius: 20px;
+  color: #314235;
+}
+#ap-connected .sx-house-phase i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #6c7e5c;
+}
+#ap-connected .sx-project-details {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 24px;
+  font-size: 7px;
+  border-bottom: 1px solid #26342d20;
+  color: #526148;
+}
+#ap-connected .sx-project-details b {
+  font-weight: 500;
+  color: #27392c;
+}
+#ap-connected .sx-architecture .dx-atelier-bottom {
+  padding: 12px 24px;
+}
+#ap-connected .sx-website-pipeline {
+  padding: 8px 0 0;
+}
+#ap-connected .sx-website-pipeline i {
+  padding: 5px;
+}
+#ap-connected .dx-flip-back .dx-admin-body {
+  max-width: 560px;
+  margin: auto;
+  padding: 28px;
+}
+#ap-connected .dx-flip-back .dx-admin-body h4 {
+  font-size: 36px;
+}
+#ap-connected .dx-flip-rotor > .dx-flip-back {
+  position: absolute;
+  inset: 0;
+}
+#ap-connected .dx-flip-back .dx-admin-body {
+  padding: 16px 24px;
+}
+#ap-connected .dx-flip-back .dx-admin-body h4 {
+  font-size: 26px;
+  margin: 8px 0;
+}
+#ap-connected .dx-flip-back .dx-admin-body > p,
+#ap-connected .dx-flip-back .dx-admin-project {
+  display: none;
+}
+#ap-connected .dx-flip-back .dx-admin-body fieldset {
+  margin: 12px 0;
+}
+#ap-connected .sx-together {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  opacity: var(--together, 0);
+  transform: translateY(calc((1 - var(--together, 0)) * 20px));
+  pointer-events: none;
+  color: #d8b394;
+  font-size: 11px;
+}
+#ap-connected .sx-together span {
+  padding: 9px 13px;
+  border: 1px solid #d8b39444;
+  border-radius: 20px;
+  background: #101e25;
+}
+#ap-connected.us-static .sx-together {
+  display: none;
+}
+#ap-connected.us-static .us-world {
+  width: min(1000px, 94%);
+}
+@media (max-width: 700px) {
+  #ap-connected .us-story {
+    height: 620svh;
+  }
+  #ap-connected .us-caption {
+    padding: 0 16px;
+  }
+  #ap-connected .us-caption h2 {
+    font-size: 24px;
+  }
+  #ap-connected .us-caption p {
+    font-size: 11px;
+    line-height: 1.5;
+    max-width: 310px;
+  }
+  #ap-connected .us-world {
+    margin-top: 16px;
+  }
+  #ap-connected .us-panel {
+    width: 355px;
+    max-width: 94vw;
+  }
+  #ap-connected .dx-demo {
+    padding: 12px;
+  }
+  #ap-connected .sx-scene {
+    min-height: 0;
+  }
+  #ap-connected .sx-agent {
+    grid-template-columns: 124px 1fr;
+    padding: 8px 0;
+    gap: 15px;
+  }
+  #ap-connected .sx-phone {
+    border-width: 3px;
+    border-radius: 23px;
+    padding: 20px 8px 12px;
+  }
+  #ap-connected .sx-island {
+    height: 8px;
+    top: 7px;
+  }
+  #ap-connected .sx-phone-time {
+    font-size: 7px;
+  }
+  #ap-connected .sx-contact > span {
+    width: 37px;
+    height: 37px;
+    font-size: 13px;
+    margin-bottom: 15px;
+  }
+  #ap-connected .sx-contact small {
+    font-size: 5px;
+    letter-spacing: 0.04em;
+  }
+  #ap-connected .sx-contact strong {
+    font-size: 12px;
+  }
+  #ap-connected .sx-contact p {
+    font-size: 8px;
+  }
+  #ap-connected .sx-voice {
+    gap: 2px;
+    height: 30px;
+    overflow: hidden;
+  }
+  #ap-connected .sx-voice i {
+    width: 2px;
+    flex-shrink: 0;
+    max-height: 24px;
+  }
+  #ap-connected .sx-phone .dx-switch {
+    gap: 3px;
+  }
+  #ap-connected .sx-phone .dx-switch button {
+    font-size: 8px;
+    padding: 5px;
+  }
+  #ap-connected .sx-transcript {
+    padding: 8px;
+  }
+  #ap-connected .sx-transcript small {
+    font-size: 5px;
+    letter-spacing: 0;
+  }
+  #ap-connected .sx-transcript p {
+    font-size: 9px;
+  }
+  #ap-connected .sx-console-head {
+    font-size: 6px;
+    letter-spacing: 0.03em;
+  }
+  #ap-connected .sx-console-head small {
+    display: none;
+  }
+  #ap-connected .sx-agent-work > h3 {
+    font-size: 25px;
+    line-height: 1.08;
+    margin: 15px 0;
+  }
+  #ap-connected .sx-intelligence {
+    gap: 7px;
+    padding: 11px 0;
+  }
+  #ap-connected .sx-step {
+    font-size: 8px;
+  }
+  #ap-connected .sx-intelligence small {
+    font-size: 5px;
+    letter-spacing: 0.05em;
+  }
+  #ap-connected .sx-intelligence strong {
+    font-size: 11px;
+  }
+  #ap-connected .sx-intelligence p {
+    font-size: 8px;
+  }
+  #ap-connected .sx-intelligence > b {
+    font-size: 9px;
+  }
+  #ap-connected .sx-control-note {
+    font-size: 8px;
+    line-height: 1.6;
+  }
+  #ap-connected .sx-software.dx-planner {
+    display: block;
+  }
+  #ap-connected .sx-sidebar {
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+    padding: 12px;
+    font-size: 8px;
+    border-right: 0;
+    border-bottom: 1px solid #ffffff14;
+  }
+  #ap-connected .sx-sidebar > b {
+    font-size: 18px;
+    margin: 0;
+  }
+  #ap-connected .sx-sidebar > b span,
+  #ap-connected .sx-sidebar > small,
+  #ap-connected .sx-sidebar > span:nth-last-of-type(-n + 2) {
+    display: none;
+  }
+  #ap-connected .sx-side-active {
+    padding: 5px;
+  }
+  #ap-connected .sx-workspace {
+    padding: 13px;
+  }
+  #ap-connected .sx-workspace > header {
+    font-size: 6px;
+  }
+  #ap-connected .sx-workspace-title {
+    margin: 12px 0 18px;
+  }
+  #ap-connected .sx-workspace-title h3 {
+    font-size: 24px;
+  }
+  #ap-connected .sx-module-row {
+    gap: 5px;
+    margin-bottom: 18px;
+  }
+  #ap-connected .sx-module-row > div {
+    padding: 9px 6px;
+  }
+  #ap-connected .sx-module-row small {
+    font-size: 5px;
+  }
+  #ap-connected .sx-module-row strong {
+    font-size: 9px;
+    margin: 7px 0;
+  }
+  #ap-connected .sx-module-row span {
+    font-size: 7px;
+  }
+  #ap-connected .sx-board-head strong {
+    font-size: 10px;
+  }
+  #ap-connected .sx-board-head > span {
+    display: none;
+  }
+  #ap-connected .sx-board-columns {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  #ap-connected .sx-board-columns > div:first-child {
+    display: none;
+  }
+  #ap-connected .sx-board-columns > div > small {
+    font-size: 6px;
+  }
+  #ap-connected .sx-board-columns article {
+    padding: 10px 8px;
+    min-height: 125px;
+  }
+  #ap-connected .sx-board-columns strong {
+    font-size: 11px;
+  }
+  #ap-connected .sx-sync {
+    margin-top: 14px;
+    padding-top: 12px;
+    gap: 6px;
+  }
+  #ap-connected .sx-sync strong {
+    font-size: 8px;
+  }
+  #ap-connected .sx-sync small {
+    display: none;
+  }
+  #ap-connected .sx-architecture .dx-atelier-nav {
+    padding: 12px;
+  }
+  #ap-connected .sx-architecture .dx-atelier-nav > b {
+    font-size: 20px;
+  }
+  #ap-connected .sx-architecture .dx-atelier-nav > span {
+    display: none;
+  }
+  #ap-connected .sx-architecture .dx-atelier-copy {
+    padding: 17px 14px 0;
+  }
+  #ap-connected .sx-architecture-hero {
+    display: block;
+  }
+  #ap-connected .sx-architecture .dx-atelier-copy h4 {
+    font-size: 30px;
+  }
+  #ap-connected .sx-architecture .dx-atelier-copy > p {
+    font-size: 8px;
+  }
+  #ap-connected .sx-house-stage {
+    height: 205px;
+    margin-top: 8px;
+  }
+  #ap-connected .sx-house-index {
+    font-size: 6px;
+    left: 12px;
+    bottom: 14px;
+  }
+  #ap-connected .sx-house-phase {
+    font-size: 6px;
+    right: 8px;
+    bottom: 10px;
+    padding: 6px 8px;
+  }
+  #ap-connected .sx-project-details {
+    padding: 10px 12px;
+    font-size: 6px;
+  }
+  #ap-connected .sx-project-details > span:nth-child(2) {
+    display: none;
+  }
+  #ap-connected .sx-architecture .dx-atelier-bottom {
+    padding: 12px;
+  }
+  #ap-connected .sx-architecture .dx-atelier-bottom > span {
+    font-size: 8px;
+  }
+  #ap-connected .sx-website-pipeline span {
+    font-size: 9px;
+  }
+  #ap-connected .sx-website-pipeline small {
+    font-size: 7px;
+  }
+  #ap-connected .dx-flip-back .dx-admin-body {
+    padding: 18px;
+  }
+  #ap-connected .dx-flip-back .dx-admin-body h4 {
+    font-size: 28px;
+  }
+  #ap-connected .sx-together {
+    font-size: 7px;
+    gap: 5px;
+  }
+  #ap-connected .sx-together span {
+    padding: 7px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #ap-connected .sx-phone {
+    transform: none;
+  }
+  #ap-connected .sx-voice i {
+    transform: none;
+  }
+  #ap-connected .sx-together {
+    transition: none;
+  }
+}

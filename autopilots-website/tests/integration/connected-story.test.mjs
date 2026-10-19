@@ -49,8 +49,15 @@ test("each interface has a scroll-driven example and manual replay without exter
     "utf8",
   );
   assert.match(stage, /data-dx-channel/);
-  assert.match(stage, /dx-planner/);
-  assert.match(stage, /dx-pipeline/);
+  const scenes = readFileSync(
+    "src/components/premium/showcase-scenes.ts",
+    "utf8",
+  );
+  assert.match(scenes, /dx-planner/);
+  assert.match(scenes, /dx-pipeline/);
+  assert.match(scenes, /data-house-canvas/);
+  assert.match(stage, /drawHouse\?\.\(houseProgress\)/);
+  assert.doesNotMatch(scenes, /fetch\(|XMLHttpRequest/);
   assert.match(stage, /data-dx-at/);
   assert.match(stage, /phase-i-\.55/);
   assert.match(stage, /Opnieuw afspelen/);
