@@ -180,7 +180,8 @@ test("unsupported branches are explicitly general and can be cleared", async ({
 }) => {
   await page.goto("/nl/");
   await page.getByRole("button", { name: "Alleen noodzakelijk" }).click();
-  await page.getByLabel("Een andere branche").selectOption("Tandartsen");
+  await page.locator(".sp-dropdown-trigger").click();
+  await page.getByRole("button", { name: "Tandartsen", exact: true }).click();
   await expect(page.locator(".us-story")).toHaveAttribute(
     "data-profile",
     "general",
@@ -224,6 +225,69 @@ test("normal scrolling keeps the branch switch clear of the caption", async ({
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
+});
+
+test("styled branch dropdown supports search, keyboard, dismissal and selection sync", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/nl/");
+  await page.getByRole("button", { name: "Alleen noodzakelijk" }).click();
+  const trigger = page.locator(".sp-dropdown-trigger");
+  const search = page.getByRole("searchbox", { name: "Zoek een branche" });
+  const panel = page.locator(".sp-dropdown-panel");
+  await trigger.click();
+  await expect(search).toBeFocused();
+  await expect(trigger).toHaveAttribute("aria-expanded", "true");
+  await search.fill("geen-match-xyz");
+  await expect(page.locator(".sp-branch-empty")).toBeVisible();
+  await search.press("Enter");
+  await expect(panel).toBeVisible();
+  await search.fill("tand");
+  await expect(page.locator(".sp-branch-choice:visible")).toHaveCount(1);
+  await search.press("ArrowDown");
+  await expect(
+    page.getByRole("button", { name: "Tandartsen", exact: true }),
+  ).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(trigger).toBeFocused();
+  await expect(panel).toBeHidden();
+  await expect(trigger).toContainText("Tandartsen");
+  await expect(page.locator(".sp-feedback")).toContainText("Tandartsen");
+  await trigger.press("ArrowDown");
+  await expect(search).toHaveValue("");
+  await expect(
+    page.getByRole("button", { name: "Tandartsen", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await search.press("Escape");
+  await expect(trigger).toBeFocused();
+  await expect(panel).toBeHidden();
+  await trigger.click();
+  await page.locator("#sp-title").click();
+  await expect(panel).toBeHidden();
+  await page.getByRole("radio", { name: "Autobedrijven", exact: true }).check();
+  await expect(trigger).toContainText("Autobedrijven");
+  await trigger.click();
+  await search.press("ArrowDown");
+  await page.keyboard.press("End");
+  await page.keyboard.press("Tab");
+  await expect(panel).toBeHidden();
+  await trigger.click();
+  const audit = await new AxeBuilder({ page }).include(".sp-picker").analyze();
+  expect(audit.violations).toEqual([]);
+  const box = await panel.boundingBox();
+  expect(box!.x).toBeGreaterThanOrEqual(0);
+  expect(box!.x + box!.width).toBeLessThanOrEqual(page.viewportSize()!.width);
+  const list = await page.locator(".sp-branch-list").boundingBox();
+  expect(list!.height).toBeLessThanOrEqual(280);
+  await search.fill("bouw");
+  await search.press("Enter");
+  await expect(page.locator(".us-story")).toHaveAttribute(
+    "data-profile",
+    "construction",
+  );
+  await page.reload();
+  await expect(trigger).toContainText("Bouw & renovatie");
 });
 
 for (const storage of ["blocked", "corrupt"])

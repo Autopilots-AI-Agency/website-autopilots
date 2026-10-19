@@ -114,32 +114,160 @@
   max-width: 480px;
   margin: 24px auto 0;
 }
-#ap-connected .sp-fields label {
+#ap-connected .sp-field-label {
+  display: block;
   font-size: 13px;
   color: #d3dbdc;
+  margin-bottom: 10px;
+}
+#ap-connected .sp-fields [hidden] {
+  display: none;
+}
+#ap-connected .sp-dropdown {
   min-width: 0;
 }
-#ap-connected .sp-fields label > span {
-  color: #90a3ab;
-  font-size: 12px;
-}
-#ap-connected .sp-fields input,
-#ap-connected .sp-fields select {
-  display: block;
+#ap-connected .sp-dropdown-trigger {
   width: 100%;
-  box-sizing: border-box;
-  margin-top: 9px;
-  min-height: 48px;
+  min-height: 56px;
+  display: grid;
+  grid-template-columns: 1fr 20px;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
   border: 1px solid #3c5057;
-  border-radius: 8px;
-  padding: 12px;
-  background: #13252d;
+  border-radius: 14px;
+  background: linear-gradient(125deg, #213640, #14262d);
   color: #f5f1e9;
   font: inherit;
   font-size: 14px;
-  color-scheme: dark;
+  cursor: pointer;
   text-align: center;
-  text-align-last: center;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+#ap-connected .sp-dropdown-trigger svg,
+#ap-connected .sp-search-wrap svg,
+#ap-connected .sp-branch-choice svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: #d5a776;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+#ap-connected .sp-dropdown-trigger[aria-expanded="true"] {
+  border-color: #c69365;
+  box-shadow: 0 0 0 3px #c6936515;
+}
+#ap-connected .sp-dropdown-trigger[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+#ap-connected .sp-dropdown-panel {
+  margin-top: 10px;
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #87674d;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #20343e, #13252d 75%);
+  box-shadow: 0 18px 40px #0003;
+  animation: sp-menu-in 0.18s ease-out;
+}
+#ap-connected .sp-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  border: 1px solid #3c5057;
+  border-radius: 10px;
+  background: #102129;
+}
+#ap-connected .sp-branch-search {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 10px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #f5f1e9;
+  font: inherit;
+  font-size: 16px;
+  outline: none;
+  color-scheme: dark;
+}
+#ap-connected .sp-search-wrap:focus-within {
+  outline: 2px solid #d5a776;
+  outline-offset: 2px;
+}
+#ap-connected .sp-branch-list {
+  max-height: min(280px, 40dvh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #967451 #14262d;
+  margin-top: 10px;
+  padding: 3px;
+}
+#ap-connected .sp-branch-choice {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: #e1e8e7;
+  text-align: left;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+#ap-connected .sp-branch-choice svg {
+  opacity: 0;
+  flex-shrink: 0;
+}
+#ap-connected .sp-branch-choice:hover {
+  background: #ffffff08;
+}
+#ap-connected .sp-branch-choice[aria-pressed="true"] {
+  background: linear-gradient(110deg, #5b4534, #2d3736);
+  border-color: #967451;
+  color: #fff1df;
+}
+#ap-connected .sp-branch-choice[aria-pressed="true"] svg {
+  opacity: 1;
+}
+#ap-connected .sp-dropdown button:focus-visible {
+  outline: 2px solid #edc797;
+  outline-offset: 1px;
+}
+#ap-connected .sp-branch-empty {
+  margin: 14px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #acbec4;
+}
+#ap-connected .sp-search-count {
+  display: block;
+  padding: 12px 14px 2px;
+  border-top: 1px solid #ffffff12;
+  color: #acbec4;
+  font-size: 12px;
+}
+@keyframes sp-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 #ap-connected .sp-fields input::placeholder {
   color: #90a3ab;
@@ -273,6 +401,12 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  #ap-connected .sp-dropdown-panel {
+    animation: none;
+  }
+  #ap-connected .sp-dropdown-trigger {
+    transition: none;
+  }
   #ap-connected .sp-option {
     transition: none;
   }
