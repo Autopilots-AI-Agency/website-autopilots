@@ -1,0 +1,116 @@
+/* One optical axis for the illustration, heading and changing status copy. */
+#ap-intake.intake-bronze .loading-view {
+  width: 100%;
+  max-width: 600px;
+  margin-inline: auto;
+  padding-top: 0;
+  display: grid;
+  justify-items: center;
+  gap: 0;
+  text-align: center;
+}
+#ap-intake.intake-bronze .loading-view > * { min-width: 0; }
+#ap-intake.intake-bronze .coffee-scene {
+  width: clamp(220px, 28vw, 280px);
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 320 / 230;
+  margin: 0 auto 18px;
+}
+#ap-intake.intake-bronze .coffee-scene svg { display: block; overflow: hidden; }
+#ap-intake.intake-bronze .loading-view .eyebrow {
+  margin: 0 0 16px;
+  font-size: 10px;
+  line-height: 1.6;
+  letter-spacing: .14em;
+  text-wrap: balance;
+}
+#ap-intake.intake-bronze .loading-view .main-title {
+  margin: 0;
+  width: 100%;
+  font-size: clamp(32px, 3.5vw, 46px);
+  line-height: 1.12;
+  text-wrap: balance;
+  outline: none;
+}
+#ap-intake.intake-bronze .loading-view .waiting-intro {
+  width: 100%;
+  max-width: 48ch;
+  margin: 22px auto 24px;
+  font-size: 15px;
+  line-height: 1.75;
+  text-wrap: pretty;
+}
+#ap-intake.intake-bronze .waiting-note {
+  width: 100%;
+  max-width: 46ch;
+  min-height: 84px;
+  display: grid;
+  grid-template-rows: 6px 1fr;
+  justify-items: center;
+  align-items: start;
+  gap: 12px;
+  margin: 0 auto;
+}
+#ap-intake.intake-bronze .waiting-note p {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.7;
+  text-wrap: balance;
+}
+#ap-intake.intake-bronze .waiting-dot { width: 5px; height: 5px; }
+#ap-intake.intake-bronze .waiting-line { width: min(220px, 65%); margin: 16px auto 20px; }
+#ap-intake.intake-bronze .loading-view small {
+  width: 100%;
+  max-width: 46ch;
+  margin: 0 auto;
+  font-size: 12px;
+  line-height: 1.7;
+  text-wrap: balance;
+}
+/* Decorative one-shot pour, not an indicator of analysis progress. */
+#ap-intake .coffee-pitcher, #ap-intake .coffee-stream { opacity: 0; }
+#ap-intake .coffee-pitcher { transform-origin: 142px 70px; }
+#ap-intake .coffee-stream { transform-origin: 142px 70px; }
+#ap-intake .coffee-fill { transform: translateY(0); }
+#ap-intake .coffee-ripple { transform-origin: 142px 143px; opacity: 0; }
+#ap-intake.is-analyzing .coffee-pitcher { animation: apCoffeePitcher 5.5s ease-in-out both; }
+#ap-intake.is-analyzing .coffee-stream { animation: apCoffeeStream 5.5s linear both; }
+#ap-intake.is-analyzing .coffee-fill { animation: apCoffeeFill 5.5s ease-in-out both; }
+#ap-intake.is-analyzing .coffee-ripple { animation: apCoffeeRipple .7s ease-out 1s 5; }
+#ap-intake.is-analyzing .coffee-steam { animation: apCoffeeWarm 5.5s linear both; }
+@keyframes apCoffeePitcher {
+  0% { opacity: 0; transform: translate(16px, -12px) rotate(-24deg); }
+  12%, 70% { opacity: 1; transform: translate(0, 0) rotate(0); }
+  90%, 100% { opacity: 0; transform: translate(18px, -12px) rotate(-24deg); }
+}
+@keyframes apCoffeeStream {
+  0%, 12% { opacity: 0; transform: scaleY(0); }
+  18%, 65% { opacity: 1; transform: scaleY(1); }
+  72%, 100% { opacity: 0; transform: scaleY(1); }
+}
+@keyframes apCoffeeFill {
+  0%, 16% { transform: translateY(62px); }
+  70%, 100% { transform: translateY(0); }
+}
+@keyframes apCoffeeRipple {
+  from { opacity: .8; transform: scale(.5); }
+  to { opacity: 0; transform: scale(2.5, 1.5); }
+}
+@keyframes apCoffeeWarm {
+  0%, 68% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@media (max-width: 680px) {
+  #ap-intake.intake-bronze .coffee-scene { width: 220px; margin-bottom: 14px; }
+  #ap-intake.intake-bronze .loading-view .waiting-intro { font-size: 14px; margin-block: 18px 20px; }
+  #ap-intake.intake-bronze .waiting-note { min-height: 102px; }
+  #ap-intake.intake-bronze .loading-view .eyebrow { font-size: 9px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #ap-intake .coffee-pitcher, #ap-intake .coffee-stream, #ap-intake .coffee-ripple { opacity: 0; }
+  #ap-intake .coffee-fill { transform: none; }
+  #ap-intake .coffee-steam { opacity: 1; }
+}
