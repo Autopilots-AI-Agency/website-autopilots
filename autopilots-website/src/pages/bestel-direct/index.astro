@@ -7,10 +7,13 @@ import { localizedPath } from "../../i18n/routes";
 import { localizedProductData } from "../../i18n/productPage";
 import { localizedNicheData } from "../../i18n/catalog";
 import { orderPageCopy } from "../../i18n/orderPage";
+import { pricingRequest } from "../../i18n/pricingRequest";
 
 interface Props { locale?: SupportedLocale }
 const { locale = "nl" } = Astro.props;
-const copy = orderPageCopy[locale];
+const quote = pricingRequest[locale];
+const original = orderPageCopy[locale];
+const copy = {...original, kicker:quote.cta, proof:quote.lead, lead:quote.lead, faqLead:quote.terms, faq:[[quote.request,quote.lead],[quote.setup,quote.terms],original.faq[2]]};
 const pageProducts = products.map((item)=>localizedProductData(locale,item));
 const pageNiches = niches.map((item)=>({...localizedNicheData(locale,item),href:localizedPath(`niche.${item.slug}`,locale)}));
 const clientData = JSON.stringify({ products:pageProducts, niches:pageNiches, locale, nichePrefix:localizedPath("page.niches",locale), productsPath:localizedPath("page.products",locale) }).replaceAll("<", "\\u003c");

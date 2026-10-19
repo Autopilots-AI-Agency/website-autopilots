@@ -1,0 +1,12 @@
+---
+import { intake } from '../../config/intake';
+interface Props { light?: boolean; compact?: boolean; label?: string }
+const { light = false, compact = false, label } = Astro.props;
+---
+<a href={intake.path} class:list={['p-cta', { 'is-light': light, 'is-compact': compact }]} data-quiz-cta data-ap-event="intake_started">{label || (compact ? intake.compactLabel : intake.label)}<span aria-hidden="true">↗</span></a>
+<script>
+  import { withCampaign } from '../../config/intake';
+  document.querySelectorAll<HTMLAnchorElement>('[data-quiz-cta]').forEach(link => {
+    link.href = withCampaign(link.getAttribute('href')!, location.search);
+  });
+</script>

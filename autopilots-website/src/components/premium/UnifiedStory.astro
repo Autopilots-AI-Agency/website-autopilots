@@ -1,0 +1,108 @@
+<script>
+const root = document.querySelector<HTMLElement>('#ap-connected');
+if(root){
+ const originals = [...root.querySelectorAll<HTMLElement>('.cs-chapter')];
+ const panels = originals.map(section=>section.querySelector<HTMLElement>('.cs-visual')!);
+ const titles = ['Drie bouwgebieden. Eén partner.','Een extra collega. Voor jouw klanten.','Jouw werkwijze. In eigen software.','Een website die verder werkt.','Los inzetbaar. Sterker samen.'];
+ const descriptions = ['Scroll en zie hoe het samenkomt.','Telefonie en chat, met afgesproken acties en jouw team aan het roer.','Van planning tot klantportaal. Gebouwd rondom jouw processen.','Een sterke voorkant, met een eigen backend en passende koppelingen.','Wij verbinden wat je nodig hebt. Ook met de systemen die je al gebruikt.'];
+ const stage = document.createElement('section');
+ stage.className='us-story';stage.setAttribute('aria-label','Wat Autopilots voor jouw bedrijf bouwt');
+ stage.innerHTML=`<div class="us-sticky"><div class="us-caption"><span class="cs-eyebrow">AUTOPILOTS / VAN IDEE NAAR SAMENWERKING</span><h2>${titles[0]}</h2><p>${descriptions[0]}</p></div><div class="us-world"><svg class="us-connections" viewBox="0 0 1000 500" preserveAspectRatio="none" aria-hidden="true"><path d="M170 250 C300 250 300 160 500 160 S700 250 830 250"/><path class="us-signal" d="M170 250 C300 250 300 160 500 160 S700 250 830 250"/></svg><div class="us-orbit" aria-hidden="true"></div></div><div class="us-controls" aria-label="Ga naar een bouwgebied">${['Overzicht','AI-medewerkers','Software','Websites','Samen'].map((name,i)=>`<button type="button" data-us-step="${i}"><span>0${i+1}</span>${name}</button>`).join('')}</div></div>`;
+ root.querySelector('.cs-hero')!.after(stage);
+ const world=stage.querySelector<HTMLElement>('.us-world')!;
+ const examples = [
+ `<div class="dx-heading"><span>01 / AI-MEDEWERKERS</span><h3>Neemt op.<br>Vraagt door. Regelt het.</h3><p>Een digitale collega voor telefonie en chat.</p></div><div class="dx-switch"><button data-dx-channel="phone" aria-pressed="true">Telefonie</button><button data-dx-channel="chat" aria-pressed="false">Chat</button></div><div class="dx-conversation"><div class="dx-caller"><span class="dx-phone">↗</span><div><strong data-dx-call>Inkomend gesprek</strong><small>Voorbeeld · jouw bedrijf</small></div><div class="dx-bars">${[9,19,12,26,16,22,10].map(h=>`<i style="height:${h}px"></i>`).join('')}</div></div><div class="dx-reveal" data-dx-at=".12"><small>KLANT</small><p>“Kan ik vrijdag een afspraak maken?”</p></div><div class="dx-reveal dx-answer" data-dx-at=".38"><small>AI-MEDEWERKER</small><p>“Zeker. Waarvoor wil je langskomen?”</p></div><div class="dx-reveal dx-result" data-dx-at=".7"><span>✓</span><div><strong>Afspraakverzoek voorbereid</strong><small>Klantvraag + context naar je team.</small></div></div></div>`,
+ `<div class="dx-heading"><span>02 / MAATWERKSOFTWARE</span><h3>Jouw werk.<br>Jouw eigen systeem.</h3><p>Van aanvraag naar planning en klantportaal.</p></div><div class="dx-planner"><div class="dx-planner-top"><strong>Projectplanning</strong><span>JOUW WERKOMGEVING</span></div><div class="dx-days"><span>MA <b>12</b></span><span>DI <b>13</b></span><span class="dx-today">WO <b>14</b></span><span>DO <b>15</b></span><span>VR <b>16</b></span></div><div class="dx-lanes"><span>09:00</span><div class="dx-slot">Beschikbaar</div><span>10:00</span><div class="dx-booking dx-reveal" data-dx-at=".22"><b>Project ingepland</b><small>Team toegewezen · 10:00–11:00</small></div></div><div class="dx-reveal dx-portal" data-dx-at=".6"><small>KLANTPORTAAL</small><strong>Je project staat gepland.</strong><div><i></i> Aanvraag <i></i> Planning <i></i> Uitvoering</div></div></div>`,
+ `<div class="dx-heading"><span>03 / WEBSITES & BACKENDS</span><h3>Een sterke website.<br>Die óók werk verzet.</h3><p>Van eerste indruk naar een nieuwe projectaanvraag.</p></div><div class="dx-site dx-atelier"><div class="dx-address"><i></i> ATELIER NOORD · CONCEPTWEBSITE <span>↗</span></div><div class="dx-atelier-nav"><b>NOORD<span>®</span></b><span>Architectuur & interieur</span><i>☰</i></div><div class="dx-atelier-hero"><div class="dx-atelier-copy"><small>RUIMTE VOOR EEN ANDERE BLIK.</small><h4>Bijzonder wonen.<br><em>Van nature.</em></h4></div><svg class="dx-villa" viewBox="0 0 600 310" role="img" aria-label="Architectuurillustratie van een moderne villa tussen duinen"><defs><linearGradient id="villaSky" x2="0" y2="1"><stop stop-color="#a5b2ac"/><stop offset="1" stop-color="#e0d9c8"/></linearGradient><linearGradient id="villaWall" x2="1" y2="1"><stop stop-color="#e2d7c4"/><stop offset="1" stop-color="#b8a78d"/></linearGradient><linearGradient id="villaGlass"><stop stop-color="#283a39"/><stop offset=".6" stop-color="#63726a"/><stop offset="1" stop-color="#253632"/></linearGradient></defs><path fill="url(#villaSky)" d="M0 0h600v310H0z"/><circle cx="465" cy="58" r="38" fill="#eee1bb" opacity=".6"/><path d="M0 198Q100 155 210 188T600 170V310H0" fill="#9b9c7e"/><path d="M0 244Q190 197 600 235V310H0" fill="#bcb395"/><path d="M92 244 446 275 564 229 232 207Z" fill="#596355" opacity=".35"/><path d="M127 133 373 113 495 148 252 172Z" fill="#e6ddcd"/><path d="M127 133 252 172V241L127 209Z" fill="#9e907a"/><path d="M252 172 495 148V224L252 241Z" fill="url(#villaWall)"/><path d="M278 182 468 164V220L278 232Z" fill="url(#villaGlass)"/><path d="m323 178 1 51m49-55v51m49-55v51" stroke="#b6a68d" stroke-width="3"/><path d="m146 153 72 21v51l-72-21Z" fill="#33433c"/><path d="m170 160 1 51m23-44v51" stroke="#847963" stroke-width="3"/><path d="m116 132 137 43 253-25v-9l-253 23-137-41Z" fill="#f0e7d8"/><path d="M506 244v-99m-13 43 13-23 15 17m-25 22 10-18 17 16" stroke="#515c47" stroke-width="5" fill="none"/><path d="M70 263v-73m-17 23 17-28 23 30m-36 15 13-23 21 24" stroke="#697353" stroke-width="6" fill="none"/><path d="m299 310 42-65 46-3 56 68" fill="#d8cdb6"/></svg><span class="dx-project-caption">01 / DUINVILLA <span>CONCEPTONTWERP ↗</span></span></div><div class="dx-atelier-bottom"><span>Jouw ideeën.<br><b>Ons volgende ontwerp.</b></span><div class="dx-submit">Start je project <span>↗</span></div></div><div class="dx-project-request dx-reveal" data-dx-at=".15"><i>↳</i><span>Nieuwe aanvraag <strong>Een vrijstaande woning ontwerpen</strong></span><b>✓</b></div></div><div class="dx-pipeline"><div class="dx-reveal" data-dx-at=".38"><i>✓</i><span>Opgeslagen<small>Eigen backend</small></span></div><b>→</b><div class="dx-reveal" data-dx-at=".7"><i>✓</i><span>Doorgestuurd<small>Naar jouw team</small></span></div></div>`
+ ];
+ const statusText=[['Gesprek komt binnen','AI vraagt door','Je team kan verder'],['Aanvraag ontvangen','Werk wordt ingepland','Klant ziet de voortgang'],['Bezoeker vult in','Backend verwerkt','Team ontvangt aanvraag']];
+ const overrides=new Map<number,number>();
+ let flipOverride:number|null=null;
+ let flipFront:HTMLElement,flipBack:HTMLElement,flipButton:HTMLButtonElement;
+ panels.forEach((panel,i)=>{
+  const demo=document.createElement('div');demo.className='dx-demo';
+  demo.innerHTML=examples[i]+`<div class="dx-bottom"><span data-dx-status>${statusText[i][0]}</span><button type="button" data-dx-play>Volgende stap <span>→</span></button></div><div class="dx-track"><i></i></div><small class="dx-disclaimer">Voorbeeld · geen echte aanvraag of boeking</small>`;
+  panel.append(demo);
+  if(i===2){
+   const site=demo.querySelector<HTMLElement>('.dx-atelier')!;
+   const shell=document.createElement('div');shell.className='dx-flip';
+   const rotor=document.createElement('div');rotor.className='dx-flip-rotor';
+   site.before(shell);shell.append(rotor);rotor.append(site);site.classList.add('dx-flip-front');flipFront=site;
+   flipBack=document.createElement('div');flipBack.className='dx-flip-back';
+   flipBack.innerHTML=`<div class="dx-admin-top"><b>NOORD® / BEHEER</b><span>Interactieve demo</span></div><div class="dx-admin-body"><small>JOUW WEBSITE. JOUW CONTROLE.</small><h4>Zelf aanpassen.<br>Zonder omwegen.</h4><p>Een beheeromgeving op maat voor jouw team.</p><label for="demo-site-title">Titel op je website</label><input id="demo-site-title" maxlength="45" value="Bijzonder wonen." autocomplete="off"><fieldset><legend>Accentkleur</legend><button type="button" data-site-color="#314235" style="--swatch:#314235" aria-label="Bosgroen" aria-pressed="true"></button><button type="button" data-site-color="#875735" style="--swatch:#875735" aria-label="Warm brons" aria-pressed="false"></button><button type="button" data-site-color="#304c67" style="--swatch:#304c67" aria-label="Nachtblauw" aria-pressed="false"></button></fieldset><div class="dx-admin-project"><span>PROJECTEN</span><strong>Duinvilla <i>Gepubliceerd in demo</i></strong><small>Teksten, projecten en aanvragen op één plek.</small></div><div class="dx-admin-saved" role="status">✓ Probeer een titel of kleur. Bekijk daarna de voorkant.</div></div>`;
+   rotor.append(flipBack);
+   flipButton=document.createElement('button');flipButton.type='button';flipButton.className='dx-flip-toggle';flipButton.textContent='Bekijk de achterkant ↻';
+   shell.after(flipButton);
+   flipButton.addEventListener('click',()=>{flipOverride=Number(panel.dataset.flip||0)>.5?0:1;schedule();});
+   const title=site.querySelector('h4')!;
+   const titleText=document.createElement('span');titleText.textContent='Bijzonder wonen.';title.firstChild!.replaceWith(titleText);
+   const saved=flipBack.querySelector<HTMLElement>('.dx-admin-saved')!;
+   flipBack.querySelector('input')!.addEventListener('input',event=>{titleText.textContent=(event.target as HTMLInputElement).value||'Bijzonder wonen.';saved.textContent='✓ Aangepast in dit voorbeeld · niets wordt gepubliceerd';});
+   flipBack.querySelectorAll<HTMLButtonElement>('[data-site-color]').forEach(button=>button.addEventListener('click',()=>{site.style.setProperty('--site-accent',button.dataset.siteColor!);flipBack.querySelectorAll('[data-site-color]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));saved.textContent='✓ Kleur aangepast · bekijk de voorkant';}));
+  }
+  demo.querySelector('[data-dx-play]')!.addEventListener('click',()=>{const now=Number(panel.dataset.demoProgress||0);overrides.set(i,now>.85?0:Math.min(1,now+.4));schedule();});
+  demo.querySelectorAll<HTMLButtonElement>('[data-dx-channel]').forEach(button=>button.addEventListener('click',()=>{demo.querySelectorAll('[data-dx-channel]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));const chat=button.dataset.dxChannel==='chat';demo.querySelector('[data-dx-call]')!.textContent=chat?'Nieuw chatbericht':'Inkomend gesprek';demo.classList.toggle('dx-chat-mode',chat);}));
+ });
+ panels.forEach((panel,i)=>{world.append(panel);panel.classList.add('us-panel');panel.dataset.panel=String(i);const label=document.createElement('h3');label.className='us-panel-label';label.textContent=['AI-medewerkers','Maatwerksoftware','Websites & backends'][i];panel.prepend(label);});
+ originals.forEach((section,i)=>{const marker=document.createElement('span');marker.id=section.id;marker.className='us-marker';marker.style.top=`${(i+1)*20}%`;stage.append(marker);section.removeAttribute('id');});
+ const connected=root.querySelector<HTMLElement>('.cs-connected-section')!;
+ const end=document.createElement('span');end.id='verbonden';end.className='us-marker';end.style.top='80%';stage.append(end);connected.removeAttribute('id');
+ const cta=root.querySelector<HTMLElement>('.cs-cta')!;stage.after(cta);
+ cta.querySelector('h2')!.innerHTML='En hoe zou dit<br/><em>voor jouw bedrijf werken?</em>';
+ root.classList.add('us-ready');
+ let current=0,target=0,frame=0,last=0;
+ const reduce=matchMedia('(prefers-reduced-motion: reduce)');
+ const quiet=()=>reduce.matches||root.classList.contains('cs-quiet');
+ const clamp=(v:number)=>Math.min(1,Math.max(0,v));
+ // Each row describes the SAME three interfaces, not new copies.
+ const desktop=[[[16,54,.58,-7],[50,45,.65,0],[84,54,.58,7]],[[50,50,1,0],[91,58,.52,7],[114,64,.42,10]],[[-12,62,.42,-9],[50,50,1,0],[95,58,.52,7]],[[-18,65,.40,-10],[7,58,.52,-7],[50,50,1,0]],[[16,51,.58,0],[50,46,.63,0],[84,51,.58,0]]];
+ const mobile=[[[45,37,.69,-5],[53,52,.69,0],[59,67,.69,5]],[[50,48,.97,0],[98,70,.65,5],[120,80,.55,8]],[[-26,76,.55,-8],[50,48,.97,0],[113,76,.6,5]],[[-45,85,.55,-8],[-10,72,.65,-5],[50,48,.97,0]],[[50,19,.66,0],[50,51,.66,0],[50,83,.66,0]]];
+ const buttons=[...stage.querySelectorAll<HTMLButtonElement>('[data-us-step]')];
+ function paint(time:number){
+  frame=0;const dt=Math.min(40,time-(last||time));last=time;
+  current+= (target-current)*(1-Math.exp(-dt/95));
+  const staticMode=quiet();root!.classList.toggle('us-static',staticMode);
+  const phase=current*4, index=Math.min(3,Math.floor(phase)), mix=phase-index;
+  const eased=mix*mix*(3-2*mix), active=Math.round(phase);
+  const states=innerWidth<701?mobile:desktop;
+  panels.forEach((panel,i)=>{
+   const from=states[index][i],to=states[index+1][i];const v=from.map((n,j)=>n+(to[j]-n)*eased);
+   // Keep the demo inside its stage, clear of the heading and navigation.
+   const radians=Math.abs(v[3])*Math.PI/180;
+   const rotatedHeight=panel.offsetHeight*Math.cos(radians)+panel.offsetWidth*Math.sin(radians);
+   const fitScale=Math.max(.1,(world.clientHeight-32)/Math.max(1,rotatedHeight));
+   const scale=Math.min(v[2],.92,fitScale);
+   const halfHeight=rotatedHeight*scale/2;
+   const centerY=Math.max(halfHeight+16,Math.min(world.clientHeight-halfHeight-16,world.clientHeight*v[1]/100));
+   panel.style.left=`${v[0]}%`;panel.style.top=`${centerY}px`;panel.style.transform=`translate(-50%,-50%) scale(${scale}) rotate(${v[3]}deg)`;
+   const focused=active===0||active===4||active===i+1;
+   panel.style.opacity=focused?'1':'.28';panel.style.zIndex=active===i+1?'5':String(i+1);
+   panel.inert=!staticMode&&!focused;panel.classList.toggle('cs-visible',focused);
+   const progress=staticMode?1:(overrides.get(i)??clamp((phase-i-.55)/.85));
+   panel.dataset.demoProgress=String(progress);
+   panel.style.setProperty('--demo',String(progress));
+   if(i===2){
+    const turn=flipOverride??(staticMode?0:clamp((phase-3.04)/.3));
+    const smoothTurn=turn*turn*(3-2*turn);
+    panel.style.setProperty('--flip',String(smoothTurn));panel.dataset.flip=String(turn);
+    const back=turn>.5;
+    flipFront.inert=back;flipBack.inert=!back;
+    flipFront.setAttribute('aria-hidden',String(back));flipBack.setAttribute('aria-hidden',String(!back));
+    flipButton.textContent=back?'Bekijk jouw aanpassingen ↻':'Bekijk de achterkant ↻';
+   }
+   panel.querySelectorAll<HTMLElement>('[data-dx-at]').forEach(el=>{const shown=progress>=Number(el.dataset.dxAt);el.classList.toggle('dx-shown',shown);el.setAttribute('aria-hidden',String(!shown));});
+   panel.querySelector('[data-dx-status]')!.textContent=statusText[i][progress<.35?0:progress<.7?1:2];
+   panel.querySelector('[data-dx-play]')!.firstChild!.textContent=progress>.85?'Opnieuw afspelen ':'Volgende stap ';
+  });
+  const heading=stage.querySelector('h2')!;
+  if(heading.textContent!==titles[active]){heading.textContent=titles[active];stage.querySelector('.us-caption p')!.textContent=descriptions[active];}
+  buttons.forEach((b,i)=>b.setAttribute('aria-current',String(i===active)));
+  stage.style.setProperty('--together',String(clamp((phase-3)*1.6)));
+  if(Math.abs(target-current)>.0001)frame=requestAnimationFrame(paint);else last=0;
+ }
+ function schedule(){const rect=stage.getBoundingClientRect();target=clamp(-rect.top/Math.max(1,stage.offsetHeight-innerHeight));if(!frame)frame=requestAnimationFrame(paint);}
+ buttons.forEach((button,i)=>button.addEventListener('click',()=>{if(quiet()){panels[Math.max(0,Math.min(2,i-1))].scrollIntoView({block:'center'});return;}scrollTo({top:scrollY+stage.getBoundingClientRect().top+(stage.offsetHeight-innerHeight)*i/4,behavior:'smooth'});}));
+ addEventListener('scroll',()=>{overrides.clear();if(!flipBack.contains(document.activeElement))flipOverride=null;schedule();},{passive:true});addEventListener('resize',schedule);reduce.addEventListener('change',schedule);
+ root.querySelector('[data-cs-motion]')?.addEventListener('click',()=>requestAnimationFrame(schedule));schedule();
+}
+</script>
