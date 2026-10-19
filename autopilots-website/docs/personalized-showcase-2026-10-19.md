@@ -18,9 +18,11 @@ gesuggereerd. Alle scènes zijn illustratieve demo's, geen echte aanvragen.
 
 - Eén gekozen branche stuurt de drie bestaande panelen aan; geen nieuwe
   scroll-engine, iframe of externe assetdienst.
-- De branche en optionele bedrijfsnaam worden uitsluitend in sessionStorage van
+- Alleen de branche wordt uitsluitend in sessionStorage van
   de huidige browsertab bewaard. Blokkering of ongeldige opgeslagen gegevens
-  hinderen de werking niet. Invoer wordt escaped of via textContent gezet.
+  hinderen de werking niet. Het bedrijfsnaamveld is verwijderd; bij herstel van
+  een oudere sessie wordt een eerder bewaarde bedrijfsnaam genegeerd en uit
+  de opgeslagen selectie verwijderd. Inhoud wordt escaped of via textContent gezet.
 - Selecteren maakt geen lead aan en doet geen netwerk- of providerverzoek.
 - De AI-scan ontvangt alleen een gevalideerde branche via de bestaande
   branche-queryparameter. De bedrijfsnaam komt niet in de URL. De scan start
@@ -35,7 +37,7 @@ gesuggereerd. Alle scènes zijn illustratieve demo's, geen echte aanvragen.
 
 Automatische browsertests controleren alle zes profielen, verschillende canvas-
 uitkomsten, opnieuw koppelen van knoppen na wisselen, keyboard/toegankelijkheid,
-mobiel, CSS-overlap, lange en HTML-achtige invoer, sessieherstel, ontbrekende
+mobiel, CSS-overlap, het verwijderen van oude bedrijfsnaamgegevens, sessieherstel, ontbrekende
 storage, algemene fallback en branche-overdracht naar de scan. Bestaande
 scroll-, flip-, route-, link-, metadata- en releasecontroles blijven verplicht.
 

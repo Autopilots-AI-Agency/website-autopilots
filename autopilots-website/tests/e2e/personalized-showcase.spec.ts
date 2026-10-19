@@ -92,23 +92,44 @@ test("six branches change all three scenes and keep keyboard-accessible controls
   ).toBe(true);
 });
 
-test("selection survives reload, company is safe and intake receives only the branch", async ({
+test("selection survives reload, old company data is discarded and intake receives the branch", async ({
   page,
 }) => {
+  await page.addInitScript(() =>
+    sessionStorage.setItem(
+      "ap-showcase-v1",
+      JSON.stringify({ branch: "Autobedrijven", company: "OLD COMPANY NAME" }),
+    ),
+  );
   await page.goto("/nl/?utm_source=demo");
   await page.getByRole("button", { name: "Alleen noodzakelijk" }).click();
   await page.getByRole("radio", { name: "Autobedrijven", exact: true }).check();
-  const company = "<img src=x onerror=alert(1)> & Test";
-  await page.getByLabel("Je bedrijfsnaam").fill(company);
+  await expect(page.getByLabel("Je bedrijfsnaam")).toHaveCount(0);
+  await expect(page.locator("#sp-title")).toHaveText(
+    "Kies jullie brancheen zie wat wij kunnen betekenen.",
+  );
+  await expect(page.locator(".sp-intro p")).toHaveText(
+    "Wij bouwen AI-medewerkers, software & websites.",
+  );
+  await expect(page.locator("#ap-connected")).not.toContainText(
+    "OLD COMPANY NAME",
+  );
+  expect(
+    await page.evaluate(() =>
+      JSON.parse(sessionStorage.getItem("ap-showcase-v1")!),
+    ),
+  ).toEqual({ branch: "Autobedrijven" });
   await page.locator(".sp-start").click();
-  await expect(page.locator(".us-caption h2")).toContainText(company);
+  await expect(page.locator(".us-caption h2")).toHaveText(
+    "Drie bouwgebieden. Eén partner.",
+  );
   await expect(page.locator(".dx-atelier img")).toHaveCount(0);
   await page.reload();
   await expect(page.locator(".us-story")).toHaveAttribute(
     "data-profile",
     "automotive",
   );
-  await expect(page.getByLabel("Je bedrijfsnaam")).toHaveValue(company);
+  await expect(page.getByLabel("Je bedrijfsnaam")).toHaveCount(0);
   const cta = page.locator("#ap-connected [data-quiz-cta]").first();
   await expect(cta).toHaveAttribute("href", /branche=Autobedrijven/);
   expect(await cta.getAttribute("href")).not.toContain("company");
@@ -160,9 +181,10 @@ test("normal scrolling keeps the branch switch clear of the caption", async ({
   const eyebrow = await page.locator(".us-caption .cs-eyebrow").boundingBox();
   expect(chip!.y + chip!.height).toBeLessThanOrEqual(eyebrow!.y);
   await page.locator(".sp-change").click();
-  await page.getByLabel("Je bedrijfsnaam").fill("A".repeat(60));
   await page.locator(".sp-start").click();
-  await expect(page.locator(".us-caption h2")).toContainText("A".repeat(60));
+  await expect(page.locator(".us-caption h2")).toHaveText(
+    "Drie bouwgebieden. Eén partner.",
+  );
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth,
