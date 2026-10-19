@@ -67,7 +67,33 @@ test("showcase has working channels, evolving scenes and an editable website bac
   await expect(page.locator("[data-customer-line]")).toContainText(
     "woning ontwerpen",
   );
-  await panels.nth(0).locator("[data-dx-play]").click();
+  // Mobile focus scrolling may already complete the scene. Exercise replay
+  // explicitly instead of assuming the first click always advances it.
+  const agentPlay = panels.nth(0).locator("[data-dx-play]");
+  if ((await agentPlay.textContent())?.includes("Opnieuw")) {
+    await agentPlay.click();
+    await expect
+      .poll(async () =>
+        Number(await panels.nth(0).getAttribute("data-demo-progress")),
+      )
+      .toBe(0);
+  }
+  for (
+    let step = 0;
+    step < 3 &&
+    Number(await panels.nth(0).getAttribute("data-demo-progress")) < 0.7;
+    step++
+  ) {
+    const before = Number(
+      await panels.nth(0).getAttribute("data-demo-progress"),
+    );
+    await agentPlay.click();
+    await expect
+      .poll(async () =>
+        Number(await panels.nth(0).getAttribute("data-demo-progress")),
+      )
+      .not.toBe(before);
+  }
   await expect(panels.nth(0).locator("[data-dx-status]")).toContainText(
     "Je team kan verder",
   );
