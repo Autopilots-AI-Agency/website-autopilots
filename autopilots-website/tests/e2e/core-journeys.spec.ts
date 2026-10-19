@@ -25,7 +25,7 @@ for (const route of routes)
 test("homepage naar AI-scan en bestaande bestelling", async ({ page }) => {
   await page.goto("/nl/");
   await page.locator("[data-quiz-cta]:visible").first().click();
-  await expect(page).toHaveURL(/\/ontwerpen\/intake\//);
+  await expect(page).toHaveURL(/\/nl\/ai-scan\//);
   await expect(page.locator("#intake-questions")).toBeVisible();
   await page.goto("/nl/bestel-direct/?product=ai-telefoniste");
   await expect(page.locator("[data-order-product]")).toContainText(

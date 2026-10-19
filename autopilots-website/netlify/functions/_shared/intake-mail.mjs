@@ -18,7 +18,11 @@ export async function sendIntakeMail({
     from: "Autopilots <support@auto-pilots.io>",
     reply_to: "support@auto-pilots.io",
     to: [record.email],
-    ...intakeConfirmation({ name: record.name, bookingUrl }),
+    ...intakeConfirmation({
+      name: record.name,
+      bookingUrl,
+      locale: record.assessment.locale,
+    }),
   };
   await store.setJSON(
     key,

@@ -39,8 +39,9 @@ for (const locale of languages) {
     await expect(page.locator("#home-language summary")).toContainText(
       locale.toUpperCase(),
     );
-    await expect(page.locator(".cs-cta")).toContainText(
-      t("De AI-scan is momenteel in het Nederlands."),
+    await expect(page.locator(".cs-cta [data-quiz-cta]")).toHaveAttribute(
+      "href",
+      new RegExp(`^/${locale}/ai-scan/`),
     );
     await expect(page.locator(".cs-cta h2")).toContainText(t("En hoe zou dit"));
     // Full phrases that differ from this locale must never leak into the demos.

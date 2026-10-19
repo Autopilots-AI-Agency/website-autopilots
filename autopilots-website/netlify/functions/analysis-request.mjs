@@ -1,6 +1,7 @@
 import { verifyAssessment } from "./_shared/assessment-token.mjs";
 import { createHash } from "node:crypto";
 import { sendIntakeMail } from "./_shared/intake-mail.mjs";
+import { scanLocale, scanError } from "./_shared/intake-i18n.mjs";
 const json = (data, status = 200) =>
   new Response(JSON.stringify(data), {
     status,
@@ -10,24 +11,41 @@ const json = (data, status = 200) =>
     },
   });
 export default async (request) => {
+  let locale = scanLocale(request.headers.get("x-autopilots-locale"));
+  const reply = (data, status = 200) =>
+    json(
+      data.message
+        ? {
+            ...data,
+            message: scanError(
+              data.message,
+              locale,
+              "Je aanvraag kon niet worden opgeslagen. Probeer opnieuw.",
+            ),
+          }
+        : data,
+      status,
+    );
   if (request.method !== "POST")
-    return json({ message: "Methode niet toegestaan." }, 405);
+    return reply({ message: "Methode niet toegestaan." }, 405);
   if (
     process.env.AUTOPILOTS_ANALYSIS_ENABLED !== "true" ||
     !process.env.ANALYSIS_SIGNING_SECRET
   )
-    return json({ message: "Aanvragen zijn nog niet beschikbaar." }, 503);
+    return reply({ message: "Aanvragen zijn nog niet beschikbaar." }, 503);
   const origin = request.headers.get("origin");
   if (origin && origin !== new URL(request.url).origin)
-    return json({ message: "Ongeldige herkomst." }, 403);
+    return reply({ message: "Ongeldige herkomst." }, 403);
   let input;
   try {
     const body = await request.text();
     if (Buffer.byteLength(body) > 65000)
-      return json({ message: "Aanvraag te groot." }, 413);
+      return reply({ message: "Aanvraag te groot." }, 413);
     input = JSON.parse(body);
+    if (!input || typeof input !== "object" || Array.isArray(input))
+      return reply({ message: "Ongeldige aanvraag." }, 400);
   } catch {
-    return json({ message: "Ongeldige aanvraag." }, 400);
+    return reply({ message: "Ongeldige aanvraag." }, 400);
   }
   const id = request.headers.get("idempotency-key");
   if (
@@ -40,15 +58,17 @@ export default async (request) => {
     input.email.length > 160 ||
     !/^\S+@\S+\.\S+$/.test(input.email)
   )
-    return json(
+    return reply(
       { message: "Controleer je naam, e-mailadres en toestemming." },
       422,
     );
   let assessment;
   try {
     assessment = verifyAssessment(input.token);
+    // The signed assessment, not a contact-form field, determines the email language.
+    locale = scanLocale(assessment.locale);
   } catch (error) {
-    return json({ message: error.message }, 422);
+    return reply({ message: error.message }, 422);
   }
   const record = {
     id,
@@ -81,7 +101,7 @@ export default async (request) => {
         if (error.code !== "EEXIST") throw error;
         const prior = JSON.parse(await readFile(path, "utf8"));
         if (prior.fingerprint !== fingerprint)
-          return json({ message: "Deze aanvraag is al gebruikt." }, 409);
+          return reply({ message: "Deze aanvraag is al gebruikt." }, 409);
       }
     } else {
       const { getStore } = await import("@netlify/blobs");
@@ -92,7 +112,7 @@ export default async (request) => {
       await store.setJSON(id, { ...record, fingerprint }, { onlyIfNew: true });
       const previous = await store.get(id, { type: "json" });
       if (previous && previous.fingerprint !== fingerprint)
-        return json({ message: "Deze aanvraag is al gebruikt." }, 409);
+        return reply({ message: "Deze aanvraag is al gebruikt." }, 409);
       try {
         confirmation = await sendIntakeMail({
           record,
@@ -108,12 +128,12 @@ export default async (request) => {
       }
     }
   } catch {
-    return json(
+    return reply(
       { message: "Je aanvraag kon niet worden opgeslagen. Probeer opnieuw." },
       503,
     );
   }
-  return json({
+  return reply({
     ok: true,
     id,
     bookingUrl: calendar,

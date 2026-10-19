@@ -16,6 +16,10 @@ export const campaignKeys = [
   "msclkid",
 ];
 
+export function intakePath(locale = 'nl') {
+  return `/${['nl','en','es','de','it','fr'].includes(locale) ? locale : 'nl'}/ai-scan/`;
+}
+
 export function withCampaign(path: string, search: string) {
   const query = new URLSearchParams(search);
   const destination = new URL(path, "https://auto-pilots.io");

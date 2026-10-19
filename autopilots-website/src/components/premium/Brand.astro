@@ -1,4 +1,5 @@
 ---
 import { intake } from '../../config/intake';
+const { href = intake.home } = Astro.props;
 ---
-<a class="p-brand" href={intake.home} aria-label="Autopilots home">AUTOPILOTS</a>
+<a class="p-brand" href={href} aria-label="Autopilots home">AUTOPILOTS</a>

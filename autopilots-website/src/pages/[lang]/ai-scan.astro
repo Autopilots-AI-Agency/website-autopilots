@@ -1,0 +1,9 @@
+---
+import IntakePage from '../../components/premium/IntakePage.astro';
+import { supportedLocales } from '../../i18n/languages';
+export function getStaticPaths() {
+  return supportedLocales.map(({code}) => ({ params: {lang: code}, props: {locale: code} }));
+}
+const {locale} = Astro.props;
+---
+<IntakePage locale={locale}/>

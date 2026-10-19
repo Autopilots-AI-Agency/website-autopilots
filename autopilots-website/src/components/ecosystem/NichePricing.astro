@@ -1,4 +1,5 @@
 ---
+import { intakePath } from '../../config/intake';
 import type { Niche } from "../../data/niches";
 import { getNichePricing } from "../../data/pricing";
 import type { SupportedLocale } from "../../i18n/languages";
@@ -28,7 +29,7 @@ const quote = pricingRequest[locale];
         </div>
         <details><summary>{copy.usage} <span aria-hidden="true">+</span></summary><p>{quote.terms}</p></details>
         <div class="ap-price-actions">
-          <a class="ap-button ap-button-primary" data-ap-event="pricing_configuration_requested" href="/ontwerpen/intake/">{quote.cta}</a>
+          <a class="ap-button ap-button-primary" data-ap-event="pricing_configuration_requested" href={intakePath(locale)}>{quote.cta}</a>
           {item.product && <a class="ap-price-product-link" href={`${localizedPath(`product.${item.product}`,locale)}?branche=${niche.slug}`}>{ui.products[item.product] ?? item.name} →</a>}
         </div>
       </article>)}
