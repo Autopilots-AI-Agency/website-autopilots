@@ -34,6 +34,40 @@ const profiles = [
   ],
 ];
 
+test("branch picker shares one centered axis on desktop and mobile", async ({
+  page,
+}) => {
+  await page.goto("/nl/");
+  await page.getByRole("button", { name: "Alleen noodzakelijk" }).click();
+  const picker = await page.locator(".sp-picker").boundingBox();
+  const center = picker!.x + picker!.width / 2;
+  for (const selector of [
+    ".sp-intro",
+    ".sp-intro p",
+    ".sp-form",
+    ".sp-options",
+    ".sp-fields",
+    ".sp-start",
+    ".sp-skip",
+  ]) {
+    const box = await page.locator(selector).boundingBox();
+    expect(Math.abs(box!.x + box!.width / 2 - center)).toBeLessThan(2);
+  }
+  const intro = await page.locator(".sp-intro").boundingBox();
+  const form = await page.locator(".sp-form").boundingBox();
+  expect(form!.y).toBeGreaterThan(intro!.y + intro!.height);
+  expect(
+    await page
+      .locator(".sp-intro")
+      .evaluate((el) => getComputedStyle(el).textAlign),
+  ).toBe("center");
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+});
+
 test("six branches change all three scenes and keep keyboard-accessible controls", async ({
   page,
 }) => {
