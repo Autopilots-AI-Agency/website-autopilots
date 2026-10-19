@@ -31,9 +31,19 @@
 
 ## Release blockers
 
+### Online test evidence — 2026-10-19
+
+- Temporary branch deployment `6ad5dfaf265a89688053dbb7` verified release identity `d3453aac031414607ef9badf48e035decbbd24c5`, context `branch-deploy` (not production).
+- Synthetic architecture-business intake without a website returned HTTP 200 with an AI assessment and signed token. Contact submission to the authorized test recipient returned HTTP 200, saved request `b6f592ac-f90b-49d0-b041-e417a1f5d3e3`, confirmation `accepted`.
+- Repeating the identical contact request returned HTTP 200 without an additional email. Resend showed exactly one new message, `01a15372-b16e-7d82-8507-dbae3f23a721`, Delivered, addressed to `tim@auto-pilots.io` from `support@auto-pilots.io`, greeting `Tim — online ketentest`.
+- This verifies the online function chain, persistence and email delivery; the earlier browser quiz test was local. No appointment was booked and production was not deployed.
+- Temporary activation was set back to false; branch rebuild `6ad5e003807222b081dd8f9f` reached ready. The branch URL returned HTTP 503 with the analysis-unavailable message, confirming shutdown there.
+
 - The former TLS blocker was resolved by certificate renewal on October 18. Production still identifies the old main commit, not this branch.
-- `OPENAI_API_KEY`, `ANALYSIS_SIGNING_SECRET` and `RESEND_API_KEY` are configured. `AUTOPILOTS_ANALYSIS_ENABLED` remains off until the preview round trip and release review are complete.
-- PR #16 remains a draft without review approval. Complete review and current-commit CI before publishing. Public scan abuse/cost controls also need review before enabling the endpoint; current analysis throttling is instance-local, not a global quota.
+- `OPENAI_API_KEY`, `ANALYSIS_SIGNING_SECRET` and `RESEND_API_KEY` are configured. The online round trip passed; `AUTOPILOTS_ANALYSIS_ENABLED` is off again pending release review and public abuse/cost controls.
+- PR #16 has no review approval. Complete review and current-commit CI before publishing.
+- Shared scan reservations now cap attempts at 50 per UTC day across all instances and three per visitor IP per UTC hour. Netlify's trusted function context supplies the IP; only a daily HMAC is stored. Atomic create-only slots prevent concurrent overspending; storage or missing-context errors fail closed. Failures consume slots, with no automatic refund. These conservative limits bound analysis calls, not all hosting/storage traffic, and are not an exact monetary budget. Review and verify the new guard in a deployed preview before activation.
+- Quota records contain only hashed visitor keys, request IDs, timestamps and attempt usage. Historical quota slots are not automatically pruned in this release; do not delete current-day slots, which would reset limits. Operational cleanup may remove expired day/hour prefixes separately after a retention policy is agreed.
 - The existing production version must remain untouched until these blockers and the complete reviewed-PR release gate are resolved.
 
 ## Release procedure

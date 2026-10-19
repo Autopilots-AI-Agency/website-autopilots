@@ -1,5 +1,6 @@
 import { analyze, websiteUrl } from "./_shared/website-analysis.mjs";
 import { signAssessment } from "./_shared/assessment-token.mjs";
+import { reserveAnalysis } from "./_shared/analysis-quota.mjs";
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), {
     status,
@@ -11,7 +12,7 @@ const json = (body, status = 200) =>
   });
 const cache = new Map();
 let active = 0;
-export default async (request) => {
+export default async (request, context) => {
   if (request.method !== "POST")
     return json({ message: "Methode niet toegestaan." }, 405);
   if (
@@ -114,6 +115,35 @@ export default async (request) => {
   active++;
   const promise = (async () => {
     try {
+      const { getStore } = await import("@netlify/blobs");
+      let allowed;
+      try {
+        allowed = await reserveAnalysis({
+          store: getStore({
+            name: "autopilots-analysis-quota",
+            consistency: "strong",
+          }),
+          ip: context?.ip,
+          secret: process.env.ANALYSIS_SIGNING_SECRET,
+          id,
+        });
+      } catch {
+        return json(
+          {
+            message:
+              "De scan is tijdelijk niet beschikbaar. Probeer later opnieuw.",
+          },
+          503,
+        );
+      }
+      if (!allowed)
+        return json(
+          {
+            message:
+              "Het maximum aantal scans is bereikt. Probeer later opnieuw.",
+          },
+          429,
+        );
       const result = await analyze({ ...input, answers: clean });
       const token = signAssessment({
         id,
