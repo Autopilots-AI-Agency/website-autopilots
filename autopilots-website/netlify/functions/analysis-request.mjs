@@ -1,5 +1,6 @@
 import { verifyAssessment } from "./_shared/assessment-token.mjs";
 import { createHash } from "node:crypto";
+import { sendIntakeMail } from "./_shared/intake-mail.mjs";
 const json = (data, status = 200) =>
   new Response(JSON.stringify(data), {
     status,
@@ -62,6 +63,10 @@ export default async (request) => {
   const fingerprint = createHash("sha256")
     .update(JSON.stringify([record.name, record.email, assessment.id]))
     .digest("hex");
+  const calendar =
+    process.env.PUBLIC_GHL_CALENDAR_URL ||
+    "https://api.leadconnectorhq.com/widget/booking/UaWTV0sdETiXy0refclQ";
+  let confirmation = { status: "not_sent_local" };
   try {
     if (process.env.AUTOPILOTS_LOCAL_INTAKE === "true") {
       const { mkdir, writeFile, readFile } = await import("node:fs/promises");
@@ -84,10 +89,23 @@ export default async (request) => {
         name: "autopilots-assessment-requests",
         consistency: "strong",
       });
+      await store.setJSON(id, { ...record, fingerprint }, { onlyIfNew: true });
       const previous = await store.get(id, { type: "json" });
       if (previous && previous.fingerprint !== fingerprint)
         return json({ message: "Deze aanvraag is al gebruikt." }, 409);
-      if (!previous) await store.setJSON(id, { ...record, fingerprint });
+      try {
+        confirmation = await sendIntakeMail({
+          record,
+          bookingUrl: calendar,
+          apiKey: process.env.RESEND_API_KEY,
+          store: getStore({
+            name: "autopilots-intake-mail",
+            consistency: "strong",
+          }),
+        });
+      } catch {
+        confirmation = { status: "pending" };
+      }
     }
   } catch {
     return json(
@@ -95,8 +113,10 @@ export default async (request) => {
       503,
     );
   }
-  const calendar =
-    process.env.PUBLIC_GHL_CALENDAR_URL ||
-    "https://api.leadconnectorhq.com/widget/booking/UaWTV0sdETiXy0refclQ";
-  return json({ ok: true, id, bookingUrl: calendar });
+  return json({
+    ok: true,
+    id,
+    bookingUrl: calendar,
+    confirmation: confirmation.status,
+  });
 };
