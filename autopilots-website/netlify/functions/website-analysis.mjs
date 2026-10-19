@@ -1,6 +1,7 @@
 import { analyze, websiteUrl } from "./_shared/website-analysis.mjs";
 import { signAssessment } from "./_shared/assessment-token.mjs";
 import { reserveAnalysis } from "./_shared/analysis-quota.mjs";
+import { scanLocale, scanLocales, scanError } from "./_shared/intake-i18n.mjs";
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), {
     status,
@@ -13,39 +14,53 @@ const json = (body, status = 200) =>
 const cache = new Map();
 let active = 0;
 export default async (request, context) => {
+  let locale = scanLocale(request.headers.get("x-autopilots-locale"));
+  const reply = (body, status = 200) =>
+    json(
+      body.message
+        ? { ...body, message: scanError(body.message, locale) }
+        : body,
+      status,
+    );
   if (request.method !== "POST")
-    return json({ message: "Methode niet toegestaan." }, 405);
+    return reply({ message: "Methode niet toegestaan." }, 405);
   if (
     process.env.AUTOPILOTS_ANALYSIS_ENABLED !== "true" ||
     !process.env.OPENAI_API_KEY ||
     !process.env.ANALYSIS_SIGNING_SECRET
   )
-    return json({ message: "De analyse is nog niet beschikbaar." }, 503);
+    return reply({ message: "De analyse is nog niet beschikbaar." }, 503);
   const origin = request.headers.get("origin");
   if (origin && origin !== new URL(request.url).origin)
-    return json({ message: "Ongeldige herkomst." }, 403);
+    return reply({ message: "Ongeldige herkomst." }, 403);
   let input;
   try {
     const body = await request.text();
     if (Buffer.byteLength(body) > 65000)
-      return json(
+      return reply(
         { message: "Het bestand is te groot. Gebruik maximaal 50 KB." },
         413,
       );
     input = JSON.parse(body);
+    if (!input || typeof input !== "object" || Array.isArray(input))
+      return reply({ message: "Ongeldige aanvraag." }, 400);
   } catch {
-    return json({ message: "Ongeldige aanvraag." }, 400);
+    return reply({ message: "Ongeldige aanvraag." }, 400);
   }
   const id = request.headers.get("idempotency-key");
+  if (input.locale !== undefined && !scanLocales.includes(input.locale))
+    return reply({ message: "Ongeldige aanvraag." }, 422);
+  locale = scanLocale(input.locale ?? locale);
+  input.locale = locale;
   if (!/^[a-zA-Z0-9-]{16,80}$/.test(id || "") || input.consent !== true)
-    return json({ message: "Bevestig toestemming voor de analyse." }, 422);
+    return reply({ message: "Bevestig toestemming voor de analyse." }, 422);
   if (
     !input.answers ||
     typeof input.answers !== "object" ||
     Array.isArray(input.answers) ||
     JSON.stringify(input.answers).length > 6000
   )
-    return json({ message: "Controleer je antwoorden." }, 422);
+    return reply({ message: "Controleer je antwoorden." }, 422);
   const clean = {};
   for (const key of [
     "sector",
@@ -61,7 +76,7 @@ export default async (request, context) => {
       !(typeof value === "string" || Array.isArray(value)) ||
       JSON.stringify(value).length > 1000
     )
-      return json({ message: "Vul alle stappen in." }, 422);
+      return reply({ message: "Vul alle stappen in." }, 422);
     clean[key] = value;
   }
   for (const key of [
@@ -78,7 +93,7 @@ export default async (request, context) => {
   }
   if (input.uploadText) {
     if (typeof input.uploadText !== "string" || input.uploadText.length > 50000)
-      return json(
+      return reply(
         { message: "Gebruik een tekstbestand van maximaal 50 KB." },
         422,
       );
@@ -86,10 +101,11 @@ export default async (request, context) => {
     try {
       websiteUrl(input.website || "");
     } catch (error) {
-      return json({ message: error.message }, 422);
+      return reply({ message: error.message }, 422);
     }
   }
   const fingerprint = JSON.stringify({
+    locale,
     website: input.website,
     uploadText: input.uploadText,
     noWebsite: input.noWebsite === true,
@@ -98,14 +114,14 @@ export default async (request, context) => {
   const existing = cache.get(id);
   if (existing) {
     if (existing.fingerprint !== fingerprint)
-      return json(
+      return reply(
         { message: "Deze aanvraag is gewijzigd. Start een nieuwe analyse." },
         409,
       );
     return (await existing.promise).clone();
   }
   if (active >= 2 || cache.size >= 25)
-    return json(
+    return reply(
       {
         message:
           "Er lopen nu meerdere analyses. Probeer het over enkele minuten opnieuw.",
@@ -128,7 +144,7 @@ export default async (request, context) => {
           id,
         });
       } catch {
-        return json(
+        return reply(
           {
             message:
               "De scan is tijdelijk niet beschikbaar. Probeer later opnieuw.",
@@ -137,7 +153,7 @@ export default async (request, context) => {
         );
       }
       if (!allowed)
-        return json(
+        return reply(
           {
             message:
               "Het maximum aantal scans is bereikt. Probeer later opnieuw.",
@@ -152,9 +168,9 @@ export default async (request, context) => {
         website: input.website || input.uploadName || "",
         expires: Date.now() + 60 * 60 * 1000,
       });
-      return json({ ok: true, id, ...result, token });
+      return reply({ ok: true, id, ...result, token });
     } catch (error) {
-      return json(
+      return reply(
         { ok: false, message: error.message || "Analyse niet beschikbaar." },
         502,
       );

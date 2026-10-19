@@ -87,3 +87,12 @@
  #ap-intake.intake-bronze .choice:hover{transform:none}
  #ap-intake.intake-bronze .recommendation h2{font-size:25px}
 }
+/* Compact, keyboard-accessible locale control in the scan's visual system. */
+#ap-intake .scan-language { position:relative; margin-left:auto; flex:none; z-index:5; }
+#ap-intake .scan-language summary { cursor:pointer; list-style:none; display:flex; align-items:center; gap:12px; padding:10px 14px; color:#f5f1eb; border:1px solid #8f6949; border-radius:10px; font-size:14px; }
+#ap-intake .scan-language summary::-webkit-details-marker { display:none; }
+#ap-intake .scan-language nav { position:absolute; top:calc(100% + 8px); right:0; width:180px; display:grid; gap:4px; padding:8px; border:1px solid #8f6949; border-radius:12px; background:#1b303a; box-shadow:0 15px 40px #0005; }
+#ap-intake .scan-language nav a { display:block; padding:10px; border-radius:6px; color:#f5f1eb; text-decoration:none; font-size:15px; }
+#ap-intake .scan-language nav a:hover, #ap-intake .scan-language nav a[aria-current] { color:#d6ac86; background:#c390681c; }
+#ap-intake .scan-language :focus-visible { outline:2px solid #d6ac86; outline-offset:3px; }
+@media(max-width:680px) { #ap-intake header { gap:12px; } #ap-intake .scan-language summary { padding:9px; } #ap-intake .header-label { display:none; } }

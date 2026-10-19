@@ -1,4 +1,5 @@
 ---
+import { intakePath } from '../../config/intake';
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { productBySlug, products } from "../../data/products";
 import type { Niche } from "../../data/niches";
@@ -223,7 +224,7 @@ const schema = [
               <div class="ap-recommendation-title"><small>{product.eyebrow}</small><h3>{ui.products[product.slug] ?? product.name}</h3><p>{product.promise}</p></div>
               <div class="ap-recommendation-scope"><div><span>{productLabels.solves}</span><ul>{product.problems.slice(0,2).map((item)=><li>{item.title}</li>)}</ul></div><div><span>{productLabels.included}</span><ul>{product.core.slice(0,3).map((item)=><li>{item.title}</li>)}</ul></div></div>
               <div class="ap-recommendation-result"><span>{productLabels.result}</span><strong>{product.workflow.at(-1)?.output}</strong></div>
-              <div class="ap-recommendation-actions"><a href={`${localizedPath(`product.${product.slug}`,locale)}?branche=${niche.slug}`}>{c.viewProduct}</a><a class="is-order" data-ap-event="pricing_configuration_requested" data-ap-product={product.slug} data-ap-niche={niche.slug} href="/ontwerpen/intake/">{pricingRequest[locale].cta}</a></div>
+              <div class="ap-recommendation-actions"><a href={`${localizedPath(`product.${product.slug}`,locale)}?branche=${niche.slug}`}>{c.viewProduct}</a><a class="is-order" data-ap-event="pricing_configuration_requested" data-ap-product={product.slug} data-ap-niche={niche.slug} href={intakePath(locale)}>{pricingRequest[locale].cta}</a></div>
             </article>;
           })}
         </div>

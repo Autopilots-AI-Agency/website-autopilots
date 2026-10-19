@@ -1,15 +1,15 @@
 ---
+import { intakePath } from '../../config/intake';
 import LanguageSwitcher from '../layout/LanguageSwitcher.astro';
 import { localizedPath } from '../../i18n/routes';
 import type { SupportedLocale } from '../../i18n/languages';
 const {locale='nl',contentId='page.home'}=Astro.props as {locale:SupportedLocale;contentId?:string};
 const labels={nl:'Start de AI-scan',en:'Start the AI scan',de:'KI-Scan starten',fr:'Lancer le diagnostic IA',es:'Iniciar el análisis de IA',it:'Avvia l’analisi IA'};
-const notice={nl:'Start de AI-scan',en:'AI scan — currently available in Dutch',de:'KI-Scan — derzeit auf Niederländisch',fr:'Diagnostic IA — actuellement en néerlandais',es:'Análisis de IA — disponible actualmente en neerlandés',it:'Analisi IA — attualmente disponibile in olandese'};
 ---
 <header class="ed-header">
  <div class="ap-container ed-header-inner">
   <a class="ed-logo" href={localizedPath('page.home',locale)} aria-label="Autopilots home">AUTOPILOTS</a>
-  <div class="ed-header-actions"><LanguageSwitcher locale={locale} contentId={contentId}/><a class="ed-scan" href="/ontwerpen/intake/" title={notice[locale]} data-ap-event="intake_started"><span>{labels[locale]}</span><small>{locale==='de'?'KI':locale==='nl'||locale==='en'?'AI':'IA'}-scan</small><b aria-hidden="true">↗</b></a></div>
+  <div class="ed-header-actions"><LanguageSwitcher locale={locale} contentId={contentId}/><a class="ed-scan" href={intakePath(locale)} title={labels[locale]} data-ap-event="intake_started"><span>{labels[locale]}</span><small>{locale==='de'?'KI':locale==='nl'||locale==='en'?'AI':'IA'}-scan</small><b aria-hidden="true">↗</b></a></div>
  </div>
  <div class="ed-reading-track" aria-hidden="true"><i></i></div>
 </header>
