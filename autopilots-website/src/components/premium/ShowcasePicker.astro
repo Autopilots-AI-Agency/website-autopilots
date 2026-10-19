@@ -1,5 +1,4 @@
 ---
-import { intakeBranches } from '../../data/intakeBranches';
 import { showcaseProfiles } from './showcase-profiles';
 import '../../styles/showcase-picker.css';
 import { translator } from './showcase-i18n';
@@ -11,23 +10,6 @@ const t=translator(locale);
  <div class="sp-intro"><h2 id="sp-title">{t("Kies jullie branche")}<br/><em>{t("en zie wat wij kunnen betekenen.")}</em></h2><p>{t("Wij bouwen AI-medewerkers, software & websites.")}</p></div>
  <form class="sp-form">
   <fieldset><legend>{t("Kies jullie branche")}</legend><div class="sp-options">{showcaseProfiles.map(profile=><label class="sp-option"><input type="radio" name="showcase-branch" value={profile.branch}/><span class="sp-icon" aria-hidden="true">{profile.icon}</span><strong>{t(profile.label)}</strong><span class="sp-check" aria-hidden="true">↗</span></label>)}</div></fieldset>
-  <div class="sp-fields">
-   <div class="sp-dropdown">
-    <span class="sp-field-label" id="sp-other-label">{t("Een andere branche")}</span>
-    <button class="sp-dropdown-trigger" type="button" aria-expanded="false" aria-controls="sp-branch-panel" aria-labelledby="sp-other-label sp-branch-value">
-     <span id="sp-branch-value">{t("Zoek jullie branche in de lijst")}</span>
-     <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></svg>
-    </button>
-    <div class="sp-dropdown-panel" id="sp-branch-panel" role="region" aria-labelledby="sp-other-label" hidden>
-     <div class="sp-search-wrap"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg><input class="sp-branch-search" type="search" aria-label={t("Zoek een branche")} placeholder={t("Typ jullie branche…")} autocomplete="off"/></div>
-     <div class="sp-branch-list" role="group" aria-label={t("Branches")}>{intakeBranches.map(branch=><button type="button" class="sp-branch-choice" data-branch={branch} aria-pressed="false"><span>{t(branch)}</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></button>)}</div>
-     <p class="sp-branch-empty" role="status" hidden>{t("Geen branche gevonden. Probeer een andere zoekterm.")}</p>
-     <span class="sp-search-count" role="status" aria-live="polite"></span>
-    </div>
-   </div>
-   <select name="showcase-other" hidden aria-hidden="true" tabindex="-1"><option value="">{t("Zoek jullie branche in de lijst")}</option>{intakeBranches.map(branch=><option value={branch}>{t(branch)}</option>)}</select>
-  </div>
-  <p class="sp-feedback" role="status" aria-live="polite">{t("Drie voorbeelden. Afgestemd op jouw wereld.")}</p>
   <div class="sp-actions"><button class="sp-start" type="submit">{t("Bekijk jouw mogelijkheden")} <span>↓</span></button><button class="sp-skip" type="button">{t('Bekijk het algemene voorbeeld')} →</button></div>
   <small class="sp-privacy">{t("Geen gegevens versturen. Geen account. Alleen een voorbeeld voor jouw branche.")}</small>
  </form>

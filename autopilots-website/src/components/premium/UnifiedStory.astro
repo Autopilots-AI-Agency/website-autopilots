@@ -4,7 +4,6 @@ import { localizedProfile } from './showcase-profile-i18n';
 import { renderShowcase } from './showcase-scenes';
 import { generalProfile, profileForBranch, escapeMarkup, type ShowcaseProfile } from './showcase-profiles';
 import { createHouseScene } from './house-scene';
-import { setupBranchDropdown } from './branch-dropdown';
 const root = document.querySelector<HTMLElement>('#ap-connected');
 if(root){
  const locale=pageLocale();
@@ -146,10 +145,8 @@ if(root){
  addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule);reduce.addEventListener('change',schedule);
  const change=document.createElement('button');change.type='button';change.className='sp-change';change.textContent=tr('Algemeen voorbeeld')+' · '+tr('wijzigen');stage.querySelector('.us-sticky')!.prepend(change);
  const form=picker.querySelector('form')!;
- const other=form.querySelector<HTMLSelectElement>('[name="showcase-other"]')!;
- const dropdown=setupBranchDropdown(form,other);
  const radios=[...form.querySelectorAll<HTMLInputElement>('[name="showcase-branch"]')];
- const allowed=new Set([...other.options].map(o=>o.value).filter(Boolean));
+ const allowed=new Set(radios.map(r=>r.value));
  let branch='';
  function applySelection(value:string){
   branch=allowed.has(value)?value:'';
@@ -162,20 +159,17 @@ if(root){
   descriptions[2]=tr('Van planning tot klantportaal. Gebouwd rondom jouw processen.');
   stage.querySelector('h2')!.textContent='';
   change.textContent=tr(branch||'Algemeen voorbeeld')+' · '+tr('wijzigen');
-  picker.querySelector('.sp-feedback')!.textContent=branch?tr(profile.id==='general'?'Voor {branch} tonen we nu het algemene voorbeeld. Jouw maatwerk werken we samen uit.':'Jouw selectie: {branch}. De AI-medewerker, software en website passen zich samen aan.',{branch:tr(branch)}):tr('Drie voorbeelden. Afgestemd op jouw wereld.');
-  radios.forEach(r=>r.checked=r.value===branch);other.value=radios.some(r=>r.checked)?'':branch;
-  dropdown.sync(branch);
+  radios.forEach(r=>r.checked=r.value===branch);
   root!.querySelectorAll<HTMLAnchorElement>('[data-quiz-cta]').forEach(link=>{const url=new URL(link.href);if(branch)url.searchParams.set('branche',branch);else url.searchParams.delete('branche');link.href=url.pathname+url.search+url.hash;});
   // Only explicit choices are remembered in this tab. No provider call or lead creation.
   try{sessionStorage.setItem('ap-showcase-v1',JSON.stringify({branch}));}catch{/* Storage can be unavailable; the demo still works. */}
   schedule();
  }
- function enterStory(){dropdown.close();stage.scrollIntoView({behavior:quiet()?'instant':'smooth',block:'start'});const heading=stage.querySelector<HTMLElement>('h2')!;heading.tabIndex=-1;heading.focus({preventScroll:true});}
+ function enterStory(){stage.scrollIntoView({behavior:quiet()?'instant':'smooth',block:'start'});const heading=stage.querySelector<HTMLElement>('h2')!;heading.tabIndex=-1;heading.focus({preventScroll:true});}
  radios.forEach(r=>r.addEventListener('change',()=>applySelection(r.value)));
- other.addEventListener('change',()=>applySelection(other.value));
  form.addEventListener('submit',event=>{event.preventDefault();applySelection(branch);enterStory();});
  form.querySelector('.sp-skip')!.addEventListener('click',()=>{applySelection('');enterStory();});
- change.addEventListener('click',()=>{picker.scrollIntoView({behavior:quiet()?'instant':'smooth',block:'start'});const selected=radios.find(r=>r.checked);if(selected)selected.focus({preventScroll:true});else dropdown.focus();});
+ change.addEventListener('click',()=>{picker.scrollIntoView({behavior:quiet()?'instant':'smooth',block:'start'});const selected=radios.find(r=>r.checked);if(selected)selected.focus({preventScroll:true});else radios[0]?.focus({preventScroll:true});});
  try{const saved=JSON.parse(sessionStorage.getItem('ap-showcase-v1')||'null');if(saved&&typeof saved.branch==='string')applySelection(saved.branch);}catch{/* Ignore corrupt or blocked session storage. */}
  root.querySelector('[data-cs-motion]')?.addEventListener('click',()=>requestAnimationFrame(schedule));schedule();
 }
