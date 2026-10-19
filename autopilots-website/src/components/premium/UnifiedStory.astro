@@ -1,39 +1,44 @@
 <script>
+import { translator, pageLocale, translateDemoHtml } from './showcase-i18n';
+import { localizedProfile } from './showcase-profile-i18n';
 import { renderShowcase } from './showcase-scenes';
 import { generalProfile, profileForBranch, escapeMarkup, type ShowcaseProfile } from './showcase-profiles';
 import { createHouseScene } from './house-scene';
 import { setupBranchDropdown } from './branch-dropdown';
 const root = document.querySelector<HTMLElement>('#ap-connected');
 if(root){
+ const locale=pageLocale();
+ const tr=translator(locale);
+ const html=(markup:string)=>translateDemoHtml(markup,locale);
  const originals = [...root.querySelectorAll<HTMLElement>('.cs-chapter')];
  const panels = originals.map(section=>section.querySelector<HTMLElement>('.cs-visual')!);
- const titles = ['Drie bouwgebieden. Eén partner.','Een extra collega. Voor jouw klanten.','Jouw werkwijze. In eigen software.','Een website die verder werkt.','Los inzetbaar. Sterker samen.'];
- const descriptions = ['Scroll en zie hoe het samenkomt.','Telefonie en chat, met afgesproken acties en jouw team aan het roer.','Van planning tot klantportaal. Gebouwd rondom jouw processen.','Een sterke voorkant, met een eigen backend en passende koppelingen.','Wij verbinden wat je nodig hebt. Ook met de systemen die je al gebruikt.'];
+ const titles = [tr('Drie bouwgebieden. Eén partner.'),tr('Een extra collega. Voor jouw klanten.'),tr('Jouw werkwijze. In eigen software.'),tr('Een website die verder werkt.'),tr('Los inzetbaar. Sterker samen.')];
+ const descriptions = [tr('Scroll en zie hoe het samenkomt.'),tr('Telefonie en chat, met afgesproken acties en jouw team aan het roer.'),tr('Van planning tot klantportaal. Gebouwd rondom jouw processen.'),tr('Een sterke voorkant, met een eigen backend en passende koppelingen.'),tr('Wij verbinden wat je nodig hebt. Ook met de systemen die je al gebruikt.')];
  const stage = document.createElement('section');
- stage.className='us-story';stage.setAttribute('aria-label','Wat Autopilots voor jouw bedrijf bouwt');
- stage.innerHTML=`<div class="us-sticky"><div class="us-caption"><span class="cs-eyebrow">AUTOPILOTS / VAN IDEE NAAR SAMENWERKING</span><h2>${titles[0]}</h2><p>${descriptions[0]}</p></div><div class="us-world"><svg class="us-connections" viewBox="0 0 1000 500" preserveAspectRatio="none" aria-hidden="true"><path d="M170 250 C300 250 300 160 500 160 S700 250 830 250"/><path class="us-signal" d="M170 250 C300 250 300 160 500 160 S700 250 830 250"/></svg><div class="us-orbit" aria-hidden="true"></div></div><div class="us-controls" aria-label="Ga naar een bouwgebied">${['Overzicht','AI-medewerkers','Software','Websites','Samen'].map((name,i)=>`<button type="button" data-us-step="${i}"><span>0${i+1}</span>${name}</button>`).join('')}</div></div>`;
+ stage.className='us-story';stage.setAttribute('aria-label',tr('Wat Autopilots voor jouw bedrijf bouwt'));
+ stage.innerHTML=html(`<div class="us-sticky"><div class="us-caption"><span class="cs-eyebrow">AUTOPILOTS / VAN IDEE NAAR SAMENWERKING</span><h2>${titles[0]}</h2><p>${descriptions[0]}</p></div><div class="us-world"><svg class="us-connections" viewBox="0 0 1000 500" preserveAspectRatio="none" aria-hidden="true"><path d="M170 250 C300 250 300 160 500 160 S700 250 830 250"/><path class="us-signal" d="M170 250 C300 250 300 160 500 160 S700 250 830 250"/></svg><div class="us-orbit" aria-hidden="true"></div></div><div class="us-controls" aria-label="Ga naar een bouwgebied">${[tr('Overzicht'),tr('AI-medewerkers'),tr('Software'),tr('Websites'),tr('Samen')].map((name,i)=>`<button type="button" data-us-step="${i}"><span>0${i+1}</span>${name}</button>`).join('')}</div></div>`);
  const picker=root.querySelector<HTMLElement>('.sp-picker')!;
  root.querySelector('.cs-hero')!.after(picker);picker.hidden=false;picker.after(stage);
  root.querySelector('.cs-discover')!.setAttribute('href','#jouw-bedrijf');
  const world=stage.querySelector<HTMLElement>('.us-world')!;
  const together=document.createElement('div');together.className='sx-together';together.innerHTML='<span>Websiteaanvraag</span>→<span>AI vraagt door</span>→<span>Project aangemaakt</span>';world.append(together);
- let selectedProfile:ShowcaseProfile=generalProfile;
- const statusText=[['Gesprek komt binnen','AI begrijpt de vraag','Je team kan verder'],['Modules komen samen','Project krijgt vorm','Team en klant verbonden'],['Het ontwerp ontstaat','Gevels en glas komen samen','Website en beheer op maat']];
+ let selectedProfile:ShowcaseProfile=localizedProfile(generalProfile,locale);
+ const statusText=[[tr('Gesprek komt binnen'),tr('AI begrijpt de vraag'),tr('Je team kan verder')],[tr('Modules komen samen'),'Project krijgt vorm',tr('Team en klant verbonden')],[tr('Het ontwerp ontstaat'),tr('Gevels en glas komen samen'),tr('Website en beheer op maat')]];
  const overrides=new Map<number,number>();
  let flipOverride:number|null=null;
  let flipFront:HTMLElement,flipBack:HTMLElement,flipButton:HTMLButtonElement;
  let drawHouse:((progress:number)=>void)|undefined;
  function mountDemos(profile:ShowcaseProfile){
  selectedProfile=profile;
- statusText[0]=['Gesprek komt binnen','AI begrijpt de vraag',profile.action];
- statusText[1]=['Modules komen samen',profile.preparation,'Team en klant verbonden'];
- statusText[2]=profile.id==='general'?['Het ontwerp ontstaat','Gevels en glas komen samen','Website en beheer op maat']:[profile.phases[0],profile.phases[2],'Website en beheer op maat'];
- const examples=renderShowcase(profile);
+ statusText[0]=[tr('Gesprek komt binnen'),tr('AI begrijpt de vraag'),profile.action];
+ statusText[1]=[tr('Modules komen samen'),profile.preparation,tr('Team en klant verbonden')];
+ statusText[2]=profile.id==='general'?[tr('Het ontwerp ontstaat'),tr('Gevels en glas komen samen'),tr('Website en beheer op maat')]:[profile.phases[0],profile.phases[2],tr('Website en beheer op maat')];
+ const examples=renderShowcase(profile,locale);
  overrides.clear();flipOverride=null;
  panels.forEach((panel,i)=>{
   panel.querySelector('.dx-demo')?.remove();
   const demo=document.createElement('div');demo.className='dx-demo';
-  demo.innerHTML=examples[i]+`<div class="dx-bottom"><span data-dx-status>${statusText[i][0]}</span><button type="button" data-dx-play>Volgende stap <span>→</span></button></div><div class="dx-track"><i></i></div><small class="dx-disclaimer">Voorbeeld · geen echte aanvraag of boeking</small>`;
+  demo.innerHTML=examples[i]+html(`<div class="dx-bottom"><span data-dx-status>${statusText[i][0]}</span><button type="button" data-dx-play>Volgende stap <span>→</span></button></div><div class="dx-track"><i></i></div><small class="dx-disclaimer">Voorbeeld · geen echte aanvraag of boeking</small>`);
   panel.append(demo);
   demo.querySelectorAll<HTMLButtonElement>('[data-dx-channel]').forEach(button=>button.addEventListener('click',()=>{
    const chat=button.dataset.dxChannel==='chat';
@@ -47,35 +52,35 @@ if(root){
    const rotor=document.createElement('div');rotor.className='dx-flip-rotor';
    site.before(shell);shell.append(rotor);rotor.append(site);site.classList.add('dx-flip-front');flipFront=site;
    flipBack=document.createElement('div');flipBack.className='dx-flip-back';
-   flipBack.innerHTML=`<div class="dx-admin-top"><b>NOORD® / BEHEER</b><span>Interactieve demo</span></div><div class="dx-admin-body"><small>JOUW WEBSITE. JOUW CONTROLE.</small><h4>Zelf aanpassen.<br>Zonder omwegen.</h4><p>Een beheeromgeving op maat voor jouw team.</p><label for="demo-site-title">Titel op je website</label><input id="demo-site-title" maxlength="45" value="Bijzonder wonen." autocomplete="off"><fieldset><legend>Accentkleur</legend><button type="button" data-site-color="#314235" style="--swatch:#314235" aria-label="Bosgroen" aria-pressed="true"></button><button type="button" data-site-color="#875735" style="--swatch:#875735" aria-label="Warm brons" aria-pressed="false"></button><button type="button" data-site-color="#304c67" style="--swatch:#304c67" aria-label="Nachtblauw" aria-pressed="false"></button></fieldset><div class="dx-admin-project"><span>PROJECTEN</span><strong>Duinvilla <i>Gepubliceerd in demo</i></strong><small>Teksten, projecten en aanvragen op één plek.</small></div><div class="dx-admin-saved" role="status">✓ Probeer een titel of kleur. Bekijk daarna de voorkant.</div></div>`;
+   flipBack.innerHTML=html(`<div class="dx-admin-top"><b>NOORD® / BEHEER</b><span>Interactieve demo</span></div><div class="dx-admin-body"><small>JOUW WEBSITE. JOUW CONTROLE.</small><h4>Zelf aanpassen.<br>Zonder omwegen.</h4><p>Een beheeromgeving op maat voor jouw team.</p><label for="demo-site-title">Titel op je website</label><input id="demo-site-title" maxlength="45" value="Bijzonder wonen." autocomplete="off"><fieldset><legend>Accentkleur</legend><button type="button" data-site-color="#314235" style="--swatch:#314235" aria-label="Bosgroen" aria-pressed="true"></button><button type="button" data-site-color="#875735" style="--swatch:#875735" aria-label="Warm brons" aria-pressed="false"></button><button type="button" data-site-color="#304c67" style="--swatch:#304c67" aria-label="Nachtblauw" aria-pressed="false"></button></fieldset><div class="dx-admin-project"><span>PROJECTEN</span><strong>Duinvilla <i>Gepubliceerd in demo</i></strong><small>Teksten, projecten en aanvragen op één plek.</small></div><div class="dx-admin-saved" role="status">✓ Probeer een titel of kleur. Bekijk daarna de voorkant.</div></div>`);
    rotor.append(flipBack);
    site.style.setProperty('--site-accent',profile.accent);
    site.dataset.profile=profile.id;
-   flipBack.querySelector('.dx-admin-top b')!.textContent=`${profile.brand} / BEHEER`;
+   flipBack.querySelector('.dx-admin-top b')!.textContent=`${profile.brand} / ${tr('BEHEER')}`;
    flipBack.querySelector('input')!.value=profile.title;
    flipBack.querySelector('.dx-admin-project strong')!.firstChild!.textContent=profile.project+' ';
    flipBack.querySelectorAll('[data-site-color]').forEach(b=>b.setAttribute('aria-pressed',String((b as HTMLElement).dataset.siteColor===profile.accent)));
-   flipButton=document.createElement('button');flipButton.type='button';flipButton.className='dx-flip-toggle';flipButton.textContent='Bekijk de achterkant ↻';
+   flipButton=document.createElement('button');flipButton.type='button';flipButton.className='dx-flip-toggle';flipButton.textContent=tr('Bekijk de achterkant')+' ↻';
    shell.after(flipButton);
    flipButton.addEventListener('click',()=>{flipOverride=Number(panel.dataset.flip||0)>.5?0:1;schedule();});
    const title=site.querySelector('h4')!;
    const titleText=document.createElement('span');titleText.textContent=profile.title;title.firstChild!.replaceWith(titleText);
    const saved=flipBack.querySelector<HTMLElement>('.dx-admin-saved')!;
-   flipBack.querySelector('input')!.addEventListener('input',event=>{titleText.textContent=(event.target as HTMLInputElement).value||profile.title;saved.textContent='✓ Aangepast in dit voorbeeld · niets wordt gepubliceerd';});
-   flipBack.querySelectorAll<HTMLButtonElement>('[data-site-color]').forEach(button=>button.addEventListener('click',()=>{site.style.setProperty('--site-accent',button.dataset.siteColor!);flipBack.querySelectorAll('[data-site-color]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));saved.textContent='✓ Kleur aangepast · bekijk de voorkant';}));
+   flipBack.querySelector('input')!.addEventListener('input',event=>{titleText.textContent=(event.target as HTMLInputElement).value||profile.title;saved.textContent='✓ '+tr('Aangepast in dit voorbeeld · niets wordt gepubliceerd');});
+   flipBack.querySelectorAll<HTMLButtonElement>('[data-site-color]').forEach(button=>button.addEventListener('click',()=>{site.style.setProperty('--site-accent',button.dataset.siteColor!);flipBack.querySelectorAll('[data-site-color]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));saved.textContent='✓ '+tr('Kleur aangepast · bekijk de voorkant');}));
   }
   demo.querySelector('[data-dx-play]')!.addEventListener('click',()=>{const now=Number(panel.dataset.demoProgress||0);overrides.set(i,now>.85?0:Math.min(1,now+.4));schedule();});
-  demo.querySelectorAll<HTMLButtonElement>('[data-dx-channel]').forEach(button=>button.addEventListener('click',()=>{demo.querySelectorAll('[data-dx-channel]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));const chat=button.dataset.dxChannel==='chat';demo.querySelector('[data-dx-call]')!.textContent=chat?'Nieuw chatbericht':'Inkomend gesprek';demo.classList.toggle('dx-chat-mode',chat);}));
+  demo.querySelectorAll<HTMLButtonElement>('[data-dx-channel]').forEach(button=>button.addEventListener('click',()=>{demo.querySelectorAll('[data-dx-channel]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));const chat=button.dataset.dxChannel==='chat';demo.querySelector('[data-dx-call]')!.textContent=chat?tr('Nieuw chatbericht'):tr('Inkomend gesprek');demo.classList.toggle('dx-chat-mode',chat);}));
  });
  together.innerHTML=profile.flow.map(text=>`<span>${escapeMarkup(text)}</span>`).join('→');
  }
- mountDemos(generalProfile);
- panels.forEach((panel,i)=>{world.append(panel);panel.classList.add('us-panel');panel.dataset.panel=String(i);const label=document.createElement('h3');label.className='us-panel-label';label.textContent=['AI-medewerkers','Maatwerksoftware','Websites & backends'][i];panel.prepend(label);});
+ mountDemos(localizedProfile(generalProfile,locale));
+ panels.forEach((panel,i)=>{world.append(panel);panel.classList.add('us-panel');panel.dataset.panel=String(i);const label=document.createElement('h3');label.className='us-panel-label';label.textContent=[tr('AI-medewerkers'),tr('Maatwerksoftware'),tr('Websites & backends')][i];panel.prepend(label);});
  originals.forEach((section,i)=>{const marker=document.createElement('span');marker.id=section.id;marker.className='us-marker';marker.style.top=`${(i+1)*20}%`;stage.append(marker);section.removeAttribute('id');});
  const connected=root.querySelector<HTMLElement>('.cs-connected-section')!;
  const end=document.createElement('span');end.id='verbonden';end.className='us-marker';end.style.top='80%';stage.append(end);connected.removeAttribute('id');
  const cta=root.querySelector<HTMLElement>('.cs-cta')!;stage.after(cta);
- cta.querySelector('h2')!.innerHTML='En hoe zou dit<br/><em>voor jouw bedrijf werken?</em>';
+ cta.querySelector('h2')!.innerHTML=html('En hoe zou dit<br/><em>voor jouw bedrijf werken?</em>');
  root.classList.add('us-ready');
  let current=0,target=0,frame=0,last=0;
  const reduce=matchMedia('(prefers-reduced-motion: reduce)');
@@ -120,11 +125,11 @@ if(root){
     const back=turn>.5;
     flipFront.inert=back;flipBack.inert=!back;
     flipFront.setAttribute('aria-hidden',String(back));flipBack.setAttribute('aria-hidden',String(!back));
-    flipButton.textContent=back?'Bekijk jouw aanpassingen ↻':'Bekijk de achterkant ↻';
+    flipButton.textContent=back?tr('Bekijk jouw aanpassingen')+' ↻':tr('Bekijk de achterkant')+' ↻';
    }
    panel.querySelectorAll<HTMLElement>('[data-dx-at]').forEach(el=>{const shown=progress>=Number(el.dataset.dxAt);el.classList.toggle('dx-shown',shown);el.setAttribute('aria-hidden',String(!shown));});
    panel.querySelector('[data-dx-status]')!.textContent=statusText[i][progress<.35?0:progress<.7?1:2];
-   panel.querySelector('[data-dx-play]')!.firstChild!.textContent=progress>.85?'Opnieuw afspelen ':'Volgende stap ';
+   panel.querySelector('[data-dx-play]')!.firstChild!.textContent=progress>.85?tr('Opnieuw afspelen')+' ':tr('Volgende stap')+' ';
   });
   const heading=stage.querySelector('h2')!;
   if(heading.textContent!==titles[active]){heading.textContent=titles[active];stage.querySelector('.us-caption p')!.textContent=descriptions[active];}
@@ -139,7 +144,7 @@ if(root){
  addEventListener('wheel',resumeScroll,{passive:true});addEventListener('touchmove',resumeScroll,{passive:true});
  addEventListener('keydown',event=>{if(['PageDown','PageUp','ArrowDown','ArrowUp','Home','End',' '].includes(event.key)&&!(event.target instanceof HTMLInputElement)&&!(event.target instanceof HTMLTextAreaElement))resumeScroll();});
  addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule);reduce.addEventListener('change',schedule);
- const change=document.createElement('button');change.type='button';change.className='sp-change';change.textContent='Algemeen voorbeeld · wijzigen';stage.querySelector('.us-sticky')!.prepend(change);
+ const change=document.createElement('button');change.type='button';change.className='sp-change';change.textContent=tr('Algemeen voorbeeld')+' · '+tr('wijzigen');stage.querySelector('.us-sticky')!.prepend(change);
  const form=picker.querySelector('form')!;
  const other=form.querySelector<HTMLSelectElement>('[name="showcase-other"]')!;
  const dropdown=setupBranchDropdown(form,other);
@@ -148,16 +153,16 @@ if(root){
  let branch='';
  function applySelection(value:string){
   branch=allowed.has(value)?value:'';
-  const profile=profileForBranch(branch);
+  const profile=localizedProfile(profileForBranch(branch),locale);
   mountDemos(profile);
   stage.dataset.branch=branch;stage.dataset.profile=profile.id;
-  titles[0]='Drie bouwgebieden. Eén partner.';
-  descriptions[0]=branch?(profile.id==='general'?`Voor ${branch}: bekijk een algemeen voorbeeld. Je exacte inrichting bepalen we samen.`:`Van klantvraag tot uitvoering. Een voorbeeld voor ${branch.toLocaleLowerCase('nl')}.`):'Scroll en zie hoe het samenkomt.';
-  descriptions[1]=profile.id==='general'?'Telefonie en chat, met afgesproken acties en jouw team aan het roer.':profile.intent+'. Je team houdt de regie.';
-  descriptions[2]=profile.id==='general'?'Van planning tot klantportaal. Gebouwd rondom jouw processen.':`${profile.module}, ${profile.document.toLocaleLowerCase('nl')} en klantportaal. In één werkplek.`;
+  titles[0]=tr('Drie bouwgebieden. Eén partner.');
+  descriptions[0]=branch?(profile.id==='general'?tr('Voor {branch} tonen we nu het algemene voorbeeld. Jouw maatwerk werken we samen uit.',{branch:tr(branch)}):tr('Van klantvraag tot uitvoering. Een voorbeeld voor {branch}.',{branch:tr(branch)})):tr('Scroll en zie hoe het samenkomt.');
+  descriptions[1]=profile.id==='general'?tr('Telefonie en chat, met afgesproken acties en jouw team aan het roer.'):profile.intent+'. '+tr('Je team houdt de regie.');
+  descriptions[2]=tr('Van planning tot klantportaal. Gebouwd rondom jouw processen.');
   stage.querySelector('h2')!.textContent='';
-  change.textContent=`${branch||'Algemeen voorbeeld'} · wijzigen`;
-  picker.querySelector('.sp-feedback')!.textContent=branch?(profile.id==='general'?`Voor ${branch} tonen we nu het algemene voorbeeld. Jouw maatwerk werken we samen uit.`:`Jouw selectie: ${branch}. De AI-medewerker, software en website passen zich samen aan.`):'Drie voorbeelden. Afgestemd op jouw wereld.';
+  change.textContent=tr(branch||'Algemeen voorbeeld')+' · '+tr('wijzigen');
+  picker.querySelector('.sp-feedback')!.textContent=branch?tr(profile.id==='general'?'Voor {branch} tonen we nu het algemene voorbeeld. Jouw maatwerk werken we samen uit.':'Jouw selectie: {branch}. De AI-medewerker, software en website passen zich samen aan.',{branch:tr(branch)}):tr('Drie voorbeelden. Afgestemd op jouw wereld.');
   radios.forEach(r=>r.checked=r.value===branch);other.value=radios.some(r=>r.checked)?'':branch;
   dropdown.sync(branch);
   root!.querySelectorAll<HTMLAnchorElement>('[data-quiz-cta]').forEach(link=>{const url=new URL(link.href);if(branch)url.searchParams.set('branche',branch);else url.searchParams.delete('branche');link.href=url.pathname+url.search+url.hash;});
