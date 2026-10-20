@@ -1,0 +1,22 @@
+name: Consultant runtime checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify consultant runtime without provider writes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Test isolated runtime with synthetic providers
+        working-directory: autopilots-platform
+        run: node --test tests/*.test.js
