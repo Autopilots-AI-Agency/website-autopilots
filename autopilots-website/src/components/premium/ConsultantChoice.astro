@@ -1,0 +1,164 @@
+---
+import { consultantCopy } from '../../data/consultant-copy';
+import { publicRuntime } from '../../config/publicRuntime';
+const { locale } = Astro.props;
+const copy = consultantCopy(locale);
+const ResultHeading = Astro.props.resultOnly ? 'h1' : 'h2';
+---
+<section class="consultant-choice" hidden aria-labelledby="consultant-title">
+  <p class="eyebrow">{copy.next}</p>
+  <h2 id="consultant-title" class="main-title" tabindex="-1">{copy.title}</h2>
+  <p class="consultant-intro">{copy.intro}</p>
+  <div class="consultant-options">
+    <article><span class="consultant-index">A / EMAIL</span><h3>{copy.email}</h3><p>{copy.emailHelp}</p>
+      <form data-consultant-email><label>{copy.emailLabel}<input type="email" name="email" autocomplete="email" maxlength="160" required/></label>
+        <label class="consent"><input type="checkbox" name="consent" required/><span>{copy.emailConsent}</span></label>
+        <button class="primary" type="submit">{copy.email}<span aria-hidden="true">↗</span></button>
+      </form>
+    </article>
+    <article><span class="consultant-index">B / AI</span><h3>{copy.call}</h3><p>{copy.callHelp}</p>
+      <form data-consultant-phone>
+      <label>{copy.phoneLabel}<input type="tel" name="phone" required autocomplete="tel" inputmode="tel" maxlength="32" aria-describedby="consultant-phone-help"/></label>
+      <p id="consultant-phone-help" class="consultant-small">{copy.phoneHelp}</p>
+      <label class="consent"><input type="checkbox" name="consent" required/><span>{copy.callConsent}</span></label>
+      <button class="primary" type="submit" disabled aria-describedby="consultant-unavailable">{copy.verify}<span aria-hidden="true">→</span></button>
+      </form>
+      <form data-consultant-code hidden><p>{copy.codeHelp}</p><label>{copy.code}<input name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{4,10}" minlength="4" maxlength="10" required/></label><button class="primary" type="submit">{copy.confirm} →</button></form>
+      <div data-consultant-ready hidden><p>{copy.verified}</p><button class="primary" type="button" data-consultant-call>{copy.callNow} ↗</button></div>
+    </article>
+  </div>
+  <p id="consultant-unavailable" class="consultant-intro">{copy.unavailable}</p>
+  <p data-consultant-status role="status"></p>
+  <button class="download" type="button" data-consultant-skip>{copy.view} ↓</button>
+</section>
+<section class="consultant-booking" hidden aria-label={copy.booking}>
+  <p class="eyebrow">{copy.next}</p><ResultHeading class="main-title" tabindex="-1">{copy.resultTitle}</ResultHeading><p class="consultant-intro">{copy.resultIntro}</p>
+  <p data-consultant-receipt role="status"></p>
+  <p data-call-status role="status" hidden></p>
+  <a class="primary" href={publicRuntime.ghlCalendarUrl} target="_blank" rel="noopener">{copy.booking}<span aria-hidden="true">↗</span></a>
+</section>
+<style is:global>
+  #ap-intake .intake-skip:not(:focus){clip-path:inset(100%);width:1px;height:1px;overflow:hidden;padding:0}
+  #ap-intake .consultant-choice{text-align:center}
+  #ap-intake .consultant-choice .main-title{max-width:none;width:100%;margin-inline:auto;text-align:center}
+  #ap-intake .consultant-intro{max-width:660px;margin:24px auto 36px;color:#acbec5;line-height:1.7}
+  #ap-intake .consultant-options{display:grid;grid-template-columns:1fr 1fr;gap:24px;text-align:left}
+  #ap-intake .consultant-options article{min-width:0;display:flex;flex-direction:column;padding:32px;background:linear-gradient(145deg,#203640,#172a32);border:1px solid #bd875d55;border-radius:24px}
+  #ap-intake .consultant-index{font-family:Syne,sans-serif;color:#d5ab88;letter-spacing:.16em;font-size:12px}
+  #ap-intake .consultant-options h3{font-size:26px;margin:24px 0 12px;color:#f5f1eb}
+  #ap-intake .consultant-options p{font-size:15px;line-height:1.7;color:#b5c5ca;margin:0 0 24px}
+  #ap-intake .consultant-options form{display:flex;flex-direction:column;flex:1}
+  #ap-intake .consultant-options label:not(.consent){font-size:14px;line-height:1.6;color:#f5f1eb}
+  #ap-intake .consultant-options input:not([type=checkbox]){box-sizing:border-box;display:block;width:100%;margin:12px 0 20px;padding:16px;border:1px solid #66777e;border-radius:12px;background:#12252d;color:#fff;font:inherit;font-size:16px}
+  #ap-intake .consultant-options .primary{margin-top:auto;width:100%;min-height:56px;font-size:15px}
+  #ap-intake .consultant-options .primary:disabled{opacity:.5;cursor:not-allowed}
+  #ap-intake .consultant-options .consent{display:flex;align-items:flex-start;gap:10px;margin:0 0 24px}
+  #ap-intake .consultant-options .consent input{flex:none;margin-top:4px}
+  #ap-intake .consultant-options .consultant-small{font-size:12px;line-height:1.6;margin:12px 0 20px}
+  #ap-intake .consultant-choice .download{margin-top:24px}
+  #ap-intake .consultant-booking{text-align:center;margin-bottom:48px;padding:32px;border:1px solid #bd875d66;border-radius:24px;background:radial-gradient(ellipse at top,#2c4149,#14272f)}
+  #ap-intake .consultant-booking .main-title{max-width:850px;margin:20px auto;font-size:clamp(32px,5vw,64px);text-align:center}
+  #ap-intake [data-call-status]{padding:18px;border:1px solid #bd875d66;border-radius:12px;background:#102028}
+  #ap-intake .consultant-options form[hidden],#ap-intake .consultant-options [hidden]{display:none}
+  #ap-intake .consultant-booking .primary{margin:16px auto;max-width:480px}
+  @media(prefers-reduced-motion:no-preference){#ap-intake .consultant-booking{animation:consultant-reveal .6s ease-out}@keyframes consultant-reveal{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:none}}}
+  #ap-intake .consultant-booking p{color:#b5c5ca;line-height:1.7}
+  @media(max-width:760px){#ap-intake .consultant-options{grid-template-columns:1fr}#ap-intake .consultant-options article{padding:24px}}
+</style>
+<script>
+import { consultantCopy } from '../../data/consultant-copy';
+const root = document.querySelector<HTMLElement>('#ap-intake')!;
+const locale=document.documentElement.lang.split('-')[0];
+const copy = consultantCopy(locale);
+const choice = root.querySelector<HTMLElement>('.consultant-choice')!;
+const booking = root.querySelector<HTMLElement>('.consultant-booking')!;
+const status=root.querySelector<HTMLElement>('[data-consultant-status]')!;
+const phoneForm=root.querySelector<HTMLFormElement>('[data-consultant-phone]')!;
+const codeForm=root.querySelector<HTMLFormElement>('[data-consultant-code]')!;
+const callButton=root.querySelector<HTMLButtonElement>('[data-consultant-call]')!;
+let token='',requestId='',verificationId='',callId='';
+let sending=false,challenge:{id:string,key:string}|null=null;
+let resultData:any=null;
+let pollTimer:ReturnType<typeof setTimeout>|undefined;
+async function api(action:string,input:Record<string,unknown>={}) {
+  const r=await fetch('/.netlify/functions/consultant',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,input})});
+  const data=await r.json();if(!r.ok||!data.ok)throw new Error(data.error||'failed');return data;
+}
+root.addEventListener('consultant:assessment',((event:CustomEvent)=>{
+  token=event.detail.token;resultData=event.detail;requestId=crypto.randomUUID();verificationId=crypto.randomUUID();callId=crypto.randomUUID();
+  choice.hidden=false;root.querySelector<HTMLElement>('[data-step-label]')!.textContent=copy.title;
+  root.querySelector<HTMLElement>('[data-step-count]')!.textContent='✓';
+  root.querySelector<HTMLElement>('#consultant-title')!.focus({preventScroll:true});
+  choice.scrollIntoView({block:'start',behavior:'instant'});
+  api('config').then(data=>{
+    phoneForm.querySelector<HTMLButtonElement>('button')!.disabled=!data.enabled;
+    root.querySelector<HTMLElement>('#consultant-unavailable')!.hidden=!!data.enabled;
+  }).catch(()=>{});
+}) as EventListener);
+function showLanding(saved:any) {
+  choice.hidden=true;booking.hidden=false;
+  booking.querySelector<HTMLElement>('[data-consultant-receipt]')!.textContent=saved?.empty?copy.empty:saved?.message||'';
+  if(saved?.empty){const a=booking.querySelector<HTMLAnchorElement>('a')!;a.href='/'+locale+'/ai-scan/';a.textContent=copy.view;return;}
+  if(saved?.call)void poll(saved.call,Date.now());
+}
+async function poll(call:{id:string,key:string},start:number) {
+  const node=root.querySelector<HTMLElement>('[data-call-status]')!;node.hidden=false;
+  try {
+    const data=await api('status',call);
+    const texts:Record<string,string>={queued:copy.queued,dispatching:copy.acceptedCall,provider_accepted:copy.acceptedCall,ringing:copy.ringing,'in-progress':copy.connected,completed:copy.completed,busy:copy.notConnected,failed:copy.notConnected,'no-answer':copy.notConnected,canceled:copy.notConnected,cancelled:copy.notConnected,provider_unknown:copy.unknown};
+    node.textContent=texts[data.status]||copy.unknown;
+    if(data.status!=='queued')booking.querySelector<HTMLElement>('[data-consultant-receipt]')!.textContent='';
+    if(data.booking==='confirmed'){booking.querySelector<HTMLAnchorElement>('a')!.hidden=true;booking.querySelector<HTMLElement>('[data-consultant-receipt]')!.textContent=copy.booked;}
+    if(['completed','busy','failed','no-answer','canceled','cancelled','provider_unknown'].includes(data.status))return;
+  } catch {node.textContent=copy.unknown;}
+  if(Date.now()-start<600000)pollTimer=setTimeout(()=>void poll(call,start),4000);else node.textContent=copy.unknown;
+}
+function results(message='',call?:{id:string,key:string}) {
+  const saved={...resultData,locale,message,call,expires:Date.now()+3600000};
+  // Personal results stay in this tab, never in query parameters or public URLs.
+  try {sessionStorage.setItem('autopilots-consultant-result',JSON.stringify(saved));location.assign('/'+locale+'/ai-scan/resultaat/');}
+  catch {showLanding(saved);root.dispatchEvent(new CustomEvent('consultant:results'));}
+}
+root.querySelector('[data-consultant-skip]')!.addEventListener('click',()=>results());
+root.querySelector<HTMLFormElement>('[data-consultant-email]')!.addEventListener('submit',async event=>{
+  event.preventDefault();if(sending||!token)return;
+  const form=event.currentTarget as HTMLFormElement;if(!form.reportValidity())return;
+  const button=form.querySelector<HTMLButtonElement>('button')!;
+  sending=button.disabled=true;status.textContent=copy.sending;
+  try {
+    const response=await fetch('/.netlify/functions/analysis-request',{method:'POST',headers:{'Content-Type':'application/json','Idempotency-Key':requestId,'X-Autopilots-Locale':locale},body:JSON.stringify({token,delivery:'analysis',email:(form.elements.namedItem('email') as HTMLInputElement).value,consent:true})});
+    const data=await response.json();if(!response.ok||!data.ok)throw new Error('failed');
+    results(data.confirmation==='accepted'?copy.accepted:copy.pending);
+  } catch {status.textContent=copy.error;}finally{sending=button.disabled=false;}
+});
+phoneForm.addEventListener('submit',async event=>{
+  event.preventDefault();if(sending||!token||!phoneForm.reportValidity())return;
+  sending=true;const button=phoneForm.querySelector<HTMLButtonElement>('button')!;button.disabled=true;status.textContent=copy.working;
+  try {
+    challenge=await api('verify-start',{id:verificationId,token,phone:(phoneForm.elements.namedItem('phone') as HTMLInputElement).value,consent:true,consentVersion:'ai-callback-2026-10-20'});
+    phoneForm.hidden=true;codeForm.hidden=false;codeForm.querySelector<HTMLInputElement>('input')!.focus();status.textContent=copy.codeHelp;
+  }catch{status.textContent=copy.callError;}finally{sending=button.disabled=false;}
+});
+codeForm.addEventListener('submit',async event=>{
+  event.preventDefault();if(sending||!challenge||!codeForm.reportValidity())return;
+  sending=true;const button=codeForm.querySelector<HTMLButtonElement>('button')!;button.disabled=true;status.textContent=copy.working;
+  try{
+    await api('verify-check',{...challenge,code:(codeForm.elements.namedItem('code') as HTMLInputElement).value});
+    codeForm.hidden=true;root.querySelector<HTMLElement>('[data-consultant-ready]')!.hidden=false;callButton.focus();status.textContent='';
+  }catch{status.textContent=copy.callError;}finally{sending=button.disabled=false;}
+});
+callButton.addEventListener('click',async()=>{
+  if(sending||!challenge)return;sending=callButton.disabled=true;status.textContent=copy.working;
+  try{
+    const call=await api('call',{id:callId,token,challengeId:challenge.id,key:challenge.key,consent:true,consentVersion:'ai-callback-2026-10-20'});
+    results(copy.queued,{id:call.id,key:call.key});
+  }catch{status.textContent=copy.callError;}finally{sending=callButton.disabled=false;}
+});
+if(location.pathname.includes('/ai-scan/resultaat')){
+  try{
+    const saved=JSON.parse(sessionStorage.getItem('autopilots-consultant-result')||'null');
+    showLanding(saved&&saved.locale===locale&&saved.expires>Date.now()?saved:{empty:true});
+  }catch{showLanding({empty:true});}
+}
+window.addEventListener('pagehide',()=>{if(pollTimer)clearTimeout(pollTimer);});
+</script>

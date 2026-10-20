@@ -1,4 +1,7 @@
 [build]
+  # Consultant functions import the isolated runtime outside this base directory.
+  # Rebuild for those changes too; an empty/identical cache ref must not skip a build.
+  ignore = 'test "$CACHED_COMMIT_REF" != "$COMMIT_REF" && git diff --quiet "$CACHED_COMMIT_REF" "$COMMIT_REF" -- . ../autopilots-platform/src/consultant'
   command = "npm run build && npm run release:verify"
   publish = "dist"
   functions = "netlify/functions"

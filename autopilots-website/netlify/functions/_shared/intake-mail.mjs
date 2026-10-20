@@ -22,15 +22,27 @@ export async function sendIntakeMail({
       name: record.name,
       bookingUrl,
       locale: record.assessment.locale,
+      assessment:
+        record.delivery === "analysis" ? record.assessment : undefined,
     }),
   };
   await store.setJSON(
     key,
-    { message, createdAt: now, risk: "R1", requestId: record.id },
+    {
+      message,
+      delivery: record.delivery || "confirmation",
+      createdAt: now,
+      risk: "R1",
+      requestId: record.id,
+    },
     { onlyIfNew: true },
   );
   const saved = await store.get(key, { type: "json" });
   if (!saved || saved.message.to[0] !== record.email)
+    return { status: "conflict" };
+  if (
+    (saved.delivery || "confirmation") !== (record.delivery || "confirmation")
+  )
     return { status: "conflict" };
   const receipt = await store.get(`${key}-receipt`, { type: "json" });
   if (receipt) return receipt;

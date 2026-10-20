@@ -1,0 +1,520 @@
+{
+  "name": "Autopilots Quiz Consultant — Provider Executor (PILOT)",
+  "active": false,
+  "nodes": [
+    {
+      "id": "ap-webhook",
+      "name": "One-use operation",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "autopilots-quiz-consultant-executor-v1",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "retryOnFail": false,
+      "webhookId": "autopilots-quiz-consultant-executor-v1",
+      "notes": "Bind a NEW Autopilots Consultant executor Header Auth credential. Never use client credentials.",
+      "notesInFlow": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "UNCONFIGURED_AP_CONSULTANT_EXECUTOR",
+          "name": "REQUIRED Autopilots Consultant EXECUTOR (not configured)"
+        }
+      }
+    },
+    {
+      "id": "ap-claim",
+      "name": "Claim once in Netlify",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        280,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://auto-pilots.io/.netlify/functions/consultant-executor",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { id: $json.body.id, key: $json.body.key } }}",
+        "options": {
+          "timeout": 10000,
+          "redirect": {
+            "redirect": {
+              "followRedirects": false
+            }
+          }
+        }
+      },
+      "retryOnFail": false
+    },
+    {
+      "id": "ap-provider",
+      "name": "Telnyx or GHL",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        560,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "provider",
+              "leftValue": "={{ $json.provider }}",
+              "rightValue": "telnyx",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "retryOnFail": false
+    },
+    {
+      "id": "ap-telnyx",
+      "name": "Telnyx — single write",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1080,
+        110
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.url }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": false,
+        "headerParameters": {
+          "parameters": []
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.body || {} }}",
+        "options": {
+          "timeout": 15000,
+          "redirect": {
+            "redirect": {
+              "followRedirects": false
+            }
+          },
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "retryOnFail": false,
+      "notes": "Dedicated Autopilots Consultant Telnyx credential required. No retries. No execution payload retention.",
+      "notesInFlow": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "UNCONFIGURED_AP_CONSULTANT_TELNYX",
+          "name": "REQUIRED Autopilots Consultant TELNYX (not configured)"
+        }
+      }
+    },
+    {
+      "id": "ap-ghl",
+      "name": "GHL — single write",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1080,
+        410
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.url }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Version",
+              "value": "2021-04-15"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.body || {} }}",
+        "options": {
+          "timeout": 15000,
+          "redirect": {
+            "redirect": {
+              "followRedirects": false
+            }
+          },
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "retryOnFail": false,
+      "notes": "Dedicated Autopilots Consultant GHL credential required. No retries. No execution payload retention.",
+      "notesInFlow": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "UNCONFIGURED_AP_CONSULTANT_GHL",
+          "name": "REQUIRED Autopilots Consultant GHL (not configured)"
+        }
+      }
+    },
+    {
+      "id": "ap-receipt",
+      "name": "Return provider receipt",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1360,
+        300
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { status: $json.statusCode, body: $json.body } }}",
+        "options": {}
+      },
+      "retryOnFail": false
+    },
+    {
+      "id": "ap-notes",
+      "name": "Activation gate",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -150
+      ],
+      "parameters": {
+        "content": "## Autopilots quizconsultant — PRIVATE PILOT\nDRAFT / DO NOT PUBLISH YET. No credentials bound.\nNetlify validates consent + OTP + signed scan, reserves the approved $10/day budget, and issues a one-use ticket. n8n ONLY executes that ticket once.\n\nBefore activation: new own Telnyx credential, own GHL scope, verified rates, six pinned assistants, tested voice/tools, reviewed website release. Test calls/SMS LAST. Existing inbound agent and customer workflows stay unchanged.",
+        "height": 350,
+        "width": 680
+      },
+      "retryOnFail": false
+    },
+    {
+      "id": "ap-telnyx-read",
+      "name": "Telnyx — read only",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1080,
+        290
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.url }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": false,
+        "headerParameters": {
+          "parameters": []
+        },
+        "sendBody": false,
+        "options": {
+          "timeout": 15000,
+          "redirect": {
+            "redirect": {
+              "followRedirects": false
+            }
+          },
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "retryOnFail": false,
+      "notes": "Dedicated Autopilots Consultant Telnyx credential required. No retries. No execution payload retention.",
+      "notesInFlow": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "UNCONFIGURED_AP_CONSULTANT_TELNYX",
+          "name": "REQUIRED Autopilots Consultant TELNYX (not configured)"
+        }
+      }
+    },
+    {
+      "id": "ap-telnyx-method",
+      "name": "Telnyx request method",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        820,
+        110
+      ],
+      "retryOnFail": false,
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "method",
+              "leftValue": "={{ $json.method }}",
+              "rightValue": "POST",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "ap-ghl-read",
+      "name": "GHL — read only",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1080,
+        590
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.url }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Version",
+              "value": "2021-04-15"
+            }
+          ]
+        },
+        "sendBody": false,
+        "options": {
+          "timeout": 15000,
+          "redirect": {
+            "redirect": {
+              "followRedirects": false
+            }
+          },
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "retryOnFail": false,
+      "notes": "Dedicated Autopilots Consultant GHL credential required. No retries. No execution payload retention.",
+      "notesInFlow": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "UNCONFIGURED_AP_CONSULTANT_GHL",
+          "name": "REQUIRED Autopilots Consultant GHL (not configured)"
+        }
+      }
+    },
+    {
+      "id": "ap-ghl-method",
+      "name": "GHL request method",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        820,
+        410
+      ],
+      "retryOnFail": false,
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "method",
+              "leftValue": "={{ $json.method }}",
+              "rightValue": "POST",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "One-use operation": {
+      "main": [
+        [
+          {
+            "node": "Claim once in Netlify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claim once in Netlify": {
+      "main": [
+        [
+          {
+            "node": "Telnyx or GHL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telnyx or GHL": {
+      "main": [
+        [
+          {
+            "node": "Telnyx request method",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "GHL request method",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telnyx request method": {
+      "main": [
+        [
+          {
+            "node": "Telnyx — single write",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Telnyx — read only",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telnyx — single write": {
+      "main": [
+        [
+          {
+            "node": "Return provider receipt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telnyx — read only": {
+      "main": [
+        [
+          {
+            "node": "Return provider receipt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GHL request method": {
+      "main": [
+        [
+          {
+            "node": "GHL — single write",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "GHL — read only",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GHL — single write": {
+      "main": [
+        [
+          {
+            "node": "Return provider receipt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GHL — read only": {
+      "main": [
+        [
+          {
+            "node": "Return provider receipt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "none",
+    "saveDataSuccessExecution": "none",
+    "saveManualExecutions": false,
+    "saveExecutionProgress": false,
+    "executionTimeout": 60,
+    "timezone": "Europe/Amsterdam"
+  },
+  "pinData": {},
+  "tags": []
+}

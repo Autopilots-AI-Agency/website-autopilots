@@ -2,6 +2,30 @@
 
 Status labels: `verified`, `inferred`, `proposed`, `blocked`.
 
+## Isolated website consultant boundary — 2026-10-20
+
+This file's OS milestones below are historical, not a competing execution mandate.
+The active shared backend/Finance scope remains the primary workspace's
+`BUILD_PLAN.md`; this website branch does not migrate or deploy that platform.
+
+For the isolated quiz consultant, the current source of truth and activation
+checklist is `autopilots-platform/src/consultant/n8n/README.md`.
+Tim selected the existing n8n and Telnyx accounts, the existing own GoHighLevel
+calendar, and a USD 10 rolling-24-hour private test ceiling. No new Render service.
+Netlify hosts the website, signed assessment admission, encrypted Blobs ledger,
+cost reservations and one-use operation tickets; n8n executes scoped provider
+requests, Telnyx hosts voice, and GHL remains the CRM/calendar owner.
+
+Verified: local release tests, preview landing, existing Telnyx caller identity
+and read-only access to the exact own GHL calendar. Not verified: production
+Blobs concurrency, new outbound assistants/voices, provider cost bounds, GHL
+booking/synchronization, or a real end-to-end call. New internal authentication
+requires confirmation. Outbound remains disabled until those gates pass; the
+approved test call is last. Public activation and additional destinations need
+separate acceptance. Existing inbound agents, client workflows, Finance and the
+governed OS demo remain unchanged. Website publication follows reviewed PR,
+protected main, Netlify deployment and exact live release identity verification.
+
 ## Current checkpoint — 2026-07-21
 
 The Phase 0–3 sandbox lighthouse is implemented in `autopilots-platform`: personalized AI employee preview → requirements/legal gates → sandbox payment → Secure Data Room → internal workflow → versioned human approval. Server sessions, role policy, tenant scope, audit, execution evidence, kill switches, idempotency and an append-only demo cost ledger are verified by automated tests.
