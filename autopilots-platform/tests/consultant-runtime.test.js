@@ -294,6 +294,32 @@ test("suppression, changed approval and expiry cancel before dispatch", async (t
     assert.equal(f.runtime.status(call).status, "cancelled");
   }
 });
+test("suppression records risk and zero provider usage once, preserving its first audit", async (t) => {
+  const f = fixture(t);
+  const input = await f.verified();
+  const call = await f.runtime.call(input, "192.0.2.1");
+  const job = f.store.get("call", call.id);
+  f.runtime.suppress(job);
+  const record = f.store.get("suppression", job.phoneHash);
+  assert.equal(record.risk, "R1");
+  assert.equal(record.idempotencyKey, `suppress:${job.phoneHash}`);
+  assert.equal(record.approvalVersion, job.approvalVersion);
+  assert.deepEqual(record.usage, {
+    providerRequests: 0,
+    cost: 0,
+    currency: "USD",
+  });
+  f.advance(1000);
+  f.runtime.suppress(job);
+  assert.deepEqual(f.store.get("suppression", job.phoneHash), record);
+  assert.equal(
+    f.store.db
+      .prepare("SELECT count(*) AS n FROM audit WHERE kind='suppression'")
+      .get().n,
+    1,
+  );
+  assert.equal(f.counts.call, 0);
+});
 test("SQLite persists encrypted dossier, enforces organization and permits recovery without redial", async (t) => {
   const dir = mkdtempSync(join(tmpdir(), "consultant-"));
   t.after(() => rmSync(dir, { recursive: true, force: true }));

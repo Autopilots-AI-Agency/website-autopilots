@@ -390,14 +390,20 @@ export function createConsultantRuntime(
       return job;
     },
     suppress(job) {
-      store.transaction(() =>
+      store.transaction(() => {
+        if (store.get("suppression", job.phoneHash)) return;
         store.put("suppression", {
           id: job.phoneHash,
+          idempotencyKey: `suppress:${job.phoneHash}`,
           organizationId: org,
           status: "suppressed",
           createdAt: clock(),
-        }),
-      );
+          risk: "R1",
+          usage: { providerRequests: 0, cost: 0, currency: "USD" },
+          approvalVersion: job.approvalVersion,
+          source: "consultant_refusal",
+        });
+      });
       return { status: "suppressed" };
     },
   };
