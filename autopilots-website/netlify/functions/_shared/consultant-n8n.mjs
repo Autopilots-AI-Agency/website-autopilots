@@ -41,6 +41,7 @@ export function connectionReady(config, env = process.env) {
       "https://n8n.auto-pilots.io/webhook/",
     ) &&
     env.CONSULTANT_N8N_WEBHOOK_KEY?.length >= 32 &&
+    env.CONSULTANT_WORKER_KEY?.length >= 32 &&
     env.CONSULTANT_STORAGE_SECRET?.length >= 32 &&
     config.hashSecret?.length >= 32 &&
     config.assessmentSecret?.length >= 32 &&
