@@ -48,11 +48,13 @@ export default async (request) => {
     return reply({ message: "Ongeldige aanvraag." }, 400);
   }
   const id = request.headers.get("idempotency-key");
+  const analysisDelivery = input.delivery === "analysis";
+  if (analysisDelivery && input.name === undefined) input.name = "";
   if (
     !/^[a-zA-Z0-9-]{16,80}$/.test(id || "") ||
     input.consent !== true ||
     typeof input.name !== "string" ||
-    input.name.length < 2 ||
+    (!analysisDelivery && input.name.length < 2) ||
     input.name.length > 100 ||
     typeof input.email !== "string" ||
     input.email.length > 160 ||
@@ -77,11 +79,18 @@ export default async (request) => {
     assessment,
     consentAt: new Date().toISOString(),
     status: "requested",
+    delivery: analysisDelivery ? "analysis" : "confirmation",
     risk: "R1",
     usage: assessment.usage,
   };
   const fingerprint = createHash("sha256")
-    .update(JSON.stringify([record.name, record.email, assessment.id]))
+    .update(
+      JSON.stringify(
+        analysisDelivery
+          ? [record.name, record.email, assessment.id, record.delivery]
+          : [record.name, record.email, assessment.id],
+      ),
+    )
     .digest("hex");
   const calendar =
     process.env.PUBLIC_GHL_CALENDAR_URL ||

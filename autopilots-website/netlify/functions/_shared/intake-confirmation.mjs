@@ -13,11 +13,12 @@ const escape = (value) =>
       })[char],
   );
 
-// Transactional confirmation only; never include raw website content or AI HTML.
+// Never include raw website content or AI HTML. Report text is escaped below.
 export function intakeConfirmation({
   name,
   bookingUrl,
   locale: language = "nl",
+  assessment,
 }) {
   const locale = scanLocale(language);
   const copy = intakeMailCopy(locale);
@@ -34,12 +35,40 @@ export function intakeConfirmation({
     String(name || "")
       .trim()
       .slice(0, 100) || copy.fallback;
-  const subject = copy.subject;
+  const report = assessment?.report;
+  const subject = report
+    ? `${report.company || "Autopilots"} — ${copy.heading}`
+        .replace(/[\r\n]/g, " ")
+        .slice(0, 160)
+    : copy.subject;
+  const reportParts = report
+    ? [
+        report.summary,
+        assessment.notice,
+        ...(report.recommendations || []).flatMap((rec) => [
+          rec.title,
+          rec.why,
+          ...(rec.workflow || []),
+          rec.benefit,
+          ...(rec.conditions || []),
+        ]),
+        ...(report.unknowns || []),
+      ]
+        .filter(Boolean)
+        .map((value) => String(value).slice(0, 4000))
+    : [];
+  const reportHtml = reportParts
+    .map(
+      (value) =>
+        `<p style="font-size:15px;line-height:25px;color:#c0cdd1;">${escape(value)}</p>`,
+    )
+    .join("");
   const salutation = [copy.hello, greeting].filter(Boolean).join(" ") + ",";
   const text = [
     salutation,
     copy.thanks,
     copy.intro,
+    ...reportParts,
     copy.invitation,
     url.href,
     copy.booked,
@@ -59,6 +88,7 @@ export function intakeConfirmation({
 <p style="font-size:16px;line-height:26px;color:#f5f1eb;">${escape(salutation)}</p>
 <p style="font-size:16px;line-height:26px;color:#c0cdd1;">${escape(copy.thanks)}</p>
 <p style="font-size:16px;line-height:26px;color:#c0cdd1;">${escape(copy.intro)}</p>
+${reportHtml}
 <table role="presentation" cellpadding="0" cellspacing="0" style="margin:28px 0;"><tr><td bgcolor="#8f573a" style="border-radius:10px;"><a href="${escape(url.href)}" style="display:inline-block;padding:17px 24px;color:#fffaf5;font-size:16px;font-weight:700;text-decoration:none;">${escape(copy.cta)} &rarr;</a></td></tr></table>
 <p style="font-size:14px;line-height:23px;color:#c0cdd1;">${escape(copy.booked)}</p>
 <p style="margin:24px 0 0;padding-top:24px;border-top:1px solid #40515a;font-size:14px;line-height:23px;color:#c0cdd1;">${escape(copy.terms)}</p>

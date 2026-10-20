@@ -1,0 +1,100 @@
+{
+  "name": "Autopilots Quiz Consultant — Queue Worker (PILOT)",
+  "active": false,
+  "nodes": [
+    {
+      "id": "ap-schedule",
+      "name": "Check authorized queue",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        300
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "seconds",
+              "secondsInterval": 10
+            }
+          ]
+        }
+      },
+      "retryOnFail": false
+    },
+    {
+      "id": "ap-worker",
+      "name": "Dispatch and reconcile",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        300,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://auto-pilots.io/.netlify/functions/consultant-worker",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 25000,
+          "redirect": {
+            "redirect": {
+              "followRedirects": false
+            }
+          }
+        }
+      },
+      "retryOnFail": false,
+      "notes": "Bind a NEW Autopilots Consultant worker Header Auth credential. No payload. Server ledger prevents concurrent dispatch.",
+      "notesInFlow": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "UNCONFIGURED_AP_CONSULTANT_WORKER",
+          "name": "REQUIRED Autopilots Consultant WORKER (not configured)"
+        }
+      }
+    },
+    {
+      "id": "ap-worker-note",
+      "name": "Worker activation gate",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -100
+      ],
+      "parameters": {
+        "content": "## DRAFT — DO NOT PUBLISH\nNo credentials bound; no calls possible from this workflow alone.\nActivate only with the reviewed website release + provider executor + verified cost ceilings + approved pilot phone allowlist.\nA 503 busy/disabled response is safe: DO NOT add provider retries.\nNo automatic redial after ambiguous outcome.",
+        "height": 260,
+        "width": 640
+      },
+      "retryOnFail": false
+    }
+  ],
+  "connections": {
+    "Check authorized queue": {
+      "main": [
+        [
+          {
+            "node": "Dispatch and reconcile",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "none",
+    "saveDataSuccessExecution": "none",
+    "saveManualExecutions": false,
+    "saveExecutionProgress": false,
+    "executionTimeout": 60,
+    "timezone": "Europe/Amsterdam"
+  },
+  "pinData": {},
+  "tags": []
+}

@@ -173,6 +173,15 @@ for (const locale of ["nl", "en", "es", "de", "it", "fr"]) {
         expect(alignment.every((offset) => offset < 2)).toBe(true);
         showAdvice();
       }
+      await expect(page.locator(".consultant-choice")).toBeVisible();
+      await page
+        .locator("[data-consultant-email] [name=email]")
+        .fill("fixture@example.com");
+      await page.locator("[data-consultant-email] [name=consent]").check();
+      await page.locator("[data-consultant-email] button").click();
+      await expect(page).toHaveURL(
+        new RegExp("/" + locale + "/ai-scan/resultaat/"),
+      );
       await expect(page.locator(".result-view")).toBeVisible();
       await expect(page.locator(".recommendation small")).toContainText(
         t("Website op maat"),
@@ -189,27 +198,14 @@ for (const locale of ["nl", "en", "es", "de", "it", "fr"]) {
           .analyze();
         expect(audit.violations).toEqual([]);
         const downloaded = page.waitForEvent("download");
-        await page.locator(".download").click();
+        await page.locator(".result-view .download").click();
         const file = await downloaded;
         const content = await readFile((await file.path())!, "utf8");
         expect(content).toContain(t("Jouw antwoorden:"));
         expect(content).toContain(t("Een nieuwe of betere website"));
         expect(content).not.toContain("focusRoute:");
       }
-      await page.locator("[data-request-open]").click();
-      await page.locator(".contact-form button").click();
-      await expect(page.locator(".contact-status")).toHaveText(
-        t("Controleer je naam, e-mailadres en toestemming."),
-      );
-      await page.locator(".contact-form [name=name]").fill("Language fixture");
-      await page
-        .locator(".contact-form [name=email]")
-        .fill("fixture@example.com");
-      await page.locator(".contact-form [name=consent]").check();
-      await page.locator(".contact-form button").click();
-      await expect(page.locator(".saved-request h2")).toHaveText(
-        t("Je aanvraag is ontvangen."),
-      );
+      await expect(page.locator(".consultant-booking")).toBeVisible();
       expect(
         await page.evaluate(
           () => document.documentElement.scrollWidth <= innerWidth,

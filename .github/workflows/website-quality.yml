@@ -55,5 +55,8 @@ jobs:
           AUTOPILOTS_RELEASE_RUN_ID: ${{ github.run_id }}
       - run: pnpm run typecheck
       - run: pnpm run test
+      - name: Verify isolated consultant runtime without provider writes
+        working-directory: autopilots-platform
+        run: node --test tests/*.test.js
       - run: pnpm run test:release
       - run: pnpm run test:e2e
