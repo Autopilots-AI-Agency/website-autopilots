@@ -147,6 +147,14 @@ for (const locale of languages) {
       .check();
     await page.locator(".sp-start").click();
     for (const step of [1, 2, 3]) {
+      if (page.viewportSize()!.width < 701) {
+        const panel = page.locator(`[data-panel="${step - 1}"]`);
+        await panel.scrollIntoViewIfNeeded();
+        const box = await panel.boundingBox();
+        expect(box!.x).toBe(16);
+        expect(box!.width).toBeGreaterThan(page.viewportSize()!.width * 0.9);
+        continue;
+      }
       await page.locator(`[data-us-step="${step}"]`).click();
       await expect(page.locator(`[data-us-step="${step}"]`)).toHaveAttribute(
         "aria-current",
