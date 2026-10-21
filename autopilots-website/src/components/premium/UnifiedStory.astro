@@ -39,6 +39,13 @@ if(root){
   const demo=document.createElement('div');demo.className='dx-demo';
   demo.innerHTML=examples[i]+html(`<div class="dx-bottom"><span data-dx-status>${statusText[i][0]}</span><button type="button" data-dx-play>Volgende stap </button></div><div class="dx-track"><i></i></div><small class="dx-disclaimer">Voorbeeld · geen echte aanvraag of boeking</small>`);
   panel.append(demo);
+  if(i===0){
+   const transcript=demo.querySelector<HTMLElement>('.sx-transcript')!;
+   const phone=demo.querySelector<HTMLElement>('.sx-phone')!;
+   const arrange=()=>{if(innerWidth<701)demo.querySelector('.sx-agent')!.append(transcript);else phone.insertBefore(transcript,phone.querySelector('.sx-call-end'));};
+   arrange();
+   // Keep the same conversation nodes and listeners when changing orientation.
+  }
   demo.querySelectorAll<HTMLButtonElement>('[data-dx-channel]').forEach(button=>button.addEventListener('click',()=>{
    const chat=button.dataset.dxChannel==='chat';
    demo.querySelector('[data-customer-line]')!.textContent=`“${chat?profile.chat:profile.question}”`;
@@ -94,6 +101,7 @@ if(root){
   current+= (target-current)*(1-Math.exp(-dt/95));
   const staticMode=quiet();root!.classList.toggle('us-static',staticMode);
   const mobileFlow=innerWidth<701;root!.classList.toggle('us-mobile',mobileFlow);
+  root!.classList.toggle('us-stack',mobileFlow&&!staticMode&&panels.every(panel=>panel.offsetHeight<innerHeight-72));
   const phase=current*4, index=Math.min(3,Math.floor(phase)), mix=phase-index;
   const motionMix=clamp((mix-.2)/.6);
   const eased=motionMix*motionMix*(3-2*motionMix), active=Math.round(phase);
@@ -113,6 +121,7 @@ if(root){
    panel.inert=!staticMode&&!focused;panel.classList.toggle('cs-visible',focused);
    const panelRect=panel.getBoundingClientRect();
    const mobileProgress=clamp((innerHeight*.85-panelRect.top)/(panelRect.height*.8));
+   panel.style.setProperty('--arrival',String(staticMode?1:clamp((innerHeight-panelRect.top)/Math.min(320,innerHeight*.45))));
    const progress=staticMode?1:(overrides.get(i)??(mobileFlow?mobileProgress:clamp((phase-i-.55)/.85)));
    if(mobileFlow){panel.inert=false;panel.classList.add('cs-visible');}
    panel.dataset.demoProgress=String(progress);
@@ -147,7 +156,13 @@ if(root){
  // Focus changes and browser scroll anchoring must not cancel a manual demo action.
  addEventListener('wheel',resumeScroll,{passive:true});addEventListener('touchmove',resumeScroll,{passive:true});
  addEventListener('keydown',event=>{if(['PageDown','PageUp','ArrowDown','ArrowUp','Home','End',' '].includes(event.key)&&!(event.target instanceof HTMLInputElement)&&!(event.target instanceof HTMLTextAreaElement))resumeScroll();});
- addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule);reduce.addEventListener('change',schedule);
+ addEventListener('scroll',schedule,{passive:true});addEventListener('resize',()=>{
+  const demo=panels[0].querySelector('.dx-demo');
+  const transcript=demo?.querySelector('.sx-transcript');
+  const phone=demo?.querySelector('.sx-phone');
+  if(transcript&&phone){if(innerWidth<701)demo!.querySelector('.sx-agent')!.append(transcript);else phone.insertBefore(transcript,phone.querySelector('.sx-call-end'));}
+  schedule();
+ });reduce.addEventListener('change',schedule);
  const change=document.createElement('button');change.type='button';change.className='sp-change';change.textContent=tr('Algemeen voorbeeld')+' · '+tr('wijzigen');stage.querySelector('.us-sticky')!.prepend(change);
  const form=picker.querySelector('form')!;
  const radios=[...form.querySelectorAll<HTMLInputElement>('[name="showcase-branch"]')];
