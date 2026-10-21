@@ -1,0 +1,9 @@
+{
+  "VITE_AUTOPILOTS_SCAN_URL": {
+    "serviceId": "b05f7168-a0d2-46df-a25a-818ec27416d6",
+    "production": "https://backend-b05f7168-a0d2-46df-a25a-818ec27416d6.rumata.dev/backend-api/b05f7168-a0d2-46df-a25a-818ec27416d6/",
+    "productionMode": "rumata_permissions",
+    "developmentMode": "rumata_permissions",
+    "development": "https://dm-30e66f2818e82b4a249de2305243157474311f1f-preview.rumata.dev/backend-preview/b05f7168-a0d2-46df-a25a-818ec27416d6/"
+  }
+}
