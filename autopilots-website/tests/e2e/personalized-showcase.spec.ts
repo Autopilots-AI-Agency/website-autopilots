@@ -87,7 +87,9 @@ test("six branches change all three scenes and keep keyboard-accessible controls
     await expect(page.locator("[data-customer-line]")).toContainText(question);
     await expect(page.locator(".sx-project-board")).toContainText(project);
     await expect(page.locator(".dx-address")).toContainText(brand);
-    await page.locator('[data-us-step="3"]').click();
+    if (page.viewportSize()!.width < 701)
+      await page.locator('[data-panel="2"]').scrollIntoViewIfNeeded();
+    else await page.locator('[data-us-step="3"]').click();
     await expect
       .poll(() =>
         page
@@ -213,11 +215,14 @@ test("normal scrolling keeps the branch switch clear of the caption", async ({
     .getByRole("radio", { name: "Installatiebedrijven", exact: true })
     .check();
   await page.locator(".sp-start").click();
-  await page.locator('[data-us-step="3"]').click();
-  await expect(page.locator('[data-us-step="3"]')).toHaveAttribute(
-    "aria-current",
-    "true",
-  );
+  if (page.viewportSize()!.width < 701)
+    await page.locator('[data-panel="2"]').scrollIntoViewIfNeeded();
+  else await page.locator('[data-us-step="3"]').click();
+  if (page.viewportSize()!.width >= 701)
+    await expect(page.locator('[data-us-step="3"]')).toHaveAttribute(
+      "aria-current",
+      "true",
+    );
   const chip = await page.locator(".sp-change").boundingBox();
   const eyebrow = await page.locator(".us-caption .cs-eyebrow").boundingBox();
   expect(chip!.y + chip!.height).toBeLessThanOrEqual(eyebrow!.y);

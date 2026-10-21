@@ -633,6 +633,24 @@
   width: min(1000px, 94%);
 }
 @media (max-width: 700px) {
+  /* Let the phone scroll naturally: never shrink a whole interface to fit. */
+  #ap-connected.us-mobile .us-story { height: auto; }
+  #ap-connected.us-mobile .us-sticky { position: relative; height: auto; overflow: visible; padding-block: 24px; }
+  #ap-connected.us-mobile .us-world { display: grid; gap: 28px; width: calc(100% - 32px); max-width: 460px; flex: none; max-height: none; overflow: visible; margin: 28px auto; }
+  #ap-connected.us-mobile .us-panel { position: relative; width: 100%; max-width: none; left: auto!important; top: auto!important; transform: none!important; opacity: 1!important; will-change: auto; scroll-margin-block: 24px; }
+  #ap-connected.us-mobile .us-panel-label { display: block; position: static; padding: 18px 16px 0; font-size: 16px; letter-spacing: -.02em; }
+  #ap-connected.us-mobile .us-controls,
+  #ap-connected.us-mobile .us-connections,
+  #ap-connected.us-mobile .us-orbit,
+  #ap-connected.us-mobile .us-marker,
+  #ap-connected.us-mobile .sx-together { display: none; }
+  #ap-connected .cs-header { gap: 8px; }
+  #ap-connected .cs-header .cs-logo { font-size: clamp(12px, 3.5vw, 16px); letter-spacing: .12em; }
+  #ap-connected .cs-header .p-cta { flex-shrink: 0; gap: 0; }
+  #ap-connected .cs-hero h1 { font-size: clamp(32px, 8.8vw, 42px); text-wrap: balance; }
+  #ap-connected .cs-wrap { width: calc(100% - 32px); }
+  #ap-connected .cs-cta h2 { font-size: clamp(32px, 8.5vw, 42px); text-wrap: balance; }
+  #ap-connected .cs-discover { width: 100%; max-width: 360px; gap: 0; }
   #ap-connected .us-story {
     height: 620svh;
   }
@@ -651,8 +669,8 @@
     margin-top: 16px;
   }
   #ap-connected .us-panel {
-    width: 355px;
-    max-width: 94vw;
+    width: calc(100vw - 32px);
+    max-width: 460px;
   }
   #ap-connected .dx-demo {
     padding: 12px;

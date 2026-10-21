@@ -2,7 +2,30 @@ import { test, expect } from "@playwright/test";
 
 test("scroll builds the house, flips to its backend and reverses correctly", async ({
   page,
+  isMobile,
 }) => {
+  if (isMobile) {
+    await page.goto("/nl/");
+    await page.locator("[data-consent-reject]").click();
+    const panels = page.locator(".us-panel");
+    for (const panel of await panels.all()) {
+      await panel.scrollIntoViewIfNeeded();
+      const box = await panel.boundingBox();
+      expect(box!.width).toBeGreaterThan(page.viewportSize()!.width * 0.9);
+      expect(box!.x).toBe(16);
+    }
+    await page.locator(".dx-flip-toggle").click();
+    await expect(page.locator(".dx-flip-back")).toHaveAttribute(
+      "aria-hidden",
+      "false",
+    );
+    await page.getByLabel("Titel op je website").fill("Ruimte om te groeien.");
+    await page.locator(".dx-flip-toggle").click();
+    await expect(page.locator(".dx-flip-front h4")).toContainText(
+      "Ruimte om te groeien.",
+    );
+    return;
+  }
   await page.goto("/nl/");
   await expect(page.locator(".us-story")).toBeVisible();
   const goToPhase = async (phase: number) => {
@@ -45,7 +68,35 @@ test("scroll builds the house, flips to its backend and reverses correctly", asy
 
 test("showcase has working channels, evolving scenes and an editable website back", async ({
   page,
+  isMobile,
 }) => {
+  if (isMobile) {
+    await page.goto("/nl/");
+    await page.locator("[data-consent-reject]").click();
+    const agent = page.locator('[data-panel="0"]');
+    await agent.locator('[data-dx-channel="chat"]').click();
+    await expect(page.locator("[data-customer-line]")).toContainText(
+      "woning ontwerpen",
+    );
+    const software = page.locator('[data-panel="1"]');
+    await software.scrollIntoViewIfNeeded();
+    const play = software.locator("[data-dx-play]");
+    // Replay, then advance explicitly, independent of the scroll position.
+    for (let step = 0; step < 4; step++) {
+      await play.click();
+      if (
+        await software
+          .locator(".sx-customer-portal")
+          .locator("..")
+          .evaluate((el) => el.classList.contains("dx-shown"))
+      )
+        break;
+    }
+    await expect(
+      software.locator(".sx-customer-portal").locator(".."),
+    ).toHaveClass(/dx-shown/);
+    return;
+  }
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/nl/");
