@@ -23,4 +23,3 @@ test('website observations must match a real source URL and a literal quote',()=
  assert.throws(()=>validateReport(report,[]));
  assert.throws(()=>validateReport(report,[{url:'https://other.example/',text:'Wij ontwerpen mooie huizen voor klanten.'}]));
 });
-

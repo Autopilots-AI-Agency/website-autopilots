@@ -29,4 +29,3 @@ export async function verifyPassword(password: string, storedHash: string): Prom
     if (salt.toString('base64url') !== match[1] || expected.toString('base64url') !== match[2]) return false;
     return timingSafeEqual(expected, await derive(password, salt));
 }
-

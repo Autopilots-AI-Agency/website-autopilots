@@ -63,4 +63,3 @@ test('unconfigured authentication fails closed, while health stays available', a
     assert.equal((await app.inject('/private')).statusCode, 503);
     assert.equal((await app.inject('/health')).statusCode, 200);
 });
-

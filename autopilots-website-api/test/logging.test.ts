@@ -161,4 +161,3 @@ test('client disconnects produce exactly one aborted completion event', { timeou
     assert.equal(completed[0].http_status_code, 499);
     assert.equal(completed[0].level, 'warn');
 });
-

@@ -26,4 +26,3 @@ WORKFLOW_API_KEY binds the stored Rumata secret (never source). Key expiry 2027-
 
 ## Rollback
 Keep existing Netlify production unchanged. Stop the development backend if needed. Do not delete persisted jobs or budget rows to retry tests; they prevent duplicate paid execution. This file supersedes the prior permission-blocker note, which is retained as historical evidence.
-

@@ -36,4 +36,3 @@ const report={
 };
 await writeFile('/tmp/autopilots-integration-readiness.json',JSON.stringify(report,null,2),{mode:0o600});
 console.log(JSON.stringify({event:'provider_readiness_checked',telnyxStatus:numbers.status,numberFound:!!number,ghlStatus:calendar.status,calendarMatched:c?.id===calendarId}));
-

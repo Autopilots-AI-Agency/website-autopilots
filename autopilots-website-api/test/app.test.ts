@@ -49,4 +49,3 @@ test('TLS bindings override URL flags and factory identifiers are escaped', asyn
     assert.equal(database.schema, '"factory""name"');
     await database.pool.end();
 });
-

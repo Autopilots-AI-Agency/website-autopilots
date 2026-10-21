@@ -87,4 +87,3 @@ export async function registerAccounts(app: FastifyInstance, database: Database 
         return result.rows[0];
     });
 }
-

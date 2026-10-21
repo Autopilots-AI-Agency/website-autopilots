@@ -45,4 +45,3 @@ test('isolates transient failures, retries stored jobs, and prevents overlapping
   await worker.stop();
   assert.deepEqual(applied, [2, 1]);
 });
-

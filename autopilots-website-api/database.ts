@@ -32,4 +32,3 @@ export function connectDatabase(env: NodeJS.ProcessEnv = process.env, logger: Fa
     pool.on('error', error => logger.error({ event: 'database_connection_failed', err: error }, 'Idle database connection failed'));
     return { pool, schema };
 }
-

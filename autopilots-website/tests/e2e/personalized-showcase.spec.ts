@@ -167,8 +167,7 @@ test("selection survives reload, old company data is discarded and intake receiv
   await expect(cta).toHaveAttribute("href", /branche=Autobedrijven/);
   expect(await cta.getAttribute("href")).not.toContain("company");
   await cta.click();
-  await expect(page.locator("[data-step-count]")).toContainText("02");
-  await page.locator(".back").click();
+  await expect(page.locator("[data-step-count]")).toContainText("01");
   await expect(
     page.getByRole("button", { name: /Autobedrijven/ }),
   ).toHaveAttribute("aria-pressed", "true");

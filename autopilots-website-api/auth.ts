@@ -29,4 +29,3 @@ export function registerAuthentication(app: FastifyInstance, env: NodeJS.Process
         }
     });
 }
-

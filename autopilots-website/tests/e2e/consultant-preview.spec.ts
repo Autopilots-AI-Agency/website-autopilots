@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { mockScan, mockEmail } from "./scan-fixtures";
 import { consultantCopy } from "../../src/data/consultant-copy";
 import { intakeTranslator } from "../../src/data/intake-i18n";
 
@@ -13,7 +14,7 @@ test.describe("consultant choice preview", () => {
       const c = consultantCopy(locale);
       const errors: string[] = [];
       page.on("pageerror", (error) => errors.push(error.message));
-      await page.route("**/.netlify/functions/website-analysis", (route) =>
+      await mockScan(page, (route) =>
         route.fulfill({
           json: {
             token: "synthetic-assessment",
@@ -29,15 +30,16 @@ test.describe("consultant choice preview", () => {
           },
         }),
       );
-      await page.route("**/.netlify/functions/analysis-request", (route) => {
+      await mockEmail(page, (route) => {
         const body = route.request().postDataJSON();
         expect(body.delivery).toBe("analysis");
         expect(body.name).toBeUndefined();
         expect(body.token).toBe("synthetic-assessment");
         return route.fulfill({ json: { ok: true, confirmation: "accepted" } });
       });
-      await page.route("**/.netlify/functions/consultant", (route) =>
-        route.fulfill({ json: { ok: true, enabled: false } }),
+      await page.route(
+        /\/(?:\.netlify\/functions|backend-api\/[^/]+)\/consultant$/,
+        (route) => route.fulfill({ json: { ok: true, enabled: false } }),
       );
       await page.goto(`/${locale}/ai-scan/`);
       await page.locator(".choice").first().click();

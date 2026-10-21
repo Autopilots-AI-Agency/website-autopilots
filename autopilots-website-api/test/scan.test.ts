@@ -23,4 +23,3 @@ test('intake-only report rejects fabricated observations and malformed recommend
  assert.throws(()=>validateReport({...report,unknowns:[]}));
  assert.throws(()=>validateReport({...report,recommendations:[{...report.recommendations[0],solution:'Unsupported'}]}));
 });
-

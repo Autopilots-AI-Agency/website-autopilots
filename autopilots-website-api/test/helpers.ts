@@ -17,4 +17,3 @@ export function capture(env: NodeJS.ProcessEnv = {}) {
         stream: { write: line => logs.push(JSON.parse(line)) } });
     return { logger, logs };
 }
-

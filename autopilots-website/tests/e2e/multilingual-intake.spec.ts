@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { mockScan, mockEmail } from "./scan-fixtures";
 import AxeBuilder from "@axe-core/playwright";
 import { readFile } from "node:fs/promises";
 import { intakeTranslator } from "../../src/data/intake-i18n";
@@ -26,63 +27,53 @@ for (const locale of ["nl", "en", "es", "de", "it", "fr"]) {
       const loadingGate = new Promise<void>((resolve) => {
         showAdvice = resolve;
       });
-      await page.route(
-        "**/.netlify/functions/website-analysis",
-        async (request) => {
-          received = request.request().postDataJSON();
-          expect(received.locale).toBe(locale);
-          expect(received.answers.focusRoute).toBe(route);
-          expect(received.answers.goal).toEqual(goals);
-          expect(request.request().headers()["x-autopilots-locale"]).toBe(
+      await mockScan(page, async (request) => {
+        received = request.request().postDataJSON();
+        expect(received.locale).toBe(locale);
+        expect(received.answers.focusRoute).toBe(route);
+        expect(received.answers.goal).toEqual(goals);
+        expect(request.request().headers()["x-autopilots-locale"]).toBe(locale);
+        if (route === "website") await loadingGate;
+        await request.fulfill({
+          json: {
             locale,
-          );
-          if (route === "website") await loadingGate;
-          await request.fulfill({
-            json: {
-              locale,
-              token: "signed-fixture",
-              sources: [],
-              generatedAt: "2026-10-19T12:00:00Z",
-              notice: t(
-                "Dit eerste voorstel is gebaseerd op jouw antwoorden. Je hebt nog geen website aangeleverd.",
-              ),
-              report: {
-                company: t("Jouw bedrijf"),
-                summary: t("Jouw persoonlijke advies"),
-                observations: [],
-                recommendations: [
-                  {
-                    title: t("Website op maat"),
-                    solution: "Website op maat",
-                    why: t("Jouw vertrekpunt"),
-                    workflow: [t("Wat hiervoor nodig is")],
-                    benefit: t("Een paar keuzes. Een helder vertrekpunt."),
-                    conditions: [t("Dit willen we nog samen controleren")],
-                  },
-                ],
-                unknowns: [t("Wat hiervoor nodig is")],
-                nextStep: t("Bespreek mijn analyse"),
-              },
+            token: "signed-fixture",
+            sources: [],
+            generatedAt: "2026-10-19T12:00:00Z",
+            notice: t(
+              "Dit eerste voorstel is gebaseerd op jouw antwoorden. Je hebt nog geen website aangeleverd.",
+            ),
+            report: {
+              company: t("Jouw bedrijf"),
+              summary: t("Jouw persoonlijke advies"),
+              observations: [],
+              recommendations: [
+                {
+                  title: t("Website op maat"),
+                  solution: "Website op maat",
+                  why: t("Jouw vertrekpunt"),
+                  workflow: [t("Wat hiervoor nodig is")],
+                  benefit: t("Een paar keuzes. Een helder vertrekpunt."),
+                  conditions: [t("Dit willen we nog samen controleren")],
+                },
+              ],
+              unknowns: [t("Wat hiervoor nodig is")],
+              nextStep: t("Bespreek mijn analyse"),
             },
-          });
-        },
-      );
-      await page.route(
-        "**/.netlify/functions/analysis-request",
-        async (request) => {
-          expect(request.request().postDataJSON().token).toBe("signed-fixture");
-          expect(request.request().headers()["x-autopilots-locale"]).toBe(
-            locale,
-          );
-          await request.fulfill({
-            json: {
-              ok: true,
-              bookingUrl: "https://auto-pilots.io/",
-              confirmation: "accepted",
-            },
-          });
-        },
-      );
+          },
+        });
+      });
+      await mockEmail(page, async (request) => {
+        expect(request.request().postDataJSON().token).toBe("signed-fixture");
+        expect(request.request().headers()["x-autopilots-locale"]).toBe(locale);
+        await request.fulfill({
+          json: {
+            ok: true,
+            bookingUrl: "https://auto-pilots.io/",
+            confirmation: "accepted",
+          },
+        });
+      });
       await page.goto(`/${locale}/ai-scan/`);
       await expect(page.locator("html")).toHaveAttribute(
         "lang",
@@ -227,7 +218,7 @@ for (const locale of ["nl", "en", "es", "de", "it", "fr"]) {
     );
     expect(new URL(page.url()).searchParams.get("branche")).toBeTruthy();
     await expect(page.locator("[data-question]")).toHaveText(
-      t("Hoe groot is je team?"),
+      t("In welke branche werkt jouw bedrijf?"),
     );
     await page.locator(".scan-language summary").click();
     await expect(page.locator(".scan-language nav a")).toHaveCount(6);

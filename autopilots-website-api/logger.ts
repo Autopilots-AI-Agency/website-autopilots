@@ -52,4 +52,3 @@ export function createLogger({ env = process.env, stream }: LoggerOptions = {}) 
             'headers["rumata-api-key"]', 'headers["x-api-key"]', 'headers["set-cookie"]'],
     }, stream);
 }
-

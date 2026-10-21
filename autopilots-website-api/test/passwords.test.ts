@@ -22,4 +22,3 @@ test('malformed hashes and invalid password lengths fail closed', async () => {
         assert.equal(await verifyPassword(password, 'malformed'), false);
     }
 });
-

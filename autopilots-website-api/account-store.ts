@@ -28,4 +28,3 @@ export function accountStore(database: Database) {
         },
     };
 }
-

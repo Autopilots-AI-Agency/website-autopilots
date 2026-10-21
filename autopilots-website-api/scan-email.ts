@@ -98,4 +98,3 @@ export async function registerScanEmail(app: FastifyInstance, db: Database | nul
   }
  });
 }
-

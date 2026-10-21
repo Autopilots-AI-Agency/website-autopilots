@@ -34,7 +34,7 @@ export function validateIntake(value: unknown) {
   if(b.website!==undefined&&(typeof b.website!=='string'||b.website.length>300))throw new Error('Invalid website');
   if(b.website && !b.noWebsite)websiteUrl(String(b.website));
   return {locale:b.locale, website: b.noWebsite ? '' : String(b.website||''), assessmentMode:'INTAKE_ONLY', sources:[] as SourcePage[], answers:{...extra,
-    industry:b.industry.trim(),goal:b.goal.trim(),focusRoute:b.focusRoute,systems:b.systems || '',channels:b.channels || []
+    industry:b.industry.trim(),goal:extra.goal ?? b.goal.trim(),focusRoute:b.focusRoute,systems:extra.systems ?? b.systems ?? '',channels:b.channels || extra.channels || []
   }};
 }
 export function validateReport(value: unknown, pages:SourcePage[]=[]) {

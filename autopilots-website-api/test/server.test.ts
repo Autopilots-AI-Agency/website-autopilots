@@ -78,4 +78,3 @@ test('uncaught failures emit a fatal event and preserve the nonzero process exit
     assert.equal(failure.origin, 'uncaughtException');
     assert.ok(failure.err?.stack);
 });
-

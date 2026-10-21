@@ -7,7 +7,7 @@ export async function consultantRequest(action:string,input:Record<string,unknow
 }
 interface ScanReference {id:string;token:string}
 export async function scanRequest(path:string,token:string,body?:unknown,id?:string) {
- const response=await fetch(base+path,{method:body?'POST':'GET',headers:{'content-type':'application/json','x-scan-token':token,...(id?{'idempotency-key':id}:{})},...(body?{body:JSON.stringify(body)}:{}),signal:AbortSignal.timeout(25000)});
+ const response=await fetch(base+path,{method:body?'POST':'GET',headers:{'content-type':'application/json','x-scan-token':token,'x-autopilots-locale':document.documentElement.lang.split('-')[0],...(id?{'idempotency-key':id}:{})},...(body?{body:JSON.stringify(body)}:{}),signal:AbortSignal.timeout(25000)});
  const data=await response.json();
  if(!response.ok)throw new Error('De analyse is niet beschikbaar. Probeer opnieuw.');
  return data;
@@ -38,7 +38,7 @@ export async function awaitScan(ref:ScanReference){
 export async function emailScan(report:{scanId:string;token:string},email:string){
  if(!base){
   const id=legacyMailRequests.get(report)||crypto.randomUUID();legacyMailRequests.set(report,id);
-  const response=await fetch('/.netlify/functions/analysis-request',{method:'POST',headers:{'Content-Type':'application/json','Idempotency-Key':id},body:JSON.stringify({token:report.token,delivery:'analysis',email,consent:true})});
+  const response=await fetch('/.netlify/functions/analysis-request',{method:'POST',headers:{'Content-Type':'application/json','Idempotency-Key':id,'X-Autopilots-Locale':document.documentElement.lang.split('-')[0]},body:JSON.stringify({token:report.token,delivery:'analysis',email,consent:true})});
   const data=await response.json();if(!response.ok)throw new Error(data.message||'failed');return {state:data.confirmation==='accepted'?'accepted':'pending'};
  }
  return scanRequest('/scans/'+report.scanId+'/email',report.token,{email,consent:true});

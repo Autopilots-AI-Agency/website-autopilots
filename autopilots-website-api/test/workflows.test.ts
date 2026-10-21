@@ -115,4 +115,3 @@ test('submissions inherit the workflow default and preserve explicit response mo
   await client.submit(id, {}, { async: false });
   assert.equal(called, `https://gateway.example/wf/${id}/trigger?mode=sync`);
 });
-

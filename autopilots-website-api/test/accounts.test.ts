@@ -52,4 +52,3 @@ test('credential admission bounds concurrent hashing, repeated attempts, and buc
     now = 600000;
     assert.ok(limits.acquire('first@example.com'));
 });
-

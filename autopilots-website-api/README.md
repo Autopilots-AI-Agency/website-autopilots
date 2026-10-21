@@ -236,4 +236,3 @@ Health and OpenAPI are explicitly public. Mark only intentional public endpoints
 uses `request.user!.id` for parameterized ownership checks. Never trust a client user
 ID or `jwt.decode` as authentication. Keep the guard when extending this starter.
 Test both owner and other-user access, and missing, forged, expired and wrong-key tokens.
-

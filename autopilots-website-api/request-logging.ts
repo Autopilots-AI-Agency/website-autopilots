@@ -38,4 +38,3 @@ export function registerRequestLogging(app: FastifyInstance,
         done();
     });
 }
-

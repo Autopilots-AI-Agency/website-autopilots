@@ -106,4 +106,3 @@ test('native account HTTP routes persist, authenticate and isolate identities in
         assert.equal(logText.includes(sensitive), false, 'logs exclude credentials');
     }
 });
-
