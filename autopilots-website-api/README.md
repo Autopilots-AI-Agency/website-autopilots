@@ -13,8 +13,9 @@ Use Node 22.18+ (the development machine) or Node 24.12+ (production uses 24.21.
 Run `pnpm install --frozen-lockfile`, `pnpm run check`, `pnpm test`, and `pnpm start`.
 Use `pnpm run dev` for automatic backend restarts after TypeScript source edits;
 production continues to use `pnpm start`. The service binds to `0.0.0.0:$PORT`
-(default 8080). For Docker, use this folder as the build context and this folder's
-`Dockerfile`. Keep `pnpm-lock.yaml` and `.dockerignore` in Git.
+(default 8080). For Docker, use the repository root as build context and
+`autopilots-website-api/Dockerfile`, so the governed consultant modules are included.
+Keep `pnpm-lock.yaml` and `.dockerignore` in Git.
 
 Node runs the `.ts` source directly, so edits need no compilation step. `pnpm run check`
 runs strict TypeScript checking on source and tests; `pnpm test` uses Node's native

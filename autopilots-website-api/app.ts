@@ -1,6 +1,7 @@
 import { registerScanEmail } from './scan-email.ts';
 import { registerConsultant } from './consultant.ts';
 import { registerScan } from './scan.ts';
+import { registerScanRetention } from './scan-retention.ts';
 import { registerAuthentication } from './auth.ts';
 import { registerAccounts } from './accounts.ts';
 import Fastify, { LogController, type FastifyBaseLogger, type FastifyError } from 'fastify';
@@ -63,6 +64,7 @@ export async function createApp({ database = null, logger = createLogger(), slow
     // Use database.pool with parameterized SQL and database.schema for factory tables.
     await registerScan(app, database, authEnv ?? process.env);
     await registerScanEmail(app, database, authEnv ?? process.env);
+    await registerScanRetention(app, database, authEnv ?? process.env);
     await registerConsultant(app, database, authEnv ?? process.env);
     if (database) app.addHook('onClose', async () => database.pool.end());
     return app;

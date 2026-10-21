@@ -18,7 +18,7 @@ Status: implementation and acceptance in progress; no domain cutover yet.
 - Factory signing keys and provider credentials are bound as secret references, never committed or shipped to browsers.
 - Combined test ceiling is USD 10/day: scan reservations at most USD 1/day and consultant admission at most USD 9/day.
 - Outbound calling remains disabled until its provider configuration and pinned multilingual assistants pass acceptance.
-- Pilot destination remains +15107216391 only; caller is +31850835827. No widening of this allowlist is implied by a deployment.
+- Pilot remains restricted to the approved test destination in runtime settings; caller is +31850835827. No widening of this allowlist is implied by a deployment.
 - Existing GHL calendar/location and consent/phone-verification gates are retained. Unknown call or email outcomes are not blindly retried.
 
 ## Release and rollback

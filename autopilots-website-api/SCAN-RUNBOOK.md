@@ -1,5 +1,7 @@
 # Scan backend — development integration
 
+Historical initial-slice evidence below. Current migration scope, cost split and release gates are in `docs/deployment/RUMATA_PRODUCTION_MIGRATION.md` at repository root. Native scan/email, full quiz mapping, website evidence and consultant bridge are now implemented. Physical scan retention runs at startup and hourly. Production publication and domain cutover still require acceptance.
+
 Service: 09a06d8f-ad23-4ee4-9940-4674176e96bc
 Workflow: ca1a680d-59b0-42ad-b85a-6c701e57c830 (published v1)
 

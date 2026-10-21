@@ -1,0 +1,49 @@
+{
+  "status": "configured_not_activated",
+  "checkedAt": "2026-10-21T13:38:35.963Z",
+  "caller": "+31850835827",
+  "allowedDestinations": "Runtime pilot allowlist; personal test destination is not stored in source",
+  "telnyxAccountId": "b7235ec4-08a6-4270-bdff-6af00aa1f178",
+  "outboundProfileId": "3075633485684147390",
+  "verifyProfileId": "490001a1-5eab-da63-bfeb-757125b49044",
+  "connectionId": "3075633762759869669",
+  "assistants": {
+    "nl": {
+      "id": "assistant-8e2aed9c-12d5-4cbc-a7f9-cd789e9f592f",
+      "version": "20261021T133515021458"
+    },
+    "en": {
+      "id": "assistant-3db2130d-8535-4329-9bff-b8cf7d61b9d6",
+      "version": "20261021T133810795590"
+    },
+    "de": {
+      "id": "assistant-256b1ec3-2166-4cd6-98fb-5c33fae51a04",
+      "version": "20261021T133816266105"
+    },
+    "fr": {
+      "id": "assistant-c6126775-8e09-412f-b8e0-b1c075370b8f",
+      "version": "20261021T133821517836"
+    },
+    "es": {
+      "id": "assistant-7818d515-0caf-45e0-941e-eae89553b26e",
+      "version": "20261021T133826978358"
+    },
+    "it": {
+      "id": "assistant-a4f6bf35-e501-48f0-972e-649c9c266b7e",
+      "version": "20261021T133831636111"
+    }
+  },
+  "ghl": {
+    "locationId": "fs9MG3kXRVSIiWUig6yv",
+    "calendarId": "UaWTV0sdETiXy0refclQ"
+  },
+  "budget": {
+    "currency": "USD",
+    "scanCents": 100,
+    "consultantCents": 900,
+    "callReserveCents": 850,
+    "smsReserveCents": 50
+  },
+  "recording": false,
+  "outboundProfileEnabled": false
+}
