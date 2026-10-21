@@ -2,6 +2,19 @@
 
 Status: implementation and acceptance in progress; no domain cutover yet.
 
+## Release decision — 2026-10-21
+
+The user explicitly chose a complete migration only, not temporary Netlify frontend plus Rumata backend. Do not merge this PR merely to publish a hybrid release: protected main automatically deploys the Netlify website. Keep the PR in draft until the complete Rumata cutover is demonstrably supported and accepted.
+
+Remaining hosting evidence:
+
+- The discovered frontend deploy API and Studio deployment dialog expose only a `*.sites.rumata.dev` subdomain. No custom-domain operation was advertised; this is unverified support, not proof the provider can never support it.
+- The deployment guide linked by Studio (`https://docs.rumata.dev/guides/publishing#deploy`) returned “404 · PAGE UNAVAILABLE” during verification.
+- Existing campaign lead/event routes, booking/payment webhooks, redirect semantics and administration handlers still depend on Netlify. Static page preservation does not migrate these routes or their stored data.
+- Do not change DNS until Rumata supplies the verified custom-domain/TLS path and the required route and storage migration can be accepted end-to-end.
+
+Verified development evidence: a real Dutch scan succeeded and recovered after backend restart; its Resend receipt `01a15eaa-a51c-7746-8b3d-4b25f0514c5f` was delivered to the approved test recipient. All 160 synthetic desktop/mobile browser journeys passed. All 61 governed platform tests passed. Six separate consultant assistants have pinned Telnyx versions and are bound to a dedicated disabled outbound profile. No SMS or phone call was initiated. This is not evidence of a completed live migration.
+
 ## Source and ownership
 
 - Canonical source: `Autopilots-AI-Agency/website-autopilots` (stable repository ID 1263233950).

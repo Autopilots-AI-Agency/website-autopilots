@@ -37,7 +37,7 @@ const branchNames = JSON.stringify(intakeBranches).replaceAll('<','\\u003c');
     <section class="result-view" hidden aria-live="polite"><p class="eyebrow">{t("Jouw persoonlijke verkenning")}</p><h2 class="main-title" data-result-company></h2><p class="result-summary" data-result-summary></p><p class="assessment-note">{t("Een eerste persoonlijk advies op basis van wat je hebt gedeeld. De haalbaarheid en koppelingen bevestigen we samen.")}</p><div class="recommendations"></div><details class="evidence"><summary><span data-evidence-title>{t("Wat we op je website hebben gevonden")}</span> <span>+</span></summary><div data-observations></div></details><details class="evidence"><summary>{t("Dit willen we nog samen controleren")}<span>+</span></summary><ul data-unknowns></ul></details><div class="result-actions"><button class="primary" type="button" data-request-open>{t("Bespreek mijn analyse")}<span>↗</span></button><button class="download" type="button">{t("Download mijn advies ↓")}</button></div><form class="contact-form" hidden novalidate><h2>{t("Laten we de volgende stap bepalen.")}</h2><p>{t("We bewaren je antwoorden en advies bij je aanvraag, zodat het gesprek direct over jouw bedrijf gaat.")}</p><label>{t("Je naam")}<input name="name" autocomplete="name" maxlength="100" required/></label><label>{t("Zakelijk e-mailadres")}<input name="email" autocomplete="email" type="email" maxlength="160" required/></label><label class="consent"><input name="consent" type="checkbox" required/><span>{t("Autopilots mag mijn intake bewaren en contact opnemen over mijn aanvraag.")}</span></label><button class="primary" type="submit">{t("Verstuur mijn aanvraag")}<span>↗</span></button><p class="contact-status" role="status"></p></form><div class="saved-request" hidden><h2>{t("Je aanvraag is ontvangen.")}</h2><p>{t("Je intake en advies zijn bij je aanvraag opgeslagen. Kies hieronder een moment voor het gesprek.")}</p><a class="primary" data-booking target="_blank" rel="noopener">{t("Kies een gespreksmoment ↗")}</a></div><div class="report-footer"><span data-report-sources></span><button type="button" data-restart>{t("Opnieuw beginnen ↻")}</button></div></section>
   </section></div><footer><span>© {new Date().getFullYear()} Autopilots</span><span>{t("Strategie. AI-implementatie. Software.")}</span><a href={localizedPath("page.privacy",locale)}>{t("Privacy")}</a></footer>
 </main><script type="application/json" id="intake-branches" set:html={branchNames}></script><script>
-import { createScan, emailScan, awaitScan } from '../../api/rumata-scan';
+import { createScan, emailScan, awaitScan, usingRumata } from '../../api/rumata-scan';
 import { publicRuntime } from '../../config/publicRuntime';
 import { intakeTranslator } from '../../data/intake-i18n';
 import { scanError } from '../../../netlify/functions/_shared/intake-i18n.mjs';
@@ -93,7 +93,7 @@ if(location.pathname.includes('/ai-scan/resultaat')) {
   try {
     let saved=JSON.parse(sessionStorage.getItem('autopilots-consultant-result')||'null');
     const reference=JSON.parse(sessionStorage.getItem('autopilots-scan-reference')||'null');
-    if(reference?.locale===locale){
+    if(usingRumata&&reference?.locale===locale){
       const restored=await awaitScan(reference);
       saved={...saved,locale,expires:Date.now()+3600000,report:restored,answers:restored.answers};
       sessionStorage.setItem('autopilots-consultant-result',JSON.stringify(saved));

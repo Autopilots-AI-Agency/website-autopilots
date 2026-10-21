@@ -14,6 +14,7 @@ export function tokenHash(value: unknown): string {
 export function validateIntake(value: unknown) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('Invalid intake');
   const b = value as Record<string, unknown>;
+  if(b.consent!==true)throw new Error('Consent required');
   if (!locales.includes(String(b.locale)) || typeof b.industry !== 'string' || !b.industry.trim() || b.industry.length > 160
       || typeof b.goal !== 'string' || !b.goal.trim() || b.goal.length > 2000
       || !['ai', 'software', 'website', 'combined'].includes(String(b.focusRoute))) throw new Error('Invalid intake');
@@ -101,7 +102,7 @@ export async function registerScan(app: FastifyInstance, database: Database | nu
   const headers = {type:'object',required:['x-scan-token'],properties:{'x-scan-token':{type:'string',minLength:43,maxLength:128}}};
   app.post('/scans', {config:{public:true},schema:{security:[],summary:'Submit a personal scan',headers:{
     ...headers,required:['x-scan-token','idempotency-key'],properties:{...headers.properties,'idempotency-key':{type:'string',format:'uuid'}}
-  },body:{type:'object',additionalProperties:false,required:['locale','industry','goal','focusRoute'],properties:{
+  },body:{type:'object',additionalProperties:false,required:['locale','industry','goal','focusRoute','consent'],properties:{
     locale:{type:'string',enum:locales},industry:{type:'string',minLength:1,maxLength:160},
     goal:{type:'string',minLength:1,maxLength:2000},focusRoute:{type:'string',enum:['ai','software','website','combined']},
     answers:{type:'object',maxProperties:11,additionalProperties:{anyOf:[{type:'string',maxLength:2000},{type:'array',maxItems:12,items:{type:'string',maxLength:500}}]}},website:{type:'string',maxLength:300},noWebsite:{type:'boolean'},consent:{const:true},

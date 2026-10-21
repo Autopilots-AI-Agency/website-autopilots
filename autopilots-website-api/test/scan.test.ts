@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {validateIntake,validateReport,tokenHash,locales} from '../scan.ts';
 test('intake supports all six languages without trusting supplied source evidence',()=>{
- for(const locale of locales) assert.equal(validateIntake({locale,industry:'Installateur',goal:'Planning',focusRoute:'software'}).locale,locale);
+ for(const locale of locales) assert.equal(validateIntake({locale,industry:'Installateur',goal:'Planning',focusRoute:'software',consent:true}).locale,locale);
+ assert.throws(()=>validateIntake({locale:'nl',industry:'Installateur',goal:'Planning',focusRoute:'software'}));
  assert.throws(()=>validateIntake({locale:'xx',industry:'x',goal:'x',focusRoute:'ai'}));
  assert.throws(()=>validateIntake({locale:'nl',industry:'x',goal:'x',focusRoute:'ai',sources:['fabricated']}));
  assert.throws(()=>validateIntake({locale:'nl',industry:' ',goal:'x',focusRoute:'ai'}));
