@@ -43,7 +43,7 @@ test("branch picker shares one centered axis on desktop and mobile", async ({
   const center = picker!.x + picker!.width / 2;
   for (const selector of [
     ".sp-intro",
-    ".sp-intro p",
+    "#sp-title",
     ".sp-form",
     ".sp-options",
     ".sp-start",
@@ -143,9 +143,13 @@ test("selection survives reload, old company data is discarded and intake receiv
   await expect(page.locator("#sp-title")).toHaveText(
     "Kies jullie brancheen zie wat wij kunnen betekenen.",
   );
-  await expect(page.locator(".sp-intro p")).toHaveText(
-    "Wij bouwen AI-medewerkers, software & websites.",
+  await expect(page.locator(".sp-intro p")).toHaveCount(0);
+  await expect(page.locator(".sp-form legend")).toHaveCount(0);
+  await expect(page.locator(".sp-form fieldset")).toHaveAttribute(
+    "aria-labelledby",
+    "sp-title",
   );
+  await expect(page.locator(".cs-intro span")).toHaveCount(0);
   await expect(page.locator("#ap-connected")).not.toContainText(
     "OLD COMPANY NAME",
   );
