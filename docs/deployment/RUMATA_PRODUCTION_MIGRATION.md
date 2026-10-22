@@ -2,6 +2,14 @@
 
 Status: implementation and acceptance in progress; no domain cutover yet.
 
+## MCP verification — 2026-10-23
+
+- The MCP connection resolves the production factory and its linked organization repository correctly.
+- Frontend deployment history is empty. The native API remains unpublished at configuration revision 3, with production scan, email and consultant activation disabled.
+- Frontend deployment preflight identifies both the website and API as not deployed. The development checkout was still at `18b0428`; the API build source points to the migration branch at `21d1f046`.
+- The discovered deployment operation accepts `factoryId`, `subdomain` and `workflowSelections`. A search for domain operations returns only subdomain availability and frontend deployment; it does not establish a custom-domain/TLS configuration path.
+- Updating the private development checkout is preparation for acceptance, not a production cutover. Existing uncommitted workspace files must be preserved.
+
 ## Release decision — 2026-10-21
 
 The user explicitly chose a complete migration only, not temporary Netlify frontend plus Rumata backend. Do not merge this PR merely to publish a hybrid release: protected main automatically deploys the Netlify website. Keep the PR in draft until the complete Rumata cutover is demonstrably supported and accepted.
