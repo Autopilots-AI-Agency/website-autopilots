@@ -1,4 +1,5 @@
 /* Full-size, coordinated product scenes inside the existing scroll stage. */
+#ap-connected .us-chapter { display:contents; }
 #ap-connected .us-story {
   height: 680svh;
 }
@@ -636,15 +637,20 @@
   /* Let the phone scroll naturally: never shrink a whole interface to fit. */
   #ap-connected.us-mobile .us-story { height: auto; }
   #ap-connected.us-mobile .us-sticky { position: relative; height: auto; overflow: visible; padding-block: 24px; }
-  #ap-connected.us-mobile .us-world { display: grid; gap: 28px; width: calc(100% - 32px); max-width: 460px; flex: none; max-height: none; overflow: visible; margin: 28px auto; }
+  #ap-connected.us-mobile .us-world { display: grid; gap: 32px; width: calc(100% - 32px); max-width: 460px; flex: none; max-height: none; overflow: visible; margin: 28px auto; }
+  #ap-connected.us-mobile .us-chapter { display:block; position:relative; min-width:0; }
   #ap-connected.us-mobile .us-panel { position: relative; width: 100%; max-width: none; left: auto!important; top: auto!important; transform: none!important; opacity: 1!important; will-change: auto; scroll-margin-block: 24px; perspective: 1000px; translate: 0 calc((1 - var(--arrival, 1)) * 24px); transition: translate .18s ease-out, border-color .3s; }
-  #ap-connected.us-mobile:not(.us-static) .us-panel .dx-demo { transform: rotateX(calc((1 - var(--arrival, 1)) * 5deg)); transform-origin: 50% 0; transition: transform .18s ease-out; }
-  #ap-connected.us-stack .us-world { gap:56px; padding-bottom:35svh; }
+  #ap-connected.us-mobile:not(.us-static) .us-panel .dx-demo { transform: rotateX(calc((1 - var(--arrival, 1)) * 7deg - var(--departure, 0) * 3deg)); transform-origin: 50% 0; transition:none; }
+  #ap-connected.us-stack .us-world { gap:32px; }
+  #ap-connected.us-stack .us-chapter { height:calc(var(--card-height) + clamp(180px, 35svh, 320px)); }
   #ap-connected.us-stack .us-panel { position:sticky; top:20px!important; translate:none; background:#1a2d36; }
   #ap-connected.us-stack .us-panel[data-panel="0"] { z-index:1!important; }
   #ap-connected.us-stack .us-panel[data-panel="1"] { z-index:2!important; }
   #ap-connected.us-stack .us-panel[data-panel="2"] { z-index:3!important; }
-  #ap-connected.us-mobile .us-panel-label { display: block; position: static; padding: 18px 16px 0; font-size: 16px; letter-spacing: -.02em; }
+  #ap-connected.us-mobile .us-panel-label { display:flex; align-items:center; gap:12px; position:static; padding:18px 16px 14px; font-size:16px; letter-spacing:-.02em; border-bottom:1px solid #bd875d26; }
+  #ap-connected.us-mobile .us-panel-label::before { content:attr(data-number); font:500 11px Syne,sans-serif; color:#d8b394; letter-spacing:.08em; }
+  #ap-connected.us-mobile .us-panel .dx-demo { border-radius:0 0 18px 18px; }
+  #ap-connected.us-mobile .us-panel .dx-track { height:2px; margin-top:12px; }
   #ap-connected.us-mobile .us-controls,
   #ap-connected.us-mobile .us-connections,
   #ap-connected.us-mobile .us-orbit,

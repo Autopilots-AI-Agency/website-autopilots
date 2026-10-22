@@ -1,5 +1,71 @@
 import { test, expect } from "@playwright/test";
 
+test("mobile pinned cards follow the scroll track in both directions", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(!isMobile, "The desktop cinematic timeline is tested separately.");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/nl/");
+  await page.locator("[data-consent-reject]").click();
+  await expect(page.locator("#ap-connected")).toHaveClass(/us-stack/);
+  await expect(page.locator(".dx-disclaimer")).toHaveCount(0);
+  const card = page.locator('[data-panel="0"]');
+  const track = page.locator(".us-chapter").first();
+  const seek = async (offset: number) => {
+    await track.evaluate(
+      (el, offset) =>
+        scrollTo({
+          top: scrollY + el.getBoundingClientRect().top + offset,
+          behavior: "instant",
+        }),
+      offset,
+    );
+    await expect
+      .poll(() =>
+        card.evaluate((el) => Math.round(el.getBoundingClientRect().top)),
+      )
+      .toBe(20);
+  };
+  await seek(40);
+  const first = Number(await card.getAttribute("data-demo-progress"));
+  await seek(220);
+  await expect
+    .poll(async () => Number(await card.getAttribute("data-demo-progress")))
+    .toBeGreaterThan(first + 0.15);
+  await seek(40);
+  await expect
+    .poll(async () =>
+      Math.abs(Number(await card.getAttribute("data-demo-progress")) - first),
+    )
+    .toBeLessThan(0.02);
+  const websiteTrack = page.locator(".us-chapter").nth(2);
+  for (const [offset, side] of [
+    [-220, "front"],
+    [280, "back"],
+    [-220, "front"],
+  ] as const) {
+    await websiteTrack.evaluate(
+      (el, offset) =>
+        scrollTo({
+          top: scrollY + el.getBoundingClientRect().top + offset,
+          behavior: "instant",
+        }),
+      offset,
+    );
+    await expect(page.locator(`.dx-flip-${side}`)).toHaveAttribute(
+      "aria-hidden",
+      "false",
+    );
+  }
+  await page.setViewportSize({ width: 390, height: 600 });
+  await expect(page.locator("#ap-connected")).not.toHaveClass(/us-stack/);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator("#ap-connected")).toHaveClass(/us-stack/);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(page.locator("#ap-connected")).not.toHaveClass(/us-stack/);
+});
+
 test("scroll builds the house, flips to its backend and reverses correctly", async ({
   page,
   isMobile,
@@ -14,7 +80,13 @@ test("scroll builds the house, flips to its backend and reverses correctly", asy
       expect(box!.width).toBeGreaterThan(page.viewportSize()!.width * 0.9);
       expect(box!.x).toBe(16);
     }
-    await page.locator(".dx-flip-toggle").click();
+    // Scrolling may already have revealed the backend; the toggle must respect it.
+    if (
+      (await page.locator(".dx-flip-back").getAttribute("aria-hidden")) ===
+      "true"
+    ) {
+      await page.locator(".dx-flip-toggle").click();
+    }
     await expect(page.locator(".dx-flip-back")).toHaveAttribute(
       "aria-hidden",
       "false",
