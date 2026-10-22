@@ -961,6 +961,63 @@
   #ap-connected .sx-together span {
     padding: 7px;
   }
+  /* A single visual and one outcome at a time, rather than a miniature dashboard. */
+  #ap-connected .sx-agent {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto minmax(78px, auto);
+    gap: 18px;
+    padding: 8px 4px 0;
+  }
+  #ap-connected .sx-agent-work { display: contents; }
+  #ap-connected .sx-agent .sx-agent-work > h3 {
+    grid-row: 1;
+    margin: 0;
+    font-size: 24px;
+    line-height: 1.16;
+    text-align: center;
+  }
+  #ap-connected .sx-agent .sx-agent-work > h3 br:first-of-type { display:none; }
+  #ap-connected .sx-agent .sx-phone {
+    grid-row: 2;
+    width: 176px;
+    max-width: 100%;
+    justify-self: center;
+    padding: 28px 12px 16px;
+  }
+  #ap-connected .sx-agent .sx-phone-time,
+  #ap-connected .sx-agent .sx-contact small,
+  #ap-connected .sx-agent .sx-call-end,
+  #ap-connected .sx-agent .sx-console-head,
+  #ap-connected .sx-agent .sx-control-note { display:none; }
+  #ap-connected .sx-agent .sx-contact { margin:12px 0; }
+  #ap-connected .sx-agent .sx-contact > span { width:44px; height:44px; margin-bottom:18px; font-size:16px; }
+  #ap-connected .sx-agent .sx-contact strong { font-size:14px; }
+  #ap-connected .sx-agent .sx-contact p { font-size:10px; }
+  #ap-connected .sx-agent .sx-phone .dx-switch button { font-size:11px; padding:8px; min-height:36px; }
+  #ap-connected .sx-agent .sx-intelligence {
+    grid-area:3 / 1;
+    align-self:stretch;
+    margin:0;
+    padding:14px;
+    gap:12px;
+    border:1px solid #bd875d26;
+    border-radius:10px;
+    background:#101e2566;
+    visibility:hidden;
+    opacity:0;
+    transform:translateY(5px);
+    transition:opacity .2s, transform .2s;
+  }
+  #ap-connected .sx-agent .sx-intelligence.sx-current { visibility:visible; opacity:1; transform:none; }
+  #ap-connected .sx-agent .sx-intelligence small { font-size:9px; letter-spacing:.06em; }
+  #ap-connected .sx-agent .sx-intelligence strong { font-size:14px; line-height:1.4; }
+  #ap-connected .sx-agent .sx-intelligence .sx-step { font-size:10px; }
+  #ap-connected .sx-agent > .sx-transcript { display:none; }
+  #ap-connected .dx-chat-mode .sx-agent > .sx-transcript { display:grid; grid-row:4; grid-template-columns:1fr; gap:8px; }
+  #ap-connected .dx-chat-mode .sx-agent > .sx-transcript > div { grid-column:1; grid-row:auto; }
+  #ap-connected .dx-chat-mode .sx-agent > .sx-transcript p { font-size:12px; }
+  #ap-connected [data-panel="0"] .dx-bottom { justify-content:center; margin-top:14px; }
+  #ap-connected [data-panel="0"] [data-dx-status] { display:none; }
 }
 @media (prefers-reduced-motion: reduce) {
   #ap-connected .sx-phone {
