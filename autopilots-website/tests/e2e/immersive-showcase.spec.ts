@@ -1,5 +1,33 @@
 import { test, expect } from "@playwright/test";
 
+test("mobile agent stays calm with one outcome and optional chat detail", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(!isMobile, "Mobile-only simplification.");
+  await page.goto("/nl/");
+  await page.locator("[data-consent-reject]").click();
+  const agent = page.locator('[data-panel="0"]');
+  for (const width of [320, 390, 430]) {
+    await page.setViewportSize({ width, height: 844 });
+    await agent.scrollIntoViewIfNeeded();
+    await expect(agent.locator(".sx-intelligence:visible")).toHaveCount(1);
+    await expect(agent.locator(".sx-transcript")).toBeHidden();
+    await expect(agent.locator(".sx-control-note")).toBeHidden();
+    const phone = await agent.locator(".sx-phone").boundingBox();
+    expect(Math.abs(phone!.x + phone!.width / 2 - width / 2)).toBeLessThan(2);
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth),
+    ).toBe(width);
+  }
+  await agent.locator('[data-dx-channel="chat"]').click();
+  await expect(agent.locator(".sx-transcript")).toBeVisible();
+  await agent.locator('[data-dx-channel="phone"]').click();
+  await expect(agent.locator(".sx-transcript")).toBeHidden();
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(agent.locator(".sx-intelligence:visible")).toHaveCount(1);
+});
+
 test("mobile pinned cards follow the scroll track in both directions", async ({
   page,
   isMobile,

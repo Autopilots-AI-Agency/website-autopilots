@@ -40,6 +40,7 @@ if(root){
   demo.innerHTML=examples[i]+html(`<div class="dx-bottom"><span data-dx-status>${statusText[i][0]}</span><button type="button" data-dx-play>Volgende stap </button></div><div class="dx-track"><i></i></div>`);
   panel.append(demo);
   if(i===0){
+   demo.querySelector('.sx-agent-work > h3 br')?.before(document.createTextNode(' '));
    const transcript=demo.querySelector<HTMLElement>('.sx-transcript')!;
    const phone=demo.querySelector<HTMLElement>('.sx-phone')!;
    const arrange=()=>{if(innerWidth<701)demo.querySelector('.sx-agent')!.append(transcript);else phone.insertBefore(transcript,phone.querySelector('.sx-call-end'));};
@@ -76,7 +77,7 @@ if(root){
    flipBack.querySelectorAll<HTMLButtonElement>('[data-site-color]').forEach(button=>button.addEventListener('click',()=>{site.style.setProperty('--site-accent',button.dataset.siteColor!);flipBack.querySelectorAll('[data-site-color]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));saved.textContent='✓ '+tr('Kleur aangepast · bekijk de voorkant');}));
   }
   demo.querySelector('[data-dx-play]')!.addEventListener('click',()=>{const now=Number(panel.dataset.demoProgress||0);overrides.set(i,now>.85?0:Math.min(1,now+.4));schedule();});
-  demo.querySelectorAll<HTMLButtonElement>('[data-dx-channel]').forEach(button=>button.addEventListener('click',()=>{demo.querySelectorAll('[data-dx-channel]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));const chat=button.dataset.dxChannel==='chat';demo.querySelector('[data-dx-call]')!.textContent=chat?tr('Nieuw chatbericht'):tr('Inkomend gesprek');demo.classList.toggle('dx-chat-mode',chat);}));
+  demo.querySelectorAll<HTMLButtonElement>('[data-dx-channel]').forEach(button=>button.addEventListener('click',()=>{demo.querySelectorAll('[data-dx-channel]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));const chat=button.dataset.dxChannel==='chat';demo.querySelector('[data-dx-call]')!.textContent=chat?tr('Nieuw chatbericht'):tr('Inkomend gesprek');demo.classList.toggle('dx-chat-mode',chat);layoutDirty=true;schedule();}));
  });
  together.innerHTML=profile.flow.map(text=>`<span>${escapeMarkup(text)}</span>`).join('');
  }
@@ -150,7 +151,15 @@ if(root){
     flipFront.setAttribute('aria-hidden',String(back));flipBack.setAttribute('aria-hidden',String(!back));
     flipButton.textContent=back?tr('Bekijk jouw aanpassingen')+' ':tr('Bekijk de achterkant')+' ';
    }
-   panel.querySelectorAll<HTMLElement>('[data-dx-at]').forEach(el=>{const shown=progress>=Number(el.dataset.dxAt);el.classList.toggle('dx-shown',shown);el.setAttribute('aria-hidden',String(!shown));});
+   const outcomes=[...panel.querySelectorAll<HTMLElement>('.sx-intelligence')];
+   const outcomeIndex=progress<.52?0:progress<.75?1:2;
+   panel.querySelectorAll<HTMLElement>('[data-dx-at]').forEach(el=>{
+    const isOutcome=el.classList.contains('sx-intelligence');
+    const selected=isOutcome&&outcomes.indexOf(el)===outcomeIndex;
+    el.classList.toggle('sx-current',selected);
+    const shown=mobileFlow&&isOutcome?selected:progress>=Number(el.dataset.dxAt);
+    el.classList.toggle('dx-shown',shown);el.setAttribute('aria-hidden',String(!shown));
+   });
    panel.querySelector('[data-dx-status]')!.textContent=statusText[i][progress<.35?0:progress<.7?1:2];
    panel.querySelector('[data-dx-play]')!.firstChild!.textContent=progress>.85?tr('Opnieuw afspelen')+' ':tr('Volgende stap')+' ';
   });
