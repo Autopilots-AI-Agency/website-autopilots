@@ -37,7 +37,7 @@ if(root){
  panels.forEach((panel,i)=>{
   panel.querySelector('.dx-demo')?.remove();
   const demo=document.createElement('div');demo.className='dx-demo';
-  demo.innerHTML=examples[i]+html(`<div class="dx-bottom"><span data-dx-status>${statusText[i][0]}</span><button type="button" data-dx-play>Volgende stap </button></div><div class="dx-track"><i></i></div><small class="dx-disclaimer">Voorbeeld · geen echte aanvraag of boeking</small>`);
+  demo.innerHTML=examples[i]+html(`<div class="dx-bottom"><span data-dx-status>${statusText[i][0]}</span><button type="button" data-dx-play>Volgende stap </button></div><div class="dx-track"><i></i></div>`);
   panel.append(demo);
   if(i===0){
    const transcript=demo.querySelector<HTMLElement>('.sx-transcript')!;
@@ -81,32 +81,39 @@ if(root){
  together.innerHTML=profile.flow.map(text=>`<span>${escapeMarkup(text)}</span>`).join('');
  }
  mountDemos(localizedProfile(generalProfile,locale));
- panels.forEach((panel,i)=>{world.append(panel);panel.classList.add('us-panel');panel.dataset.panel=String(i);const label=document.createElement('h3');label.className='us-panel-label';label.textContent=[tr('AI-medewerkers'),tr('Maatwerksoftware'),tr('Websites & backends')][i];panel.prepend(label);});
+ const tracks=panels.map((panel,i)=>{const track=document.createElement('div');track.className='us-chapter';world.append(track);track.append(panel);panel.classList.add('us-panel');panel.dataset.panel=String(i);const label=document.createElement('h3');label.className='us-panel-label';label.dataset.number=`0${i+1}`;label.textContent=[tr('AI-medewerkers'),tr('Maatwerksoftware'),tr('Websites & backends')][i];panel.prepend(label);return track;});
  originals.forEach((section,i)=>{const marker=document.createElement('span');marker.id=section.id;marker.className='us-marker';marker.style.top=`${(i+1)*20}%`;stage.append(marker);section.removeAttribute('id');});
  const connected=root.querySelector<HTMLElement>('.cs-connected-section')!;
  const end=document.createElement('span');end.id='verbonden';end.className='us-marker';end.style.top='80%';stage.append(end);connected.removeAttribute('id');
  const cta=root.querySelector<HTMLElement>('.cs-cta')!;stage.after(cta);
  cta.querySelector('h2')!.innerHTML=html('En hoe zou dit<br/><em>voor jouw bedrijf werken?</em>');
  root.classList.add('us-ready');
- let current=0,target=0,frame=0,last=0;
+ let current=0,target=0,frame=0,last=0,layoutDirty=true;
  const reduce=matchMedia('(prefers-reduced-motion: reduce)');
  const quiet=()=>reduce.matches||root.classList.contains('cs-quiet');
  const clamp=(v:number)=>Math.min(1,Math.max(0,v));
  // Each row describes the SAME three interfaces, not new copies.
  const desktop=[[[16,54,.36,-7],[50,45,.44,0],[84,54,.36,7]],[[50,50,1,0],[118,58,.4,7],[155,64,.3,10]],[[-48,62,.3,-9],[50,50,1,0],[130,58,.4,7]],[[-55,65,.3,-10],[-30,58,.4,-7],[50,50,1,0]],[[16,51,.36,0],[50,46,.4,0],[84,51,.36,0]]];
- const mobile=[[[50,44,.92,0],[50,50,.96,0],[50,56,1,0]],[[50,50,1,0],[155,50,1,0],[260,50,1,0]],[[-55,50,1,0],[50,50,1,0],[155,50,1,0]],[[-160,50,1,0],[-55,50,1,0],[50,50,1,0]],[[50,44,.92,0],[50,50,.96,0],[50,56,1,0]]];
  const buttons=[...stage.querySelectorAll<HTMLButtonElement>('[data-us-step]')];
  function paint(time:number){
-  frame=0;const dt=Math.min(40,time-(last||time));last=time;
-  current+= (target-current)*(1-Math.exp(-dt/95));
+  frame=0;const dt=last?Math.min(40,time-last):16;last=time;
   const staticMode=quiet();root!.classList.toggle('us-static',staticMode);
   const mobileFlow=innerWidth<701;root!.classList.toggle('us-mobile',mobileFlow);
-  root!.classList.toggle('us-stack',mobileFlow&&!staticMode&&panels.every(panel=>panel.offsetHeight<innerHeight-72));
+  if(layoutDirty){
+   root!.classList.remove('us-stack');
+   const stack=mobileFlow&&!staticMode&&panels.every(panel=>panel.offsetHeight<innerHeight-72);
+   root!.classList.toggle('us-stack',stack);
+   tracks.forEach((track,i)=>track.style.setProperty('--card-height',`${panels[i].offsetHeight}px`));
+   layoutDirty=false;
+  }
+  target=clamp(-stage.getBoundingClientRect().top/Math.max(1,stage.offsetHeight-innerHeight));
+  current+= (target-current)*(1-Math.exp(-dt/80));
   const phase=current*4, index=Math.min(3,Math.floor(phase)), mix=phase-index;
-  const motionMix=clamp((mix-.2)/.6);
+  const motionMix=clamp((mix-.08)/.84);
   const eased=motionMix*motionMix*(3-2*motionMix), active=Math.round(phase);
-  const states=innerWidth<701?mobile:desktop;
+  const states=desktop;
   panels.forEach((panel,i)=>{
+   if(!mobileFlow){
    const from=states[index][i],to=states[index+1][i];const v=from.map((n,j)=>n+(to[j]-n)*eased);
    // Keep the demo inside its stage, clear of the heading and navigation.
    const radians=Math.abs(v[3])*Math.PI/180;
@@ -119,16 +126,20 @@ if(root){
    const focused=active===0||active===4||active===i+1;
    panel.style.opacity=focused?'1':(innerWidth<701?'.08':'.2');panel.style.zIndex=active===i+1?'5':String(i+1);
    panel.inert=!staticMode&&!focused;panel.classList.toggle('cs-visible',focused);
-   const panelRect=panel.getBoundingClientRect();
-   const mobileProgress=clamp((innerHeight*.85-panelRect.top)/(panelRect.height*.8));
-   panel.style.setProperty('--arrival',String(staticMode?1:clamp((innerHeight-panelRect.top)/Math.min(320,innerHeight*.45))));
+   }
+   // Measure the stationary track, never the sticky/transformed card itself.
+   const trackRect=tracks[i].getBoundingClientRect();
+   const travel=Math.max(0,tracks[i].offsetHeight-panel.offsetHeight);
+   const mobileProgress=clamp((innerHeight*.75-trackRect.top)/(innerHeight*.75+travel-20));
+   panel.style.setProperty('--arrival',String(staticMode?1:clamp((innerHeight-trackRect.top)/Math.min(320,innerHeight*.45))));
+   panel.style.setProperty('--departure',String(staticMode?0:clamp((-trackRect.top-travel+20)/Math.max(1,panel.offsetHeight))));
    const progress=staticMode?1:(overrides.get(i)??(mobileFlow?mobileProgress:clamp((phase-i-.55)/.85)));
    if(mobileFlow){panel.inert=false;panel.classList.add('cs-visible');}
    panel.dataset.demoProgress=String(progress);
    panel.style.setProperty('--demo',String(progress));
    if(i===2){
-    const turn=flipOverride??(staticMode||mobileFlow?0:clamp((phase-3.16)/.2));
-    const houseProgress=staticMode?1:(overrides.get(2)??(mobileFlow?mobileProgress:clamp((phase-2.55)/.55)));
+    const turn=flipOverride??(staticMode?0:mobileFlow?clamp((mobileProgress-.8)/.18):clamp((phase-3.16)/.2));
+    const houseProgress=staticMode?1:(overrides.get(2)??(mobileFlow?clamp(mobileProgress/.75):clamp((phase-2.55)/.55)));
     drawHouse?.(houseProgress);
     const phaseLabel=panel.querySelector('[data-house-phase]');
     if(phaseLabel)phaseLabel.textContent=selectedProfile.phases[Math.min(4,Math.floor(houseProgress*5))];
@@ -150,7 +161,7 @@ if(root){
   stage.style.setProperty('--together',String(clamp((phase-3)*1.6)));
   if(Math.abs(target-current)>.0001)frame=requestAnimationFrame(paint);else last=0;
  }
- function schedule(){const rect=stage.getBoundingClientRect();target=clamp(-rect.top/Math.max(1,stage.offsetHeight-innerHeight));if(!frame)frame=requestAnimationFrame(paint);}
+ function schedule(){if(!frame)frame=requestAnimationFrame(paint);}
  function resumeScroll(){overrides.clear();if(!quiet()&&!flipBack.contains(document.activeElement))flipOverride=null;}
  buttons.forEach((button,i)=>button.addEventListener('click',()=>{resumeScroll();if(quiet()||innerWidth<701){panels[Math.max(0,Math.min(2,i-1))].scrollIntoView({block:'center',behavior:quiet()?'instant':'smooth'});return;}scrollTo({top:scrollY+stage.getBoundingClientRect().top+(stage.offsetHeight-innerHeight)*i/4,behavior:'smooth'});}));
  // Focus changes and browser scroll anchoring must not cancel a manual demo action.
@@ -161,8 +172,8 @@ if(root){
   const transcript=demo?.querySelector('.sx-transcript');
   const phone=demo?.querySelector('.sx-phone');
   if(transcript&&phone){if(innerWidth<701)demo!.querySelector('.sx-agent')!.append(transcript);else phone.insertBefore(transcript,phone.querySelector('.sx-call-end'));}
-  schedule();
- });reduce.addEventListener('change',schedule);
+  layoutDirty=true;schedule();
+ });reduce.addEventListener('change',()=>{layoutDirty=true;schedule();});
  const change=document.createElement('button');change.type='button';change.className='sp-change';change.textContent=tr('Algemeen voorbeeld')+' · '+tr('wijzigen');stage.querySelector('.us-sticky')!.prepend(change);
  const form=picker.querySelector('form')!;
  const radios=[...form.querySelectorAll<HTMLInputElement>('[name="showcase-branch"]')];
@@ -172,6 +183,7 @@ if(root){
   branch=allowed.has(value)?value:'';
   const profile=localizedProfile(profileForBranch(branch),locale);
   mountDemos(profile);
+  layoutDirty=true;
   stage.dataset.branch=branch;stage.dataset.profile=profile.id;
   titles[0]=tr('Drie bouwgebieden. Eén partner.');
   descriptions[0]=branch?(profile.id==='general'?tr('Voor {branch} tonen we nu het algemene voorbeeld. Jouw maatwerk werken we samen uit.',{branch:tr(branch)}):tr('Van klantvraag tot uitvoering. Een voorbeeld voor {branch}.',{branch:tr(branch)})):tr('Scroll en zie hoe het samenkomt.');
@@ -191,6 +203,7 @@ if(root){
  form.querySelector('.sp-skip')!.addEventListener('click',()=>{applySelection('');enterStory();});
  change.addEventListener('click',()=>{picker.scrollIntoView({behavior:quiet()?'instant':'smooth',block:'start'});const selected=radios.find(r=>r.checked);if(selected)selected.focus({preventScroll:true});else radios[0]?.focus({preventScroll:true});});
  try{const saved=JSON.parse(sessionStorage.getItem('ap-showcase-v1')||'null');if(saved&&typeof saved.branch==='string')applySelection(saved.branch);}catch{/* Ignore corrupt or blocked session storage. */}
- root.querySelector('[data-cs-motion]')?.addEventListener('click',()=>requestAnimationFrame(schedule));schedule();
+ root.querySelector('[data-cs-motion]')?.addEventListener('click',()=>{layoutDirty=true;requestAnimationFrame(schedule);});
+ document.fonts.ready.then(()=>{layoutDirty=true;schedule();});schedule();
 }
 </script>
