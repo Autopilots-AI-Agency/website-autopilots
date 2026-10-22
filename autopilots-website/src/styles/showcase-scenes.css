@@ -659,7 +659,13 @@
   #ap-connected .cs-header { gap: 8px; }
   #ap-connected .cs-header .cs-logo { font-size: clamp(12px, 3.5vw, 16px); letter-spacing: .12em; }
   #ap-connected .cs-header .p-cta { flex-shrink: 0; gap: 0; }
-  #ap-connected .cs-hero h1 { font-size: clamp(32px, 8.8vw, 42px); text-wrap: balance; }
+  #ap-connected .cs-hero { padding-top:44px; }
+  #ap-connected .cs-hero .cs-eyebrow { font-size:9px; letter-spacing:.13em; margin-bottom:24px; }
+  #ap-connected .cs-hero h1 { font-size:clamp(28px, 7.7vw, 34px); line-height:1.16; letter-spacing:-.04em; text-wrap:balance; margin-inline:auto; }
+  #ap-connected .cs-hero h1 > br { display:none; }
+  #ap-connected .cs-hero h1 em { display:block; max-width:18ch; margin:6px auto 0; text-wrap:balance; }
+  #ap-connected .cs-hero .cs-intro { max-width:34ch; margin:24px auto 28px; font-size:15px; line-height:1.65; text-wrap:pretty; }
+  #ap-connected .cs-hero .cs-intro span { max-width:30ch; margin:12px auto 0; font-size:14px; line-height:1.6; text-wrap:balance; }
   #ap-connected .cs-wrap { width: calc(100% - 32px); }
   #ap-connected .cs-cta h2 { font-size: clamp(32px, 8.5vw, 42px); text-wrap: balance; }
   #ap-connected .cs-discover { width: 100%; max-width: 360px; gap: 0; }
