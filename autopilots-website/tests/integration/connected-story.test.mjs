@@ -36,7 +36,7 @@ test("unified stage reuses interfaces and retains a quiet fallback", () => {
   );
   const styles = readFileSync("src/styles/unified-story.css", "utf8");
   assert.match(source, /UnifiedStory\.astro/);
-  assert.match(stage, /world\.append\(panel\)/);
+  assert.match(stage, /track\.append\(panel\)/);
   assert.doesNotMatch(stage, /cloneNode|sn-courier|fetch\(/);
   assert.match(stage, /panel\.inert=/);
   assert.match(stage, /prefers-reduced-motion/);
@@ -61,6 +61,6 @@ test("each interface has a scroll-driven example and manual replay without exter
   assert.match(stage, /data-dx-at/);
   assert.match(stage, /phase-i-\.55/);
   assert.match(stage, /Opnieuw afspelen/);
-  assert.match(stage, /geen echte aanvraag of boeking/);
+  assert.doesNotMatch(stage, /geen echte aanvraag of boeking/);
   assert.doesNotMatch(stage, /fetch\(|XMLHttpRequest/);
 });

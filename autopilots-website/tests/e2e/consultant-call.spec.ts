@@ -9,37 +9,40 @@ for (const locale of ["nl", "en", "es", "de", "it", "fr"]) {
     const errors: string[] = [];
     page.on("pageerror", (e) => errors.push(e.message));
     await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.route("**/.netlify/functions/consultant", async (route) => {
-      const body = route.request().postDataJSON();
-      calls.push(body.action);
-      if (body.action === "config")
-        return route.fulfill({ json: { ok: true, enabled: true } });
-      if (body.action === "verify-start") {
-        expect(body.input.consent).toBe(true);
-        expect(body.input.phone).toBe("+31612345678");
-        expect(body.input.token).toBe("synthetic");
-        return route.fulfill({
-          json: { ok: true, id: "challenge-fixture", key: "synthetic-key" },
-        });
-      }
-      if (body.action === "verify-check") {
-        expect(body.input.code).toBe("123456");
-        return route.fulfill({ json: { ok: true, verified: true } });
-      }
-      if (body.action === "call") {
-        expect(body.input.challengeId).toBe("challenge-fixture");
-        expect(body.input.consentVersion).toBe("ai-callback-2026-10-20");
-        return route.fulfill({
-          json: {
-            ok: true,
-            id: "call-fixture",
-            key: "status-fixture",
-            status: "queued",
-          },
-        });
-      }
-      return route.fulfill({ json: { ok: true, status: "in-progress" } });
-    });
+    await page.route(
+      /\/(?:\.netlify\/functions|backend-api\/[^/]+)\/consultant$/,
+      async (route) => {
+        const body = route.request().postDataJSON();
+        calls.push(body.action);
+        if (body.action === "config")
+          return route.fulfill({ json: { ok: true, enabled: true } });
+        if (body.action === "verify-start") {
+          expect(body.input.consent).toBe(true);
+          expect(body.input.phone).toBe("+31612345678");
+          expect(body.input.token).toBe("synthetic");
+          return route.fulfill({
+            json: { ok: true, id: "challenge-fixture", key: "synthetic-key" },
+          });
+        }
+        if (body.action === "verify-check") {
+          expect(body.input.code).toBe("123456");
+          return route.fulfill({ json: { ok: true, verified: true } });
+        }
+        if (body.action === "call") {
+          expect(body.input.challengeId).toBe("challenge-fixture");
+          expect(body.input.consentVersion).toBe("ai-callback-2026-10-20");
+          return route.fulfill({
+            json: {
+              ok: true,
+              id: "call-fixture",
+              key: "status-fixture",
+              status: "queued",
+            },
+          });
+        }
+        return route.fulfill({ json: { ok: true, status: "in-progress" } });
+      },
+    );
     await page.goto(`/${locale}/ai-scan/`);
     // The full quiz -> choice path is covered separately in all six languages.
     await page.evaluate((locale) => {

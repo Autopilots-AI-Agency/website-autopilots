@@ -6,7 +6,7 @@ interface Props { light?: boolean; compact?: boolean; label?: string; locale?:Su
 const { light = false, compact = false, label, locale='nl' } = Astro.props;
 const t = intakeTranslator(locale);
 ---
-<a href={intakePath(locale)} class:list={['p-cta', { 'is-light': light, 'is-compact': compact }]} data-quiz-cta data-ap-event="intake_started">{label || t(compact ? intake.compactLabel : intake.label)}<span aria-hidden="true">↗</span></a>
+<a href={intakePath(locale)} class:list={['p-cta', { 'is-light': light, 'is-compact': compact }]} data-quiz-cta data-ap-event="intake_started">{label || t(compact ? intake.compactLabel : intake.label)}</a>
 <script>
   import { withCampaign } from '../../config/intake';
   document.querySelectorAll<HTMLAnchorElement>('[data-quiz-cta]').forEach(link => {

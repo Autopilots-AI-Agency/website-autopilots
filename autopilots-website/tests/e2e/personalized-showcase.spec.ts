@@ -43,7 +43,7 @@ test("branch picker shares one centered axis on desktop and mobile", async ({
   const center = picker!.x + picker!.width / 2;
   for (const selector of [
     ".sp-intro",
-    ".sp-intro p",
+    "#sp-title",
     ".sp-form",
     ".sp-options",
     ".sp-start",
@@ -87,7 +87,9 @@ test("six branches change all three scenes and keep keyboard-accessible controls
     await expect(page.locator("[data-customer-line]")).toContainText(question);
     await expect(page.locator(".sx-project-board")).toContainText(project);
     await expect(page.locator(".dx-address")).toContainText(brand);
-    await page.locator('[data-us-step="3"]').click();
+    if (page.viewportSize()!.width < 701)
+      await page.locator('[data-panel="2"]').scrollIntoViewIfNeeded();
+    else await page.locator('[data-us-step="3"]').click();
     await expect
       .poll(() =>
         page
@@ -141,9 +143,13 @@ test("selection survives reload, old company data is discarded and intake receiv
   await expect(page.locator("#sp-title")).toHaveText(
     "Kies jullie brancheen zie wat wij kunnen betekenen.",
   );
-  await expect(page.locator(".sp-intro p")).toHaveText(
-    "Wij bouwen AI-medewerkers, software & websites.",
+  await expect(page.locator(".sp-intro p")).toHaveCount(0);
+  await expect(page.locator(".sp-form legend")).toHaveCount(0);
+  await expect(page.locator(".sp-form fieldset")).toHaveAttribute(
+    "aria-labelledby",
+    "sp-title",
   );
+  await expect(page.locator(".cs-intro span")).toHaveCount(0);
   await expect(page.locator("#ap-connected")).not.toContainText(
     "OLD COMPANY NAME",
   );
@@ -167,8 +173,7 @@ test("selection survives reload, old company data is discarded and intake receiv
   await expect(cta).toHaveAttribute("href", /branche=Autobedrijven/);
   expect(await cta.getAttribute("href")).not.toContain("company");
   await cta.click();
-  await expect(page.locator("[data-step-count]")).toContainText("02");
-  await page.locator(".back").click();
+  await expect(page.locator("[data-step-count]")).toContainText("01");
   await expect(
     page.getByRole("button", { name: /Autobedrijven/ }),
   ).toHaveAttribute("aria-pressed", "true");
@@ -213,11 +218,14 @@ test("normal scrolling keeps the branch switch clear of the caption", async ({
     .getByRole("radio", { name: "Installatiebedrijven", exact: true })
     .check();
   await page.locator(".sp-start").click();
-  await page.locator('[data-us-step="3"]').click();
-  await expect(page.locator('[data-us-step="3"]')).toHaveAttribute(
-    "aria-current",
-    "true",
-  );
+  if (page.viewportSize()!.width < 701)
+    await page.locator('[data-panel="2"]').scrollIntoViewIfNeeded();
+  else await page.locator('[data-us-step="3"]').click();
+  if (page.viewportSize()!.width >= 701)
+    await expect(page.locator('[data-us-step="3"]')).toHaveAttribute(
+      "aria-current",
+      "true",
+    );
   const chip = await page.locator(".sp-change").boundingBox();
   const eyebrow = await page.locator(".us-caption .cs-eyebrow").boundingBox();
   expect(chip!.y + chip!.height).toBeLessThanOrEqual(eyebrow!.y);
