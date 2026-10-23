@@ -1,6 +1,10 @@
 # Rumata production migration
 
-Status: implementation and acceptance in progress; no domain cutover yet.
+Status: Rumata migration deferred; the existing Netlify production host remains active.
+
+## Release decision — 2026-10-23
+
+The user explicitly requested publishing the approved local design through Netlify. Release PR #28 contains the isolated website/mobile changes on a fresh branch from protected main, retaining the existing Netlify scan, email, consultant and campaign handlers. This supersedes the earlier full-Rumata-only constraint for the current website release. Rumata migration PR #27 remains draft and must not be merged to publish the website design. Its domain, API and stored-data migration requirements remain open for a later complete migration.
 
 ## MCP verification — 2026-10-23
 
@@ -10,7 +14,7 @@ Status: implementation and acceptance in progress; no domain cutover yet.
 - The discovered deployment operation accepts `factoryId`, `subdomain` and `workflowSelections`. A search for domain operations returns only subdomain availability and frontend deployment; it does not establish a custom-domain/TLS configuration path.
 - Updating the private development checkout is preparation for acceptance, not a production cutover. Existing uncommitted workspace files must be preserved.
 
-## Release decision — 2026-10-21
+## Historical release decision — 2026-10-21
 
 The user explicitly chose a complete migration only, not temporary Netlify frontend plus Rumata backend. Do not merge this PR merely to publish a hybrid release: protected main automatically deploys the Netlify website. Keep the PR in draft until the complete Rumata cutover is demonstrably supported and accepted.
 
