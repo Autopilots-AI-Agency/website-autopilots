@@ -8,7 +8,7 @@ const { locale = defaultLocale } = Astro.props;
 const copy = uiCopy[locale].system;
 ---
 
-<div class="ap-consent" data-consent-banner hidden role="dialog" aria-modal="false" aria-labelledby="ap-consent-title">
+<div id="ap-cookie-consent" class="ap-consent" data-consent-banner hidden role="dialog" aria-modal="false" aria-labelledby="ap-consent-title">
   <div>
     <strong id="ap-consent-title">{copy.consentTitle}</strong>
     <p>{copy.consentText}</p>
@@ -52,5 +52,25 @@ const copy = uiCopy[locale].system;
 </script>
 
 <style>
-  .ap-consent{position:fixed;right:18px;bottom:18px;z-index:1000;display:grid;width:min(620px,calc(100% - 36px));grid-template-columns:minmax(0,1fr) auto;gap:22px;align-items:center;border:1px solid rgba(255,255,255,.14);border-radius:24px;background:#111;padding:20px;color:#fff;box-shadow:0 24px 70px rgba(0,0,0,.28)}.ap-consent[hidden]{display:none}.ap-consent strong{font-size:15px}.ap-consent p{max-width:430px;margin:7px 0 0;color:rgba(255,255,255,.66);font-size:12px;line-height:1.5}.ap-consent-actions{display:flex;gap:8px}.ap-consent button{min-height:42px;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:transparent;padding:10px 14px;color:#fff;font:inherit;font-size:11px;font-weight:850;cursor:pointer}.ap-consent button.is-primary{border-color:var(--ap-brown);background:var(--ap-brown)}@media(max-width:680px){.ap-consent{grid-template-columns:1fr}.ap-consent-actions{flex-wrap:wrap}.ap-consent button{flex:1}}
+  #ap-cookie-consent {
+    position:fixed;right:24px;bottom:24px;z-index:1000;
+    display:grid;grid-template-columns:1fr;gap:20px;
+    width:min(440px,calc(100% - 32px));box-sizing:border-box;
+    padding:24px;border:1px solid #bd875d55;border-radius:12px;
+    background:#1a2d36;color:#f6f1e9;
+    box-shadow:0 16px 48px #0005;
+    font-family:'Public Sans',sans-serif;text-align:left;
+    max-height:calc(100svh - 32px);overflow:auto;
+  }
+  #ap-cookie-consent[hidden]{display:none}
+  #ap-cookie-consent strong{display:block;font-size:17px;line-height:1.35;font-weight:700;letter-spacing:-.025em}
+  #ap-cookie-consent p{margin:10px 0 0;color:#aabcc2;font-size:13px;line-height:1.65}
+  #ap-cookie-consent .ap-consent-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  #ap-cookie-consent button{min-width:0;min-height:48px;border:1px solid #bd875d66;border-radius:5px;background:#101e25;padding:12px;color:#f6f1e9;font:600 12px/1.4 'Public Sans',sans-serif;cursor:pointer;transition:background .2s,border-color .2s}
+  #ap-cookie-consent button.is-primary{border-color:#bd875d;background:#875638}
+  #ap-cookie-consent button:hover{background:#263d46;border-color:#bd875d}
+  #ap-cookie-consent button.is-primary:hover{background:#996342}
+  #ap-cookie-consent button:focus-visible{outline:2px solid #d8b394;outline-offset:3px}
+  @media(max-width:680px){#ap-cookie-consent{right:16px;bottom:max(16px,env(safe-area-inset-bottom));padding:20px;gap:18px}#ap-cookie-consent strong{font-size:16px}}
+  @media(prefers-reduced-motion:reduce){#ap-cookie-consent button{transition:none}}
 </style>
