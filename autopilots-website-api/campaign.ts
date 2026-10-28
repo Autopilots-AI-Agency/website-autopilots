@@ -35,7 +35,7 @@ export async function registerCampaign(app: FastifyInstance, db: Database | null
                 if (route.url === '/api/funnel-lead' && (env.CAMPAIGN_CRM_ENABLED !== 'true' || env.CAMPAIGN_APPROVAL_VERSION !== campaignContextVersion)) {
                     return reply.code(503).send({ ok: false, error: 'Campaign CRM not activated' });
                 }
-                if (route.method === 'POST' && request.headers.origin && request.headers.origin !== (env.PUBLIC_ORIGIN ?? 'https://auto-pilots.io')) {
+                if (route.method === 'POST' && request.headers.origin && request.headers.origin !== (env.WEBSITE_ORIGIN ?? 'https://auto-pilots.io')) {
                     return reply.code(403).send({ ok: false, error: 'Origin not allowed' });
                 }
                 const raw = Buffer.isBuffer(request.body) ? request.body : Buffer.alloc(0);
@@ -43,7 +43,7 @@ export async function registerCampaign(app: FastifyInstance, db: Database | null
                 for (const [key, value] of Object.entries(request.headers)) {
                     if (value !== undefined) headers.set(key, Array.isArray(value) ? value.join(', ') : value);
                 }
-                const webRequest = new Request(`https://auto-pilots.io${route.url}`, {
+                const webRequest = new Request(`${env.WEBSITE_ORIGIN ?? 'https://auto-pilots.io'}${route.url}`, {
                     method: route.method, headers, ...(route.method === 'POST' ? { body: new Uint8Array(raw) } : {}),
                 });
                 // Authenticate the existing private dashboard before any data access.

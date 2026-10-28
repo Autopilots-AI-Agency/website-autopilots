@@ -57,7 +57,7 @@ export function createWorkflowClient({
     try {
       response = await fetchImpl(url, {
         method, redirect: 'error', signal: AbortSignal.timeout(timeoutMs),
-        headers: { 'rumata-api-key': apiKey, 'content-type': 'application/json' },
+        headers: { 'rumata-api-key': apiKey, ...(body === undefined ? {} : { 'content-type': 'application/json' }) },
         ...(body === undefined ? {} : { body: JSON.stringify(body) }),
       });
     } catch {

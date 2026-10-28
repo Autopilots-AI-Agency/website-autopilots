@@ -18,7 +18,9 @@ if (production && missing.length) {
 }
 
 console.log(
-  production
-    ? "Productieconfiguratie is compleet."
-    : "Lokale build: productie-secrets worden pas tijdens Netlify production deploy verplicht.",
+  process.env.CONTEXT === "rumata-production"
+    ? "Rumata frontend: openbare configuratie wordt gebouwd; servergeheimen blijven in de aparte backend."
+    : production
+      ? "Productieconfiguratie is compleet."
+      : "Lokale build: productie-secrets worden pas tijdens Netlify production deploy verplicht.",
 );

@@ -1,7 +1,8 @@
+import { siteOrigin } from "./site-origin.mjs";
 const defaultCalendarUrl = "https://api.leadconnectorhq.com/widget/booking/UaWTV0sdETiXy0refclQ";
 
 export const publicRuntime = {
-  siteUrl: import.meta.env.PUBLIC_SITE_URL || "https://auto-pilots.io",
+  siteUrl: siteOrigin(import.meta.env.PUBLIC_SITE_URL),
   ghlCalendarUrl: import.meta.env.PUBLIC_GHL_CALENDAR_URL || defaultCalendarUrl,
   analyticsProvider: import.meta.env.PUBLIC_ANALYTICS_PROVIDER || "none",
   analyticsSiteId: import.meta.env.PUBLIC_ANALYTICS_SITE_ID || "",

@@ -3,6 +3,42 @@
 Status: complete Rumata migration resumed on explicit user authority, 2026-10-28.
 The existing Netlify production host remains active until full acceptance.
 
+## Current www authority and next release — 2026-10-28
+
+The user explicitly authorized continuing through `www.auto-pilots.io` temporarily
+and finishing all unblocked migration work. Rumata support confirmed direct www
+custom-domain connection, automatic HTTPS and the managed same-origin backend
+gateway. Root-domain support is a provider feature request, not a reason to stop
+independent work. Apex DNS/HTTPS redirection remains separate and unchanged.
+
+The Rumata build now targets `https://www.auto-pilots.io`, preserving page paths,
+six locale clusters and robots/sitemap/canonical consistency. The Netlify build's
+default apex origin remains unchanged for rollback. `rumata.frontend.json`
+specifies repository-root monorepo commands and an explicit immutable Git-SHA
+release identity; the build refuses to publish an unknown commit. Website checks
+and source tests run before the build, then built-site/release tests run after it.
+
+Unprotected appointment forms and campaign telemetry now use the documented
+managed backend binding, avoiding reliance on unknown edge rewrite support.
+The locked `CampaignLeadForm.astro` still needs the separate contract-first,
+funnel-only release procedure from
+`autopilots-website/docs/deployment/AUTODEALER_FUNNEL_INCIDENT_2026-07-27.md`.
+Do not bypass its integrity check with a fetch monkeypatch or build transform.
+
+Netlify environment inventory confirms the current source has no booking/Stripe
+webhook signing keys configured. Those signed conversion routes therefore remain
+disabled on Rumata too; enabling them is separate from preserving their code and
+records. Existing GHL location/pipeline/stage IDs and admin username were read
+without disclosing tokens/passwords. The existing Rumata GHL secret is bound to
+the legacy variable name; actual provider scope verification remains required.
+
+Backend configuration now stages www via `WEBSITE_ORIGIN`, retains all activation
+flags as false, and preserves database/disk/provider bindings. `PUBLIC_ORIGIN`
+was rejected as a reserved platform/frontend name and was not saved. One secure
+setup form was provided for the missing existing `FUNNEL_ADMIN_PASSWORD`; no new
+provider key was requested, no password was printed, and no admin access was
+weakened. Bind it only after metadata confirms it has been saved.
+
 ## Current scope and checklist — 2026-10-28
 
 The user requested starting the complete website and website-backend migration,

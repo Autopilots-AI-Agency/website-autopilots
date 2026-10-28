@@ -86,3 +86,12 @@ test('distinct page views without an explicit event key are not silently dropped
     await app.inject(request); await app.inject(request);
     assert.equal(f.writes(), 2);
 });
+
+test('www origin is accepted only through the staged backend origin setting', async t => {
+    const f = fixture(); const app = Fastify(); t.after(() => app.close());
+    await registerCampaign(app, f.db, { CAMPAIGN_ENABLED: 'true', WEBSITE_ORIGIN: 'https://www.auto-pilots.io' });
+    const request = { method: 'POST' as const, url: '/api/funnel-event', headers: { origin: 'https://www.auto-pilots.io' }, payload: { sessionId: 'test_session_12345', event: 'page_view' } };
+    assert.equal((await app.inject(request)).statusCode, 200);
+    assert.equal((await app.inject({ ...request, headers: { origin: 'https://auto-pilots.io' } })).statusCode, 403);
+    assert.equal(f.writes(), 1);
+});

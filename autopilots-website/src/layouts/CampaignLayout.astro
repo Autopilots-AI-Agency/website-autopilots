@@ -11,6 +11,7 @@ const metaPixelId = import.meta.env.PUBLIC_META_PIXEL_ID ?? "1715813002902335";
 const alternates=contentId?localizedAlternates(contentId):[];
 const defaultAlternate=alternates.find(item=>item.locale==="nl");
 const localeTag=getLocale(locale).tag;
+const campaignBackendBase = import.meta.env.VITE_AUTOPILOTS_SCAN_URL || '';
 ---
 <!doctype html>
 <html lang={localeTag}>
@@ -42,7 +43,7 @@ const localeTag=getLocale(locale).tag;
         <button type="button" data-consent-accept>Klik hier om te accepteren</button>
       </div>
     </aside>
-    <script is:inline define:vars={{ campaign, metaPixelId }}>
+    <script is:inline define:vars={{ campaign, metaPixelId, campaignBackendBase }}>
       (()=>{
         const keys=["utm_source","utm_medium","utm_campaign","utm_term","utm_content","gclid","fbclid","msclkid"];
         const params=new URLSearchParams(location.search);
@@ -63,7 +64,7 @@ const localeTag=getLocale(locale).tag;
           else if(name==="appointment_scheduled")window.fbq("track","Schedule",{...shared,content_category:"autobedrijven_ai_funnel",calendar:detail.calendar||""},{eventID:metaEventId("schedule")});
         };
         const backendEventNames={funnel_page_viewed:location.pathname.includes("/ervaring/")?"demo_page_view":"page_view",funnel_started:"funnel_started",funnel_question_answered:"funnel_question_answered",funnel_diagnosis_completed:"funnel_diagnosis_completed",lead_form_submitted:"lead_form_submitted",lead_form_succeeded:"lead_form_succeeded",lead_form_failed:"lead_form_failed",elevenlabs_demo_opened:"demo_widget_opened",demo_role_selected:"demo_role_selected",roi_calculated:"roi_completed",appointment_scheduled:"booking_clicked"};
-        const trackBackend=(name,detail={})=>{const event=backendEventNames[name];if(!event)return;const properties={campaign,...attribution,...detail};const body=JSON.stringify({sessionId,event,page:location.pathname,properties});if(navigator.sendBeacon){navigator.sendBeacon("/api/funnel-event",new Blob([body],{type:"application/json"}));return}fetch("/api/funnel-event",{method:"POST",headers:{"Content-Type":"application/json"},body,keepalive:true}).catch(()=>{})};
+        const trackBackend=(name,detail={})=>{const event=backendEventNames[name];if(!event)return;const properties={campaign,...attribution,...detail};const body=JSON.stringify({sessionId,event,page:location.pathname,properties});const endpoint=campaignBackendBase.replace(/\/$/,"")+"/api/funnel-event";if(navigator.sendBeacon){navigator.sendBeacon(endpoint,new Blob([body],{type:"application/json"}));return}fetch(endpoint,{method:"POST",headers:{"Content-Type":"application/json"},body,keepalive:true}).catch(()=>{})};
         const emit=(name,detail={})=>{const event={event:name,page_path:location.pathname,campaign,...attribution,...detail};window.dispatchEvent(new CustomEvent("autopilots:analytics",{detail:event}));if(Array.isArray(window.dataLayer))window.dataLayer.push(event);trackBackend(name,detail);trackMeta(name,detail)};
         window.apCampaign={attribution,sessionId,emit};
         const loadMeta=()=>{

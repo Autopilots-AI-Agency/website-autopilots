@@ -17,6 +17,8 @@ test('submits once using server credentials and returns an accepted run for poll
   assert.ok(typeof calls[0].body === 'string');
   assert.deepEqual(JSON.parse(calls[0].body), { input: { jobId: 'job' } });
   assert.equal(calls[1].url, `https://gateway.example/wf/runs/${id}`);
+  assert.equal(new Headers(calls[0].headers).get('content-type'), 'application/json');
+  assert.equal(new Headers(calls[1].headers).has('content-type'), false, 'bodyless polling must pass the managed JSON parser');
   assert.throws(() => client.status('https://attacker.example'), /valid workflow run ID/);
 });
 

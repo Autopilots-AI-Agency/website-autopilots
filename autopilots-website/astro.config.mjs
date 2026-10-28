@@ -1,3 +1,4 @@
 import { defineConfig } from "astro/config";
 import { rumataBackends } from "./rumata-backends.mjs";
-export default defineConfig({site:"https://auto-pilots.io",vite:{plugins:process.env.NETLIFY ? [] : [rumataBackends()]}});
+import { siteOrigin } from "./src/config/site-origin.mjs";
+export default defineConfig({site:siteOrigin(process.env.PUBLIC_SITE_URL),vite:{plugins:process.env.NETLIFY ? [] : [rumataBackends()]}});
