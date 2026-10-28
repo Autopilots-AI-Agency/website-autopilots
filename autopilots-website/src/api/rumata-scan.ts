@@ -1,12 +1,15 @@
+import { ensureBackendReady } from './backend-readiness.mjs';
 const base=(import.meta.env.VITE_AUTOPILOTS_SCAN_URL||'').replace(/\/$/,'');
 export const usingRumata=Boolean(base);
 const legacyMailRequests=new WeakMap<object,string>();
 export async function consultantRequest(action:string,input:Record<string,unknown>={}) {
+ await ensureBackendReady(base);
  const response=await fetch(base?base+'/consultant':'/.netlify/functions/consultant',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action,input}),signal:AbortSignal.timeout(25000)});
  const data=await response.json();if(!response.ok||!data.ok)throw new Error(data.error||'failed');return data;
 }
 interface ScanReference {id:string;token:string}
 export async function scanRequest(path:string,token:string,body?:unknown,id?:string) {
+ await ensureBackendReady(base);
  const response=await fetch(base+path,{method:body!==undefined?'POST':'GET',headers:{...(body!==undefined?{'content-type':'application/json'}:{}),'x-scan-token':token,'x-autopilots-locale':document.documentElement.lang.split('-')[0],...(id?{'idempotency-key':id}:{})},...(body!==undefined?{body:JSON.stringify(body)}:{}),signal:AbortSignal.timeout(25000)});
  const data=await response.json();
  if(!response.ok)throw new Error('De analyse is niet beschikbaar. Probeer opnieuw.');

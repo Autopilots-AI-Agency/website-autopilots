@@ -1,10 +1,12 @@
 import { test, expect } from "@playwright/test";
 import { consultantCopy } from "../../src/data/consultant-copy";
+import { mockBackendHealth } from "./scan-fixtures";
 for (const locale of ["nl", "en", "es", "de", "it", "fr"]) {
   test(`${locale}: verified callback choice reaches personal landing with provider status`, async ({
     page,
   }, info) => {
     const c = consultantCopy(locale);
+    await mockBackendHealth(page);
     const calls: string[] = [];
     const errors: string[] = [];
     page.on("pageerror", (e) => errors.push(e.message));

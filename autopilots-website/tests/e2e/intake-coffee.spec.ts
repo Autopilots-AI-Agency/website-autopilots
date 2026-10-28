@@ -1,9 +1,11 @@
 import { test, expect } from "@playwright/test";
+import { mockBackendHealth } from "./scan-fixtures";
 
 for (const motion of ["no-preference", "reduce"] as const) {
   test(`coffee loading: centered, visible and ${motion} safe`, async ({
     page,
   }) => {
+    await mockBackendHealth(page);
     await page.emulateMedia({ reducedMotion: "reduce" });
     let release!: () => void;
     const responseGate = new Promise<void>((resolve) => {

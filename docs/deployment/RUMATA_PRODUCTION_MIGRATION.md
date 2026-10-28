@@ -3,6 +3,83 @@
 Status: complete Rumata migration resumed on explicit user authority, 2026-10-28.
 The existing Netlify production host remains active until full acceptance.
 
+## Rumata hosted acceptance — 2026-10-29 (Bangkok)
+
+The actual factory allowance is now 41,943,040 bytes (40 MiB); no paid asset-size
+pack or recurring asset-size charge is registered. Do not complete the unused
+Polar checkout. The owner explicitly authorized resuming publication.
+
+Frontend release `12196d60-4a90-4763-9b9a-6e5bd2d47416` deployed reviewed main
+`dff128f45483b3cc2176a9b422536e31deced6ee`, 32,503,840 bytes / 504 files.
+The owner then explicitly approved sleeping when idle to conserve backend hours.
+Configuration revision 8 uses `sleep_when_idle` with a 300-second idle timeout;
+release `0d50620a-bcf9-460d-8702-218dc3bf6c4d` deployed the same website with
+that backend configuration. Public runtime is verified at
+`https://autopilots-production.sites.rumata.dev`; this is staging acceptance,
+not customer-domain cutover. The release manifest identifies the reviewed commit.
+
+Hosted evidence:
+
+- All six language homepages, intake, sitemap and a representative industry page
+  return the expected content. Desktop and 840px views have no horizontal
+  overflow; the 390px screenshot shows the approved centered mobile layout.
+- Six synthetic API scans plus one complete Dutch browser quiz reached
+  `succeeded`. PostgreSQL confirms seven persisted results across all six
+  languages. Incorrect visitor capabilities return 404. All advice is in its
+  requested language and explicitly distinguishes intake from website evidence.
+- The browser email choice sent exactly one test analysis to Tim. PostgreSQL
+  records `accepted` with a provider receipt. Gmail confirms it in Tim's inbox
+  at `2026-10-28T16:56:56Z`, subject `[TEST Rumata] Je persoonlijke AI-analyse — Autopilots`.
+  Customer mail remains test-recipient-only until final activation.
+- The result page survives reload and puts the existing GHL booking link above
+  the advice. The actual calendar renders available slots; no appointment was
+  created. Private campaign administration remains 404, CRM writes and calls
+  remain disabled pending their separate controlled acceptance/approval.
+- The backend reached `suspended` at `17:03:19Z` after its last request at
+  `16:58:02Z`. A genuine wake probe returned 200 after 34,105 ms, followed by the
+  same persisted completed Dutch result. The old 25-second browser timeout is
+  insufficient. The readiness repair retries only bodyless GET `/health` probes
+  before the original command, with a bounded two-minute wait and shared short
+  cache. It must not automatically replay scan/email/SMS/call POSTs.
+- The first API test during deployment handover timed out before admission.
+  Healthy owned GET then proved absence (404); the operator reused its original
+  UUID/token rather than creating a second paid job. There are no duplicate runs.
+
+The latest encrypted Netlify capture is
+`20261028-www-checkpoint/netlify-stores.enc.json`, captured
+`2026-10-28T16:36:10.465Z`, SHA-256
+`8db4c80d4db518c3d392ee6ed1c5605f38c499f3b9890cbadca6a6a79402dd82`.
+Its separate key directory and readback are verified. All 896 identities and
+payload hashes match the imported snapshot: zero added/changed/deleted records.
+Repeat delta reconciliation at the actual domain switch; no source write freeze
+or source deletion has occurred.
+
+### Remaining customer-domain gate: HTTP redirects and real 404s
+
+Rumata's static frontend currently ignores the existing `public/_redirects`
+contract. Live examples on the staging origin:
+
+- `/welkom/`: HTTP 200 homepage, instead of 301 to the existing YouTube target.
+- `/ai-voor-autobedrijven/`: HTTP 200 instead of its existing forced 301.
+- `/producten`: 307 to `/producten/`, then HTTP 200, not the canonical 301.
+- `/niet-bestaande-route-migratietest/`: HTTP 200 homepage, not a 404.
+
+Header verification also found that the deployed frontend does not apply
+`public/_headers`: `X-Frame-Options`, `Referrer-Policy` and `Permissions-Policy`
+are absent, whereas the existing Netlify production serves them. Rumata does
+provide `nosniff` and HSTS itself. Preserve the reviewed header policy through a
+supported hosting configuration; do not claim those missing headers are active.
+
+The legacy `/diensten/chat/` generated redirect document does retain a meta
+refresh, but this is not equivalent to preserving server-side HTTP 301 behavior.
+All 56 redirect rules remain in the artifact. No redirect configuration operation
+is advertised by MCP, and the linked official docs root currently returns a
+provider 404. Ask Rumata for supported Netlify-style redirect/header handling or
+an equivalent static-site routing configuration with real 301/404 responses.
+Do not silently replace required server redirects with browser scripts, invent
+undocumented hosting options, expose the backend directly, remove SEO pages,
+change DNS or present the full migration as complete before this is resolved.
+
 ## Current www authority and next release — 2026-10-28
 
 ### Clean-checkout type preparation repair
