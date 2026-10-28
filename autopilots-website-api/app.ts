@@ -1,4 +1,5 @@
 import { registerScanEmail } from './scan-email.ts';
+import { registerCampaign } from './campaign.ts';
 import { registerConsultant } from './consultant.ts';
 import { registerScan } from './scan.ts';
 import { registerScanRetention } from './scan-retention.ts';
@@ -66,6 +67,7 @@ export async function createApp({ database = null, logger = createLogger(), slow
     await registerScanEmail(app, database, authEnv ?? process.env);
     await registerScanRetention(app, database, authEnv ?? process.env);
     await registerConsultant(app, database, authEnv ?? process.env);
+    await registerCampaign(app, database, authEnv ?? process.env);
     if (database) app.addHook('onClose', async () => database.pool.end());
     return app;
 }

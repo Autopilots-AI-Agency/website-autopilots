@@ -7,7 +7,7 @@ export async function consultantRequest(action:string,input:Record<string,unknow
 }
 interface ScanReference {id:string;token:string}
 export async function scanRequest(path:string,token:string,body?:unknown,id?:string) {
- const response=await fetch(base+path,{method:body?'POST':'GET',headers:{'content-type':'application/json','x-scan-token':token,'x-autopilots-locale':document.documentElement.lang.split('-')[0],...(id?{'idempotency-key':id}:{})},...(body?{body:JSON.stringify(body)}:{}),signal:AbortSignal.timeout(25000)});
+ const response=await fetch(base+path,{method:body!==undefined?'POST':'GET',headers:{...(body!==undefined?{'content-type':'application/json'}:{}),'x-scan-token':token,'x-autopilots-locale':document.documentElement.lang.split('-')[0],...(id?{'idempotency-key':id}:{})},...(body!==undefined?{body:JSON.stringify(body)}:{}),signal:AbortSignal.timeout(25000)});
  const data=await response.json();
  if(!response.ok)throw new Error('De analyse is niet beschikbaar. Probeer opnieuw.');
  return data;

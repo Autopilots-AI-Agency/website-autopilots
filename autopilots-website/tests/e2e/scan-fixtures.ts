@@ -28,6 +28,10 @@ export async function mockScan(page: Page, handler: (route: Route) => unknown) {
   });
   await page.route("**/backend-api/*/scans/*", (route) => {
     if (route.request().method() !== "GET") return route.fallback();
+    if (route.request().headers()["content-type"])
+      throw new Error(
+        "Bodyless scan polling must not send a JSON content-type",
+      );
     return route.fulfill({
       json: {
         state: "succeeded",
