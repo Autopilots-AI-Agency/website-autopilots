@@ -22,11 +22,13 @@ the wider OS, unrelated n8n workflows and other client factories are out of scop
 - [x] Add authenticated-encryption backup and read-back verification tooling.
 - [x] Capture and verify the current encrypted Netlify snapshot; prove full restore
   into an isolated local PostgreSQL database (not yet hosted Rumata restore).
-- [ ] Port conversion webhooks while preserving signature checks and raw request bytes.
+- [x] Port conversion webhooks, preserving raw request bodies and signature checks;
+  local verification passed. Hosted callback acceptance/configuration remains open.
 - [ ] Prove same-origin legacy `/api/*` and `/backend/*` routes on Rumata. The managed
   `/backend-api/<service>` binding alone does not prove old absolute paths work.
 - [ ] Bind campaign-specific CRM settings, webhook signing keys and private admin credentials.
-- [ ] Import actual records, reconcile counts/hashes, and handle post-snapshot changes.
+- [x] Import and independently verify the initial 896-record snapshot in Rumata.
+- [ ] Reconcile post-snapshot source changes and perform the final delta at cutover.
 - [ ] Decide compatibility/expiry for old signed result links and old quota state.
 - [ ] Move the production release path from Netlify to Rumata in a reviewed change.
 - [ ] Merge the complete accepted release, then bind/build/deploy that exact main SHA.
@@ -76,6 +78,42 @@ route and next-write acceptance. No original source was removed or modified.
 Headless preflight currently selects frontend main `762685c3` but backend branch
 `44158ff4`. Both must be changed to the same reviewed merged release before
 publication; a successful preview must not hide this mismatch.
+
+### Hosted import receipt — 2026-10-28
+
+The initial snapshot is now imported into the production factory's private
+`website_legacy_records` table. 45 transactional batches committed between
+10:37:32Z and 10:38:59Z: 896 inserts, 896 source JSON/checksum matches independently
+read back, no conflicts. A separate final query confirms 883 funnel, 7 quota,
+2 assessment-request and 4 intake-mail records. Empty stores remain empty.
+`website_migration_batches` retains immutable batch receipts, source snapshot
+SHA256, R2 classification and zero external-provider spend for these copy operations.
+Rumata infrastructure consumption is not included in that provider-spend field.
+
+The authenticated Studio SQL capability was used with a private operator transport:
+strict UUID schema selection, validated JSON/checksums, base64-only data transport,
+server-side checksum checks, transaction/advisory locks, conflict rejection and
+per-batch independent verification. No customer plaintext, signing key or API key
+was printed in the user-facing output or committed to Git. Application SQL remains
+parameterized. This import executes no CRM, mail, payment or telephone action.
+
+The hosted import is a snapshot, not a live-write cutover: Netlify still serves
+production and may accept newer records. Final delta/reconciliation is required
+before DNS changes. No original source record was changed or removed.
+
+### Confirmed domain limitation — 2026-10-28
+
+The current Studio Deploy Project dialog explicitly states: only owned subdomains
+are supported; root domains are not supported yet. A website must be published
+before a custom domain can be attached. Therefore eligibility for ten domains is
+not proof that `auto-pilots.io` can be connected: only e.g. `www.auto-pilots.io`
+is currently advertised. No domain or DNS change has been performed.
+
+The user wants a provider message prepared asking Rumata to support the root
+domain, HTTPS, www-to-root redirects, same-origin API/admin routes and self-service
+Studio/MCP management. Do not silently switch the canonical site to www, keep a
+Netlify proxy, or claim the complete migration is live. Root-domain support and
+existing-path routing require a verified provider solution before the cutover.
 
 ## Compatibility storage and backups
 

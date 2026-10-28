@@ -1,5 +1,6 @@
 import { registerScanEmail } from './scan-email.ts';
 import { registerCampaign } from './campaign.ts';
+import { registerConversionWebhooks } from './conversion-webhooks.ts';
 import { registerConsultant } from './consultant.ts';
 import { registerScan } from './scan.ts';
 import { registerScanRetention } from './scan-retention.ts';
@@ -68,6 +69,7 @@ export async function createApp({ database = null, logger = createLogger(), slow
     await registerScanRetention(app, database, authEnv ?? process.env);
     await registerConsultant(app, database, authEnv ?? process.env);
     await registerCampaign(app, database, authEnv ?? process.env);
+    await registerConversionWebhooks(app, database, authEnv ?? process.env);
     if (database) app.addHook('onClose', async () => database.pool.end());
     return app;
 }

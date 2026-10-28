@@ -16,19 +16,22 @@ function identity(store: string, key: string) {
     }
 }
 
-export async function ensureLegacyStorage(db: Database) {
-    await db.pool.query(`CREATE TABLE IF NOT EXISTS ${db.schema}.website_legacy_records (
+export function legacyStorageStatements(schema: string) {
+    return [`CREATE TABLE IF NOT EXISTS ${schema}.website_legacy_records (
         store_name text NOT NULL, record_key text NOT NULL, payload jsonb NOT NULL,
         content_sha256 text NOT NULL, source_etag text, imported_at timestamptz,
         updated_at timestamptz NOT NULL DEFAULT now(), PRIMARY KEY (store_name, record_key)
-    )`);
-    await db.pool.query(`CREATE TABLE IF NOT EXISTS ${db.schema}.website_campaign_commands (
+    )`, `CREATE TABLE IF NOT EXISTS ${schema}.website_campaign_commands (
         command_key text PRIMARY KEY, input_sha256 text NOT NULL,
         state text NOT NULL CHECK(state IN ('pending','completed','unknown')),
         risk text NOT NULL, approval_version text, usage_cents integer NOT NULL DEFAULT 0,
         response_status integer, response_body text, response_headers jsonb,
         created_at timestamptz NOT NULL DEFAULT now(), finished_at timestamptz
-    )`);
+    )`];
+}
+
+export async function ensureLegacyStorage(db: Database) {
+    for (const statement of legacyStorageStatements(db.schema)) await db.pool.query(statement);
 }
 
 /** Factory schema scopes all records. This is not a public data-access API. */
