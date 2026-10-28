@@ -41,6 +41,50 @@ weakened. Bind it only after metadata confirms it has been saved.
 
 ## Current scope and checklist — 2026-10-28
 
+### WWW verification checkpoint — 2026-10-28 12:33 UTC
+
+- Candidate `a30a3180b74971083abae8cdbb451edf7342c3fb` is pushed to draft
+  PR #27. No merge, frontend publication, DNS change or provider activation occurred.
+- The complete Rumata frontend build passed: 430 HTML pages, 18,767 internal
+  links, canonical/hreflang/sitemap/robots and source/release/unit checks. The
+  generated release artifact identifies that exact candidate and the www origin.
+- Native API typecheck and tests completed locally: 61 passed, 3 optional
+  PostgreSQL tests skipped without a configured test database. The separate GitHub
+  native-API gate passed against the candidate. These are tests, not hosted
+  provider acceptance.
+- Rumata managed backend build `e8f6491a-6647-4b96-8aa8-adfd532a98d8`
+  succeeded for the same candidate, producing immutable image digest
+  `sha256:83711c8a599fe6963fea318f81e491cc7ca1811b6b4931279e8be05822a3ed10`.
+  The service remains unpublished, revision 4, with no active deployment.
+- Local browser runs were not uniformly green: 160/162 and 154/162 executable
+  scenarios passed, with varying timeout/layout failures. The isolated consultant
+  rerun passed all 24 desktop/mobile scenarios. The independent GitHub website
+  gate subsequently passed at 12:33 UTC: 162 browser scenarios passed and two
+  intentionally skipped; all four candidate checks are green. Do not erase or
+  reclassify the local failures, and repeat the gate for any subsequent code head.
+- Draft contract-only PR #29 declares the future isolated campaign transport
+  change. The protected component itself is still unchanged. A temporary proposed
+  component was tested against the existing original: five answers, required
+  contact fields, consent, exactly one intercepted POST and correct experience
+  navigation all passed. Proposed POST targets the managed same-origin backend;
+  no CRM write, email, SMS or call was made. Contact-form screenshots were
+  byte-identical (SHA-256
+  `906b186fcbd221d50044990976c55b11ed5dc30b54637bcb736d12dde590f80c`).
+  Temporary proposal files and the local preview server were removed afterward.
+- Secret metadata still reports `FUNNEL_ADMIN_PASSWORD` missing. The existing
+  password must be saved through the secure Studio form before binding; it is
+  not read out of Netlify or copied through MCP arguments.
+- Both captured legacy assessment expirations were inspected in memory without
+  logging customer records. Neither remains valid; the latest expired at
+  `2026-10-19T11:36:14.909Z`. Preserve original records, do not revive expired
+  tokens or weaken verification. At cutover repeat this check against the final
+  source delta; wait for any newer one-hour tokens to expire or explicitly stage
+  a short compatibility window before removing the old handler. Old quota rows
+  remain archived; native scan budget/accounting must not be reset or bypassed.
+- Rumata currently has no frontend deployments or attached domains. The existing
+  Netlify host is retained. Do not attach/switch www to an unaccepted deployment
+  or claim the migration live from a successful container build.
+
 The user requested starting the complete website and website-backend migration,
 including checking what already exists. This supersedes the deferred migration
 decision below, not the protected-main or full acceptance requirements. Finance,
