@@ -1,7 +1,16 @@
 import type { Page, Route } from "@playwright/test";
 
+export async function mockBackendHealth(page: Page) {
+  await page.route("**/backend-api/*/health", (route) => {
+    if (route.request().method() !== "GET" || route.request().postData())
+      throw new Error("Readiness must remain a bodyless read-only probe");
+    return route.fulfill({ json: { status: "ready" } });
+  });
+}
+
 // Synthetic HTTP receipts only; this adapter exercises both real client transports.
 export async function mockScan(page: Page, handler: (route: Route) => unknown) {
+  await mockBackendHealth(page);
   let report: any;
   let input: any;
   await page.route("**/.netlify/functions/website-analysis", handler);
