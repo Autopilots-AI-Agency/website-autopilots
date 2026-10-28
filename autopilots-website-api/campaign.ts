@@ -31,6 +31,11 @@ export async function registerCampaign(app: FastifyInstance, db: Database | null
             config: { public: true },
             schema: { security: [], summary: 'Website campaign compatibility endpoint' },
             handler: async (request, reply) => {
+                // The owner deferred the private dashboard, not the public funnel.
+                // Reject before storage/auth work even if the old credentials exist.
+                if (route.method === 'GET' && env.CAMPAIGN_ADMIN_ENABLED !== 'true') {
+                    return reply.code(404).send({ error: 'Not found' });
+                }
                 if (!db || env.CAMPAIGN_ENABLED !== 'true') return reply.code(503).send({ ok: false, error: 'Campaign unavailable' });
                 if (route.url === '/api/funnel-lead' && (env.CAMPAIGN_CRM_ENABLED !== 'true' || env.CAMPAIGN_APPROVAL_VERSION !== campaignContextVersion)) {
                     return reply.code(503).send({ ok: false, error: 'Campaign CRM not activated' });

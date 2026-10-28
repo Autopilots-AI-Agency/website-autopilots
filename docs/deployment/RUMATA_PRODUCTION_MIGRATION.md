@@ -5,6 +5,17 @@ The existing Netlify production host remains active until full acceptance.
 
 ## Current www authority and next release — 2026-10-28
 
+### Scope clarification: private dashboard deferred
+
+The user explicitly authorized continuing without the password-protected
+autobedrijven administration overview. This does not remove the public quiz,
+AI scan, email delivery, booking routes or any stored customer records.
+`CAMPAIGN_ADMIN_ENABLED=false` is now the explicit server-side default and must
+remain false in both Rumata environments. Requests to that overview return 404
+before database access; old credentials cannot accidentally reopen it. The missing
+`FUNNEL_ADMIN_PASSWORD` is no longer a migration blocker and is not requested.
+Reopening the private overview is a separate authorized change with secure login.
+
 The user explicitly authorized continuing through `www.auto-pilots.io` temporarily
 and finishing all unblocked migration work. Rumata support confirmed direct www
 custom-domain connection, automatic HTTPS and the managed same-origin backend

@@ -46,9 +46,22 @@ test('event handler persists through the Rumata adapter and explicit retries rep
 test('CRM is separately disabled and private dashboard rejects before database access', async t => {
     const app = Fastify(); t.after(() => app.close());
     const db: any = { schema: '"factory"', pool: { query: () => { throw new Error('No database access permitted'); } } };
-    await registerCampaign(app, db, { CAMPAIGN_ENABLED: 'true' });
+    await registerCampaign(app, db, { CAMPAIGN_ENABLED: 'true', CAMPAIGN_ADMIN_ENABLED: 'true' });
     assert.equal((await app.inject({ method: 'POST', url: '/api/funnel-lead', payload: {} })).statusCode, 503);
     assert.equal((await app.inject('/backend/funnel-autobedrijven/')).statusCode, 401);
+});
+
+test('deferred private dashboard stays unavailable without blocking the public funnel', async t => {
+    const f = fixture(); const app = Fastify(); t.after(() => app.close());
+    await registerCampaign(app, f.db, { CAMPAIGN_ENABLED: 'true', CAMPAIGN_ADMIN_ENABLED: 'false' });
+    for (const headers of [{}, { authorization: 'Basic ' + Buffer.from('tim:synthetic-only').toString('base64') }]) {
+        const response = await app.inject({ url: '/backend/funnel-autobedrijven/', headers });
+        assert.equal(response.statusCode, 404);
+        assert.equal(response.headers['www-authenticate'], undefined);
+        assert.equal(f.records.size, 0);
+    }
+    assert.equal((await app.inject({ method: 'POST', url: '/api/funnel-event', payload: { sessionId: 'test_session_deferred', event: 'page_view' } })).statusCode, 200);
+    assert.equal(f.records.size, 1);
 });
 
 test('cross-origin browser submissions and stale CRM approvals fail before SQL', async t => {
