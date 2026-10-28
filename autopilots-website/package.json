@@ -11,7 +11,7 @@
     "release:verify": "node scripts/check-production-release.mjs dist",
     "release:production": "npm run build && npm run release:verify && node scripts/deploy-production.mjs && node scripts/check-live-ad-funnel.mjs",
     "preview": "astro preview",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "astro sync && tsc --noEmit",
     "format": "prettier --write package.json scripts netlify/functions tests playwright.config.ts eslint.config.js",
     "format:check": "prettier --check package.json scripts netlify/functions tests playwright.config.ts eslint.config.js",
     "lint": "eslint scripts netlify/functions tests playwright.config.ts eslint.config.js",

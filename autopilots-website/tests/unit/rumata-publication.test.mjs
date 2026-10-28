@@ -4,6 +4,13 @@ import { readFileSync } from "node:fs";
 import { siteOrigin } from "../../src/config/site-origin.mjs";
 import { campaignEndpoint } from "../../src/api/campaign-endpoint.mjs";
 
+test("typechecking generates Astro declarations on a clean checkout first", () => {
+  const manifest = JSON.parse(
+    readFileSync(new URL("../../package.json", import.meta.url), "utf8"),
+  );
+  assert.equal(manifest.scripts.typecheck, "astro sync && tsc --noEmit");
+});
+
 test("headless installation starts beside the pinned package manager with an explicit workspace", () => {
   const config = JSON.parse(
     readFileSync(
