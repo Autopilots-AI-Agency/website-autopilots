@@ -16,6 +16,35 @@ before database access; old credentials cannot accidentally reopen it. The missi
 `FUNNEL_ADMIN_PASSWORD` is no longer a migration blocker and is not requested.
 Reopening the private overview is a separate authorized change with secure login.
 
+### Controlled publication sequence after dashboard deferral
+
+Contract-only PR #29 merged as `8fba2b4697fcbf7c63d8835cac3d51e88c3933fb`;
+the separate funnel-only PR #30 then merged as
+`a4b158e9` after both mandatory checks passed. The protected component matches
+the approved hash. Public quiz content and consent are unchanged. The migration
+branch incorporates those protected-main changes, not a snapshot merge of another
+worktree. A dedicated desktop/mobile regression now checks the complete campaign
+submission on the managed transport and rejects submission without consent.
+
+The owner has authorized proceeding with the www migration and deferring only
+private administration. After the complete merged-candidate checks, publish that
+reviewed main commit to Rumata's own hostname for controlled acceptance first.
+This is release staging, not a claim that customer traffic has moved. Existing
+Netlify production remains the rollback source; its old external funnel release
+guard is not loosened to publish an intermediate migration there. Do not change
+Vimexx DNS or enable customer delivery until hosted acceptance succeeds. Any
+Netlify auto-build rejected by that old guard retains the previous live release.
+The apex HTTPS redirect and eventual removal of old hosting remain separate from
+the initial www cutover.
+
+A fresh encrypted source capture at `2026-10-28T14:04:58.059Z` contains the same
+896 records: zero additions, changes or deletions against the imported snapshot.
+Encrypted SHA-256 is
+`a6541b625862b5b1313f9c2f4033f7257341754c1c6a0dddc4cbaa271e45e18f`.
+It is stored privately in the `20261028-precutover` backup directory with a
+separate key directory. This is a verified checkpoint, not a source write freeze;
+recheck changes at the actual domain switch.
+
 The user explicitly authorized continuing through `www.auto-pilots.io` temporarily
 and finishing all unblocked migration work. Rumata support confirmed direct www
 custom-domain connection, automatic HTTPS and the managed same-origin backend
