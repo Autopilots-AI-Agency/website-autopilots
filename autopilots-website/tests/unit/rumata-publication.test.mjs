@@ -1,7 +1,30 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { siteOrigin } from "../../src/config/site-origin.mjs";
 import { campaignEndpoint } from "../../src/api/campaign-endpoint.mjs";
+
+test("headless installation starts beside the pinned package manager with an explicit workspace", () => {
+  const config = JSON.parse(
+    readFileSync(
+      new URL("../../rumata.frontend.json", import.meta.url),
+      "utf8",
+    ),
+  );
+  assert.equal(config.workingDirectory, "autopilots-website");
+  assert.equal(
+    config.installCommand,
+    "corepack pnpm install --frozen-lockfile",
+  );
+  assert.equal(config.buildCommand, "node scripts/build-rumata.mjs");
+  assert.equal(config.outputDirectory, "autopilots-website/dist");
+  const workspace = readFileSync(
+    new URL("../../pnpm-workspace.yaml", import.meta.url),
+    "utf8",
+  );
+  assert.ok(workspace.startsWith("packages:\n  - .\n"));
+  assert.ok(workspace.includes("allowBuilds:\n  esbuild: true\n  sharp: true"));
+});
 
 test("publication origin supports the approved www target without accepting arbitrary hosts", () => {
   assert.equal(siteOrigin(), "https://auto-pilots.io");

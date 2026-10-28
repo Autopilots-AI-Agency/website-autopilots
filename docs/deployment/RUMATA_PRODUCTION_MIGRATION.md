@@ -5,6 +5,27 @@ The existing Netlify production host remains active until full acceptance.
 
 ## Current www authority and next release — 2026-10-28
 
+### First hosted publication and installer repair
+
+PR #27 merged to protected main as
+`fec18cf439c371346253bd50117dee5ae2d5f574` after all required checks.
+Managed backend build `32b0e513-2284-43d3-b5ec-cbcacd4c6008` succeeded and
+standalone deployment `2d26f14f-7304-4fe3-a24f-04c33e35aebc` initially reported
+ready. Do not confuse that control-plane result with gateway acceptance.
+Frontend publication `1aeddd63-71d5-4d71-982f-3a8f4d6136d0` then failed during
+dependency installation: `packages field missing or empty`. Its orchestrated
+backend release was stopped and service publication became false; managed HTTP
+checks returned platform-level `Backend service is unavailable`, not app data.
+No DNS was changed and the existing Netlify production remained live.
+
+The repair explicitly declares the single frontend workspace package, preserving
+the dependency build allowlist, and starts Corepack in `autopilots-website` beside
+its pinned package manager. Build/output paths remain explicit and repository
+relative as documented. This repair must pass its own protected-main PR before
+retrying publication. Do not disable integrity checks, discard the lockfile,
+switch to direct backend access or grant new public permissions to mask this
+installation/orchestration failure.
+
 ### Scope clarification: private dashboard deferred
 
 The user explicitly authorized continuing without the password-protected
