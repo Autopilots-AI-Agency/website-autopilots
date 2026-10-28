@@ -5,6 +5,20 @@ The existing Netlify production host remains active until full acceptance.
 
 ## Current www authority and next release — 2026-10-28
 
+### Clean-checkout type preparation repair
+
+PR #31 merged as `2913fdca1df777374bdd6485ac32c2565317e73e`.
+The second hosted publication `3234b135-0131-4dfc-8a06-e58af58399df`
+installed dependencies successfully but failed at the pre-build typecheck:
+the clean checkout had no generated Astro declarations (`ImportMeta.env` and
+`astro:middleware` were missing). A local cold typecheck reproduced this failure.
+The typecheck command now runs `astro sync` before `tsc --noEmit`; no compiler
+checks are disabled. A regression assertion covers this clean-checkout order.
+The complete Rumata release gate must pass without a pre-existing `.astro`
+directory before publication is retried from reviewed protected main.
+The failed frontend publication again stopped its orchestrated backend release;
+this is not evidence of missing gateway permissions. DNS remains unchanged.
+
 ### First hosted publication and installer repair
 
 PR #27 merged to protected main as
