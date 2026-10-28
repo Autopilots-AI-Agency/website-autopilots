@@ -1,8 +1,131 @@
 import { test, expect } from "@playwright/test";
 
+test("mobile agent stays calm with one outcome and optional chat detail", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(!isMobile, "Mobile-only simplification.");
+  await page.goto("/nl/");
+  await page.locator("[data-consent-reject]").click();
+  const agent = page.locator('[data-panel="0"]');
+  for (const width of [320, 390, 430]) {
+    await page.setViewportSize({ width, height: 844 });
+    await agent.scrollIntoViewIfNeeded();
+    await expect(agent.locator(".sx-intelligence:visible")).toHaveCount(1);
+    await expect(agent.locator(".sx-transcript")).toBeHidden();
+    await expect(agent.locator(".sx-control-note")).toBeHidden();
+    const phone = await agent.locator(".sx-phone").boundingBox();
+    expect(Math.abs(phone!.x + phone!.width / 2 - width / 2)).toBeLessThan(2);
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth),
+    ).toBe(width);
+  }
+  await agent.locator('[data-dx-channel="chat"]').click();
+  await expect(agent.locator(".sx-transcript")).toBeVisible();
+  await agent.locator('[data-dx-channel="phone"]').click();
+  await expect(agent.locator(".sx-transcript")).toBeHidden();
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(agent.locator(".sx-intelligence:visible")).toHaveCount(1);
+});
+
+test("mobile pinned cards follow the scroll track in both directions", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(!isMobile, "The desktop cinematic timeline is tested separately.");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/nl/");
+  await page.locator("[data-consent-reject]").click();
+  await expect(page.locator("#ap-connected")).toHaveClass(/us-stack/);
+  await expect(page.locator(".dx-disclaimer")).toHaveCount(0);
+  const card = page.locator('[data-panel="0"]');
+  const track = page.locator(".us-chapter").first();
+  const seek = async (offset: number) => {
+    await track.evaluate(
+      (el, offset) =>
+        scrollTo({
+          top: scrollY + el.getBoundingClientRect().top + offset,
+          behavior: "instant",
+        }),
+      offset,
+    );
+    await expect
+      .poll(() =>
+        card.evaluate((el) => Math.round(el.getBoundingClientRect().top)),
+      )
+      .toBe(20);
+  };
+  await seek(40);
+  const first = Number(await card.getAttribute("data-demo-progress"));
+  await seek(220);
+  await expect
+    .poll(async () => Number(await card.getAttribute("data-demo-progress")))
+    .toBeGreaterThan(first + 0.15);
+  await seek(40);
+  await expect
+    .poll(async () =>
+      Math.abs(Number(await card.getAttribute("data-demo-progress")) - first),
+    )
+    .toBeLessThan(0.02);
+  const websiteTrack = page.locator(".us-chapter").nth(2);
+  for (const [offset, side] of [
+    [-220, "front"],
+    [280, "back"],
+    [-220, "front"],
+  ] as const) {
+    await websiteTrack.evaluate(
+      (el, offset) =>
+        scrollTo({
+          top: scrollY + el.getBoundingClientRect().top + offset,
+          behavior: "instant",
+        }),
+      offset,
+    );
+    await expect(page.locator(`.dx-flip-${side}`)).toHaveAttribute(
+      "aria-hidden",
+      "false",
+    );
+  }
+  await page.setViewportSize({ width: 390, height: 600 });
+  await expect(page.locator("#ap-connected")).not.toHaveClass(/us-stack/);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator("#ap-connected")).toHaveClass(/us-stack/);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(page.locator("#ap-connected")).not.toHaveClass(/us-stack/);
+});
+
 test("scroll builds the house, flips to its backend and reverses correctly", async ({
   page,
+  isMobile,
 }) => {
+  if (isMobile) {
+    await page.goto("/nl/");
+    await page.locator("[data-consent-reject]").click();
+    const panels = page.locator(".us-panel");
+    for (const panel of await panels.all()) {
+      await panel.scrollIntoViewIfNeeded();
+      const box = await panel.boundingBox();
+      expect(box!.width).toBeGreaterThan(page.viewportSize()!.width * 0.9);
+      expect(box!.x).toBe(16);
+    }
+    // Scrolling may already have revealed the backend; the toggle must respect it.
+    if (
+      (await page.locator(".dx-flip-back").getAttribute("aria-hidden")) ===
+      "true"
+    ) {
+      await page.locator(".dx-flip-toggle").click();
+    }
+    await expect(page.locator(".dx-flip-back")).toHaveAttribute(
+      "aria-hidden",
+      "false",
+    );
+    await page.getByLabel("Titel op je website").fill("Ruimte om te groeien.");
+    await page.locator(".dx-flip-toggle").click();
+    await expect(page.locator(".dx-flip-front h4")).toContainText(
+      "Ruimte om te groeien.",
+    );
+    return;
+  }
   await page.goto("/nl/");
   await expect(page.locator(".us-story")).toBeVisible();
   const goToPhase = async (phase: number) => {
@@ -45,7 +168,35 @@ test("scroll builds the house, flips to its backend and reverses correctly", asy
 
 test("showcase has working channels, evolving scenes and an editable website back", async ({
   page,
+  isMobile,
 }) => {
+  if (isMobile) {
+    await page.goto("/nl/");
+    await page.locator("[data-consent-reject]").click();
+    const agent = page.locator('[data-panel="0"]');
+    await agent.locator('[data-dx-channel="chat"]').click();
+    await expect(page.locator("[data-customer-line]")).toContainText(
+      "woning ontwerpen",
+    );
+    const software = page.locator('[data-panel="1"]');
+    await software.scrollIntoViewIfNeeded();
+    const play = software.locator("[data-dx-play]");
+    // Replay, then advance explicitly, independent of the scroll position.
+    for (let step = 0; step < 4; step++) {
+      await play.click();
+      if (
+        await software
+          .locator(".sx-customer-portal")
+          .locator("..")
+          .evaluate((el) => el.classList.contains("dx-shown"))
+      )
+        break;
+    }
+    await expect(
+      software.locator(".sx-customer-portal").locator(".."),
+    ).toHaveClass(/dx-shown/);
+    return;
+  }
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/nl/");

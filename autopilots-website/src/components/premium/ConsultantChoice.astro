@@ -66,6 +66,8 @@ const ResultHeading = Astro.props.resultOnly ? 'h1' : 'h2';
   @media(max-width:760px){#ap-intake .consultant-options{grid-template-columns:1fr}#ap-intake .consultant-options article{padding:24px}}
 </style>
 <script>
+import { publicRuntime } from '../../config/publicRuntime';
+import { emailScan, consultantRequest } from '../../api/rumata-scan';
 import { consultantCopy } from '../../data/consultant-copy';
 const root = document.querySelector<HTMLElement>('#ap-intake')!;
 const locale=document.documentElement.lang.split('-')[0];
@@ -81,8 +83,7 @@ let sending=false,challenge:{id:string,key:string}|null=null;
 let resultData:any=null;
 let pollTimer:ReturnType<typeof setTimeout>|undefined;
 async function api(action:string,input:Record<string,unknown>={}) {
-  const r=await fetch('/.netlify/functions/consultant',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,input})});
-  const data=await r.json();if(!r.ok||!data.ok)throw new Error(data.error||'failed');return data;
+  return consultantRequest(action,{...input,...(['verify-start','call'].includes(action)?{scanId:resultData?.report?.scanId}:{} )});
 }
 root.addEventListener('consultant:assessment',((event:CustomEvent)=>{
   token=event.detail.token;resultData=event.detail;requestId=crypto.randomUUID();verificationId=crypto.randomUUID();callId=crypto.randomUUID();
@@ -97,6 +98,7 @@ root.addEventListener('consultant:assessment',((event:CustomEvent)=>{
 }) as EventListener);
 function showLanding(saved:any) {
   choice.hidden=true;booking.hidden=false;
+  const bookingLink=booking.querySelector<HTMLAnchorElement>('a')!;bookingLink.href=publicRuntime.ghlCalendarUrl;bookingLink.textContent=copy.booking;bookingLink.hidden=false;
   booking.querySelector<HTMLElement>('[data-consultant-receipt]')!.textContent=saved?.empty?copy.empty:saved?.message||'';
   if(saved?.empty){const a=booking.querySelector<HTMLAnchorElement>('a')!;a.href='/'+locale+'/ai-scan/';a.textContent=copy.view;return;}
   if(saved?.call)void poll(saved.call,Date.now());
@@ -126,9 +128,8 @@ root.querySelector<HTMLFormElement>('[data-consultant-email]')!.addEventListener
   const button=form.querySelector<HTMLButtonElement>('button')!;
   sending=button.disabled=true;status.textContent=copy.sending;
   try {
-    const response=await fetch('/.netlify/functions/analysis-request',{method:'POST',headers:{'Content-Type':'application/json','Idempotency-Key':requestId,'X-Autopilots-Locale':locale},body:JSON.stringify({token,delivery:'analysis',email:(form.elements.namedItem('email') as HTMLInputElement).value,consent:true})});
-    const data=await response.json();if(!response.ok||!data.ok)throw new Error('failed');
-    results(data.confirmation==='accepted'?copy.accepted:copy.pending);
+    const data=await emailScan(resultData.report,(form.elements.namedItem('email') as HTMLInputElement).value);
+    results(data.state==='accepted'?copy.accepted:copy.pending);
   } catch {status.textContent=copy.error;}finally{sending=button.disabled=false;}
 });
 phoneForm.addEventListener('submit',async event=>{
@@ -154,6 +155,7 @@ callButton.addEventListener('click',async()=>{
     results(copy.queued,{id:call.id,key:call.key});
   }catch{status.textContent=copy.callError;}finally{sending=callButton.disabled=false;}
 });
+root.addEventListener('consultant:landing',((event:CustomEvent)=>showLanding(event.detail)) as EventListener);
 if(location.pathname.includes('/ai-scan/resultaat')){
   try{
     const saved=JSON.parse(sessionStorage.getItem('autopilots-consultant-result')||'null');

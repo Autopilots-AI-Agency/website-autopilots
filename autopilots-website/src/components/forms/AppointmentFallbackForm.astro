@@ -25,6 +25,7 @@ const clientCopy = JSON.stringify({sending:copy.sending,success:copy.success,err
 </form>
 
 <script>
+  import { campaignUrl } from '../../api/campaign';
   const form = document.querySelector("[data-appointment-fallback]");
   if (form instanceof HTMLFormElement) {
     const copy = JSON.parse(form.dataset.copy || "{}");
@@ -48,7 +49,7 @@ const clientCopy = JSON.stringify({sending:copy.sending,success:copy.success,err
       status.textContent = copy.sending;
       window.dispatchEvent(new CustomEvent("autopilots:analytics", { detail: { event:"appointment_fallback_submitted", page_path:location.pathname } }));
       try {
-        const response = await fetch("/api/funnel-lead", { method:"POST", headers:{ "Content-Type":"application/json", "Accept":"application/json", "Idempotency-Key":idempotencyKey }, body:JSON.stringify(data) });
+        const response = await fetch(campaignUrl("/api/funnel-lead"), { method:"POST", headers:{ "Content-Type":"application/json", "Accept":"application/json", "Idempotency-Key":idempotencyKey }, body:JSON.stringify(data) });
         const result = await response.json().catch(() => ({}));
         if (!response.ok || !result.ok) throw new Error(result.message || "Versturen is nu niet gelukt.");
         form.reset();

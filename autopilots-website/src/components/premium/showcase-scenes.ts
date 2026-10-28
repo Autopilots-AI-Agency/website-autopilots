@@ -79,6 +79,6 @@ export function renderShowcase(
     translateDemoHtml(
       template.replace(pattern, (key) => escapeMarkup(replacements[key])),
       locale,
-    ),
+    ).replace(/[→↓↗↻]/g, ""),
   );
 }

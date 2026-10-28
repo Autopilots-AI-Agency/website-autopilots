@@ -10,7 +10,7 @@ export function telnyxConsultantProvider(config, fetchImpl = fetch) {
         !config.apiKey ||
         !/^\d+$/.test(config.connectionId || "") ||
         !assistant?.id ||
-        !/^\d+$/.test(assistant.version || "") ||
+        !/^(?:\d+|\d{8}T\d{12})$/.test(assistant.version || "") ||
         !config.from
       )
         throw new Error("telnyx_not_ready");
@@ -51,7 +51,7 @@ export function telnyxConsultantProvider(config, fetchImpl = fetch) {
               : {}),
             Record: false,
             TimeLimit: 360,
-            timeout_seconds: 30,
+            Timeout: 30,
           }),
           signal: AbortSignal.timeout(15000),
         },

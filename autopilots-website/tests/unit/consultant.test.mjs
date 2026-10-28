@@ -189,8 +189,12 @@ test("Telnyx adapter transmits correct locale dossier, pinned assistant and call
   assert.equal(request.url, "https://api.telnyx.com/v2/texml/ai_calls/123");
   assert.equal(request.body.Record, false);
   assert.equal(request.body.TimeLimit, 360);
+  assert.equal(request.body.Timeout, 30);
   assert.equal(request.body.AIAssistantDynamicVariables.locale, "nl");
   assert.equal(request.body.AIAssistantVersion, "1");
+  config.assistants.nl.version = "20261021T133515021458";
+  await provider.dial(await requestConsultantCall(input, deps()));
+  assert.equal(request.body.AIAssistantVersion, "20261021T133515021458");
   await assert.rejects(
     telnyxConsultantProvider({ ...config, enabled: false }).dial({
       locale: "nl",

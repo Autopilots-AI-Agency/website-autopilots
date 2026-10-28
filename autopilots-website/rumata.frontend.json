@@ -1,0 +1,7 @@
+{
+  "workingDirectory": ".",
+  "installCommand": "corepack pnpm --dir autopilots-website install --frozen-lockfile",
+  "buildCommand": "node autopilots-website/scripts/build-rumata.mjs",
+  "devCommand": "corepack pnpm --dir autopilots-website dev --host 0.0.0.0 --port 5173",
+  "outputDirectory": "autopilots-website/dist"
+}

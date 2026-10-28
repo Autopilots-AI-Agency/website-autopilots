@@ -1,0 +1,9 @@
+.git
+node_modules
+.env
+.env.*
+*.log
+coverage
+test
+README.md
+rumata.backend.json

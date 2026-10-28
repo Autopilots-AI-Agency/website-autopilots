@@ -1,0 +1,38 @@
+name: Native website API
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  verify:
+    name: Verify native Rumata API
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: campaign_test
+          POSTGRES_PASSWORD: synthetic_local_test_only
+          POSTGRES_DB: campaign_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U campaign_test"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.10.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Verify API without provider writes
+        working-directory: autopilots-website-api
+        env:
+          CAMPAIGN_TEST_DATABASE_URL: postgres://campaign_test:synthetic_local_test_only@127.0.0.1:5432/campaign_test
+        run: pnpm install --ignore-workspace --frozen-lockfile && pnpm run check && pnpm test
+      - name: Verify governed consultant runtime
+        working-directory: autopilots-platform
+        run: node --test tests/consultant-runtime.test.js

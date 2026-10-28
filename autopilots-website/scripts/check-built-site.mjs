@@ -88,7 +88,10 @@ for (const file of htmlFiles) {
     if (checked.has(key)) continue;
     checked.add(key);
     const clean = href.split("#")[0].split("?")[0];
-    const sourceUrl = new URL(page, "https://auto-pilots.io");
+    const sourceUrl = new URL(
+      page,
+      process.env.PUBLIC_SITE_URL || "https://auto-pilots.io",
+    );
     const targetUrl = new URL(clean, sourceUrl);
     let target = join(root, decodeURIComponent(targetUrl.pathname));
     if (targetUrl.pathname.endsWith("/")) target = join(target, "index.html");

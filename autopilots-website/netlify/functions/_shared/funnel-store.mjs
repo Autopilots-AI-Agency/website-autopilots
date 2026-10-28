@@ -1,4 +1,4 @@
-import { getStore } from "@netlify/blobs";
+import { getLegacyStore } from "./store-context.mjs";
 
 const STORE_NAME = "autopilots-funnel";
 const safeText = (value, max = 180) =>
@@ -9,7 +9,7 @@ const safeText = (value, max = 180) =>
     .slice(0, max);
 
 export const funnelStore = () =>
-  getStore({ name: STORE_NAME, consistency: "strong" });
+  getLegacyStore({ name: STORE_NAME, consistency: "strong" });
 
 export const safeSessionId = (value) => {
   const sessionId = safeText(value, 80);
@@ -21,22 +21,22 @@ export const createRecordId = () =>
 
 export const saveFunnelEvent = async (event) => {
   const id = createRecordId();
-  await funnelStore().setJSON(`events/${id}`, { id, ...event });
+  await (await funnelStore()).setJSON(`events/${id}`, { id, ...event });
   return id;
 };
 
 export const saveLeadRecord = async (record) => {
-  await funnelStore().setJSON(`leads/${record.id}`, record);
+  await (await funnelStore()).setJSON(`leads/${record.id}`, record);
   return record;
 };
 
 export const updateLeadRecord = async (record) => {
-  await funnelStore().setJSON(`leads/${record.id}`, record);
+  await (await funnelStore()).setJSON(`leads/${record.id}`, record);
   return record;
 };
 
 export const listJSON = async (prefix, limit = 500) => {
-  const store = funnelStore();
+  const store = await funnelStore();
   const result = await store.list({ prefix });
   const keys = result.blobs
     .map((blob) => blob.key)

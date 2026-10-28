@@ -52,13 +52,21 @@ export const verifyStripeSignature = (
   secret,
   toleranceSeconds = 300,
 ) => {
-  const parts = Object.fromEntries(
-    String(header)
-      .split(",")
-      .map((part) => part.split("=", 2)),
-  );
-  const timestamp = Number(parts.t);
-  if (!timestamp || Math.abs(Date.now() / 1000 - timestamp) > toleranceSeconds)
+  const parts = String(header)
+    .split(",")
+    .map((part) => part.trim().split("=", 2));
+  const timestamps = parts.filter(([scheme]) => scheme === "t");
+  if (timestamps.length !== 1) return false;
+  const timestampText = timestamps[0][1];
+  const timestamp = Number(timestampText);
+  if (
+    !Number.isSafeInteger(timestamp) ||
+    timestamp <= 0 ||
+    Math.abs(Date.now() / 1000 - timestamp) > toleranceSeconds
+  )
     return false;
-  return safeEqualHex(hmac(secret, `${timestamp}.${raw}`), parts.v1 || "");
+  const expected = hmac(secret, `${timestampText}.${raw}`);
+  return parts
+    .filter(([scheme]) => scheme === "v1")
+    .some(([, signature]) => safeEqualHex(expected, signature || ""));
 };

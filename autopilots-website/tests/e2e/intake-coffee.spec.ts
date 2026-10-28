@@ -11,7 +11,7 @@ for (const motion of ["no-preference", "reduce"] as const) {
     });
     let calls = 0;
     await page.route(
-      "**/.netlify/functions/website-analysis",
+      /\/(?:\.netlify\/functions\/website-analysis|backend-api\/[^/]+\/scans)$/,
       async (route) => {
         calls++;
         await responseGate;
@@ -22,6 +22,7 @@ for (const motion of ["no-preference", "reduce"] as const) {
       },
     );
     await page.goto("/en/ai-scan/?branche=Autobedrijven");
+    await page.locator(".choice").first().click();
     await page.locator(".choice").first().click();
     await page.locator(".choice").first().click();
     await page.locator(".continue").click();
