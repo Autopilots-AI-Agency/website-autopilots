@@ -11,6 +11,5 @@ const t=translator(locale);
  <form class="sp-form">
   <fieldset aria-labelledby="sp-title"><div class="sp-options">{showcaseProfiles.map(profile=><label class="sp-option"><input type="radio" name="showcase-branch" value={profile.branch}/><span class="sp-icon" aria-hidden="true">{profile.id==='automotive'?<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 10 2-5h10l2 5M3 10h18v8H3zM6 18v2m12-2v2M6 14h2m8 0h2"/></svg>:profile.icon}</span><strong>{t(profile.label)}</strong></label>)}</div></fieldset>
   <div class="sp-actions"><button class="sp-start" type="submit">{t("Bekijk jouw mogelijkheden")} </button><button class="sp-skip" type="button">{t('Bekijk het algemene voorbeeld')} </button></div>
-  <small class="sp-privacy">{t("Geen gegevens versturen. Geen account. Alleen een voorbeeld voor jouw branche.")}</small>
  </form>
 </section>

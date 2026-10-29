@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import QuizCTA from '../../../../components/premium/QuizCTA.astro';
+import '../../../../styles/animals-faith-case.css';
+import { suppliedCaseMetrics, specialistAgents } from '../../../../data/animals-faith-case.mjs';
+---
+<BaseLayout title="AI Telefoniste die kwalificeert en afspraken plant | Animals Faith" description="Zeven specialistische agents voor Animals Faith. Van adoptie en gedragsvragen tot afspraken, met menselijke opvolging waar nodig." locale="nl" customChrome>
+  <Fragment slot="head">
+    <link rel="alternate" hreflang="nl-NL" href={new URL('/nl/cases/animals-faith/', Astro.site ?? Astro.url.origin).toString()} />
+    <link rel="alternate" hreflang="x-default" href={new URL('/nl/cases/animals-faith/', Astro.site ?? Astro.url.origin).toString()} />
+  </Fragment>
+  <div id="af-case">
+    <header class="af-header af-wrap">
+      <a class="af-wordmark" href="/nl/" aria-label="Autopilots home">AUTOPILOTS</a>
+      <nav aria-label="Paginanavigatie"><QuizCTA label="Start de AI-scan" compact /></nav>
+    </header>
+
+    <section class="af-hero af-wrap" aria-labelledby="af-title">
+      <div class="af-hero-copy">
+        <a href="/nl/" class="af-back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6M8 12h13"/></svg>Terug naar Autopilots</a>
+        <div class="af-client"><img src="/samenwerkingen/animals-faith.png" alt="Animals Faith" width="240" height="90"/></div>
+        <h1 id="af-title">AI Telefoniste die kwalificeert<br/><em>en afspraken plant.</em></h1>
+        <section class="af-impact" aria-label="Resultaten Animals Faith">
+          <p class="af-impact-period">BEHAALD IN 2026</p>
+          <div class="af-metrics">{suppliedCaseMetrics.map(metric => <article class="af-metric"><div class="af-metric-value"><span data-count={metric.value} data-source={metric.source} data-decimals={metric.decimals}>{new Intl.NumberFormat('nl-NL',{minimumFractionDigits:metric.decimals,maximumFractionDigits:metric.decimals}).format(metric.value)}</span><small>{metric.suffix}</small></div><h2>{metric.label}</h2>{metric.key === 'hoursSaved' && <p>Geschatte tijdwinst</p>}</article>)}</div>
+        </section>
+        <div class="af-specialism-intro"><p class="af-specialism-title"><span data-count="7" data-verified="true">7</span> specialistische agents</p><p class="af-role-summary">Adoptie · Donaties · Gedragsproblemen · Stage & vrijwilligerswerk · Pension · Afstand doen · Urgente situaties</p></div>
+        <a class="af-primary" href="#werking">Zo werken de agents samen <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16m-6-6 6 6 6-6"/></svg></a>
+      </div>
+    </section>
+
+    <section id="werking" class="af-story-section af-section" aria-labelledby="af-story-title">
+      <div class="af-wrap">
+        <div class="af-centered"><p class="af-eyebrow">ZEVEN AGENTS. ÉÉN SAMENWERKEND SYSTEEM.</p><h2 id="af-story-title">Eén AI Telefoniste.<br/><em>De juiste expert voor elke vraag.</em></h2><p>De AI Telefoniste herkent de vraag en betrekt de juiste specialist.<br class="af-desktop"/> Die vraagt gericht door en bereidt de passende vervolgstap voor.</p></div>
+        <div class="af-collaboration" data-collaboration>
+          <div class="af-flow-top"><span>ANIMALS FAITH / MULTI-AGENT ORCHESTRATION</span><span class="af-flow-label">Route naar Adoptie</span></div>
+          <div class="af-agent-center"><div class="af-agent-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M7 17v-2a9 9 0 0 1 18 0v2M7 15H5v9h5v-9H7m18 0h2v9h-5v-9h3M25 24c0 4-3 4-7 4"/><path d="M15 12v8m-4-6v4m8-4v4"/></svg></div><h3>AI Telefoniste</h3><p>Herkent de vraag. Betrekt de juiste agent.</p><div class="af-wave" aria-hidden="true">{[8,15,24,16,30,18,26,14,9].map(h=><i style={`--bar:${h}px`}></i>)}</div></div>
+          <svg class="af-agent-connections" aria-hidden="true">{specialistAgents.map((_,i)=><path class="af-connection-track" data-connection={i} />)}<path class="af-connection-selected" data-selected-connection/><path class="af-connection-current" data-connection-current pathLength="100"/></svg>
+          <div class="af-routing-space" aria-hidden="true"></div>
+          <div class="af-agent-grid" aria-label="Kies een specialistische agent">{specialistAgents.map((agent,i)=><button type="button" data-agent={i} aria-pressed={i===0?'true':'false'} aria-controls="af-agent-detail"><span class="af-agent-index">0{i+1}</span><strong>{agent.name}</strong><span class="af-agent-indicator" aria-hidden="true"></span></button>)}</div>
+          <div id="af-agent-detail" class="af-agent-detail">{specialistAgents.map((agent,i)=><div data-agent-panel={i} hidden={i!==0}><p class="af-ui-label">GESELECTEERDE SPECIALIST</p><h3>{agent.name}</h3><p>{agent.detail}</p><div class="af-agent-outcome"><span class="af-dot"></span>{agent.outcome}</div></div>)}</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="af-human af-wrap af-section" aria-labelledby="af-human-title"><div class="af-human-copy"><p class="af-eyebrow">MENSELIJK WAAR HET TELT</p><h2 id="af-human-title">AI waar het kan.<br/><em>Een medewerker wanneer het nodig is.</em></h2><p>Niet elke vraag hoort bij een automatische afhandeling. Daarom is menselijke opvolging onderdeel van het systeem, niet een gedachte achteraf.</p></div><div class="af-handoff"><div class="af-handoff-source"><span class="af-avatar">AI</span><div><strong>AI Telefoniste</strong><span>De vraag en de context</span></div><span class="af-dot"></span></div><div class="af-handoff-paths"><svg class="af-handoff-streams" viewBox="0 0 700 72" preserveAspectRatio="none" aria-hidden="true"><path class="af-stream-track" d="M350 0V20Q350 32 338 32H187Q175 32 175 44V72"/><path class="af-stream-track" d="M350 0V20Q350 32 362 32H513Q525 32 525 44V72"/><path class="af-stream-pulse af-stream-left" pathLength="100" d="M350 0V20Q350 32 338 32H187Q175 32 175 44V72"/><path class="af-stream-pulse af-stream-right" pathLength="100" d="M350 0V20Q350 32 362 32H513Q525 32 525 44V72"/></svg><article><span class="af-ui-label">BINNEN DE INRICHTING</span><h3>Verder met de AI</h3><p>Ondersteunde vragen en passende vervolgstappen.</p></article><article><span class="af-ui-label">MENSELIJKE BEOORDELING</span><h3>Over naar het team</h3><p>Een terugbelverzoek met relevante context.</p></article></div></div></section>
+
+    <section class="af-build af-wrap af-section" aria-labelledby="af-build-title"><div class="af-centered"><p class="af-eyebrow">GEBOUWD DOOR AUTOPILOTS</p><h2 id="af-build-title">Geen losse chatbot.<br/><em>Een samenwerkend systeem.</em></h2></div><div class="af-build-grid"><article><span class="af-build-number" data-count="7" data-verified="true">7</span><h3>Specialistische rollen</h3><p>Eén centrale stem, met kennis voor de verschillende vragen bij Animals Faith.</p></article><article><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="3" y="17" width="12" height="14" rx="3"/><rect x="33" y="5" width="12" height="14" rx="3"/><rect x="33" y="29" width="12" height="14" rx="3"/><path d="M15 24h9V12h9M24 24v12h9"/></svg><h3>Verbonden processen</h3><p>Gesprekslogica, relevante informatie en afspraakplanning bij elkaar gebracht.</p></article><article><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="4" y="7" width="40" height="32" rx="5"/><path d="M4 16h40M13 31v-8m10 8v-5m10 5V21"/></svg><h3>Inzicht en verbetering</h3><p>Een eigen dashboard voor overzicht, met controle en doorontwikkeling van de inrichting.</p></article></div></section>
+
+    <section class="af-cta af-wrap af-section"><div class="af-cta-orbit" aria-hidden="true"></div><p class="af-eyebrow">DE VOLGENDE STAP IS VAN JULLIE</p><h2>Wat kan een AI-medewerker<br/><em>jullie uit handen nemen?</em></h2><p>Begin bij jullie branche. Ontdek waar AI,<br class="af-desktop"/> software en een sterke website kunnen helpen.</p><div class="af-cta-actions"><QuizCTA label="Start de AI-scan"/><a class="af-secondary" href="/nl/afspraak/">Plan een kennismaking</a></div></section>
+    <footer class="af-footer af-wrap"><a class="af-wordmark" href="/nl/">AUTOPILOTS</a><span>Van idee naar samenwerking.</span><a href="/nl/privacy/">Privacy</a><button type="button" data-motion aria-pressed="false">Minder beweging</button></footer>
+  </div>
+  <script>import '../../../../scripts/animals-faith-case';</script>
+</BaseLayout>

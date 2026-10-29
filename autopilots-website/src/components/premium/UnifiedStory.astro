@@ -11,7 +11,7 @@ if(root){
  const html=(markup:string)=>translateDemoHtml(markup,locale);
  const originals = [...root.querySelectorAll<HTMLElement>('.cs-chapter')];
  const panels = originals.map(section=>section.querySelector<HTMLElement>('.cs-visual')!);
- const titles = [tr('Drie bouwgebieden. Eén partner.'),tr('Een extra collega. Voor jouw klanten.'),tr('Jouw werkwijze. In eigen software.'),tr('Een website die verder werkt.'),tr('Los inzetbaar. Sterker samen.')];
+ const titles = [tr('Drie bouwgebieden. Eén partner.'),tr('Een extra AI collega. Voor jouw klanten.'),tr('Jouw werkwijze. In eigen software.'),tr('Een website die verder werkt.'),tr('Los inzetbaar. Sterker samen.')];
  const descriptions = [tr('Scroll en zie hoe het samenkomt.'),tr('Telefonie en chat, met afgesproken acties en jouw team aan het roer.'),tr('Van planning tot klantportaal. Gebouwd rondom jouw processen.'),tr('Een sterke voorkant, met een eigen backend en passende koppelingen.'),tr('Wij verbinden wat je nodig hebt. Ook met de systemen die je al gebruikt.')];
  const stage = document.createElement('section');
  stage.className='us-story';stage.setAttribute('aria-label',tr('Wat Autopilots voor jouw bedrijf bouwt'));
@@ -87,6 +87,7 @@ if(root){
  const connected=root.querySelector<HTMLElement>('.cs-connected-section')!;
  const end=document.createElement('span');end.id='verbonden';end.className='us-marker';end.style.top='80%';stage.append(end);connected.removeAttribute('id');
  const cta=root.querySelector<HTMLElement>('.cs-cta')!;stage.after(cta);
+ const cases=root.querySelector<HTMLElement>('#ap-home-cases');if(cases)stage.after(cases);
  cta.querySelector('h2')!.innerHTML=html('En hoe zou dit<br/><em>voor jouw bedrijf werken?</em>');
  root.classList.add('us-ready');
  let current=0,target=0,frame=0,last=0,layoutDirty=true;
@@ -183,7 +184,6 @@ if(root){
   if(transcript&&phone){if(innerWidth<701)demo!.querySelector('.sx-agent')!.append(transcript);else phone.insertBefore(transcript,phone.querySelector('.sx-call-end'));}
   layoutDirty=true;schedule();
  });reduce.addEventListener('change',()=>{layoutDirty=true;schedule();});
- const change=document.createElement('button');change.type='button';change.className='sp-change';change.textContent=tr('Algemeen voorbeeld')+' · '+tr('wijzigen');stage.querySelector('.us-sticky')!.prepend(change);
  const form=picker.querySelector('form')!;
  const radios=[...form.querySelectorAll<HTMLInputElement>('[name="showcase-branch"]')];
  const allowed=new Set(radios.map(r=>r.value));
@@ -199,7 +199,6 @@ if(root){
   descriptions[1]=profile.id==='general'?tr('Telefonie en chat, met afgesproken acties en jouw team aan het roer.'):profile.intent+'. '+tr('Je team houdt de regie.');
   descriptions[2]=tr('Van planning tot klantportaal. Gebouwd rondom jouw processen.');
   stage.querySelector('h2')!.textContent='';
-  change.textContent=tr(branch||'Algemeen voorbeeld')+' · '+tr('wijzigen');
   radios.forEach(r=>r.checked=r.value===branch);
   root!.querySelectorAll<HTMLAnchorElement>('[data-quiz-cta]').forEach(link=>{const url=new URL(link.href);if(branch)url.searchParams.set('branche',branch);else url.searchParams.delete('branche');link.href=url.pathname+url.search+url.hash;});
   // Only explicit choices are remembered in this tab. No provider call or lead creation.
@@ -210,7 +209,6 @@ if(root){
  radios.forEach(r=>r.addEventListener('change',()=>applySelection(r.value)));
  form.addEventListener('submit',event=>{event.preventDefault();applySelection(branch);enterStory();});
  form.querySelector('.sp-skip')!.addEventListener('click',()=>{applySelection('');enterStory();});
- change.addEventListener('click',()=>{picker.scrollIntoView({behavior:quiet()?'instant':'smooth',block:'start'});const selected=radios.find(r=>r.checked);if(selected)selected.focus({preventScroll:true});else radios[0]?.focus({preventScroll:true});});
  try{const saved=JSON.parse(sessionStorage.getItem('ap-showcase-v1')||'null');if(saved&&typeof saved.branch==='string')applySelection(saved.branch);}catch{/* Ignore corrupt or blocked session storage. */}
  root.querySelector('[data-cs-motion]')?.addEventListener('click',()=>{layoutDirty=true;requestAnimationFrame(schedule);});
  document.fonts.ready.then(()=>{layoutDirty=true;schedule();});schedule();
