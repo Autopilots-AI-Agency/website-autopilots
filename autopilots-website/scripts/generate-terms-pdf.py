@@ -13,7 +13,7 @@ from reportlab.platypus import PageBreak, Paragraph, SimpleDocTemplate, Spacer
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "src/i18n/termsContent.ts"
-OUTPUT = ROOT / "public/downloads/autopilots-algemene-servicevoorwaarden-v1.9.pdf"
+OUTPUT = ROOT / "public/downloads/autopilots-algemene-servicevoorwaarden-v1.10.pdf"
 
 source = SOURCE.read_text(encoding="utf-8").split("const localeMeta:")[0]
 sections = []
@@ -60,12 +60,12 @@ def footer(canvas, doc):
     canvas.saveState()
     canvas.setStrokeColor(HexColor("#ddddda")); canvas.line(20*mm, 15*mm, 190*mm, 15*mm)
     canvas.setFont("Helvetica", 7.5); canvas.setFillColor(muted)
-    canvas.drawString(20*mm, 10*mm, "Autopilots AI Agency LLC - Algemene servicevoorwaarden - versie 1.9")
+    canvas.drawString(20*mm, 10*mm, "Autopilots AI Agency LLC - Algemene servicevoorwaarden - versie 1.10")
     canvas.drawRightString(190*mm, 10*mm, f"Pagina {doc.page}")
     canvas.restoreState()
 
 doc = SimpleDocTemplate(str(OUTPUT), pagesize=A4, rightMargin=20*mm, leftMargin=20*mm, topMargin=20*mm, bottomMargin=22*mm, title="Algemene servicevoorwaarden Autopilots", author="Autopilots AI Agency LLC")
-story = [Spacer(1, 18*mm), BrandWordmark(), Paragraph("Algemene servicevoorwaarden", title_style), Paragraph("Autopilots AI Agency LLC", subtitle_style), Spacer(1, 8*mm), Paragraph("B2B-servicevoorwaarden voor AI-medewerkers, software, implementatie en support.", subtitle_style), Spacer(1, 12*mm), Paragraph("Versie 1.9 &nbsp;&nbsp;|&nbsp;&nbsp; Laatst bijgewerkt: 29 oktober 2026", subtitle_style), Spacer(1, 14*mm), Paragraph("De Nederlandse versie is juridisch leidend. Deze voorwaarden vormen samen met de bestelling, het voorstel of de Statement of Work de overeenkomst.", notice_style), Spacer(1, 22*mm), Paragraph("Autopilots AI Agency LLC<br/>131 Continental Dr, Suite 305<br/>Newark, Delaware 19713, Verenigde Staten<br/>support@auto-pilots.io", subtitle_style), PageBreak()]
+story = [Spacer(1, 18*mm), BrandWordmark(), Paragraph("Algemene servicevoorwaarden", title_style), Paragraph("Autopilots AI Agency LLC", subtitle_style), Spacer(1, 8*mm), Paragraph("B2B-servicevoorwaarden voor AI-medewerkers, software, implementatie en support.", subtitle_style), Spacer(1, 12*mm), Paragraph("Versie 1.10 &nbsp;&nbsp;|&nbsp;&nbsp; Laatst bijgewerkt: 29 oktober 2026", subtitle_style), Spacer(1, 14*mm), Paragraph("De Nederlandse versie is juridisch leidend. Deze voorwaarden vormen samen met de bestelling, het voorstel of de Statement of Work de overeenkomst.", notice_style), Spacer(1, 22*mm), Paragraph("Autopilots AI Agency LLC<br/>131 Continental Dr, Suite 305<br/>Newark, Delaware 19713, Verenigde Staten<br/>support@auto-pilots.io", subtitle_style), PageBreak()]
 for section_index, (title, paragraphs) in enumerate(sections):
     story.append(Paragraph(title, h2_style))
     for paragraph_index, paragraph in enumerate(paragraphs):

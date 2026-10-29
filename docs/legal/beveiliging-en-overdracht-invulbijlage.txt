@@ -1,0 +1,38 @@
+AUTOPILOTS — BEVEILIGING EN OVERDRACHT
+Voorbereidingsbijlage bij de klantofferte en DPA — 29 oktober 2026
+Status: intern concept; nog niet gereed voor klantacceptatie.
+
+1. Opdracht en dienstverlening
+Klant/Order-ID: nog in te vullen.
+Geaccepteerde offerte, versie en datum: nog in te vullen.
+Maandelijkse inhoud, tarieven, inbegrepen uren en startdatum: volgen de geaccepteerde offerte; niet door dit document uitgebreid.
+Support: support@auto-pilots.io. Bereikbaarheid: overnemen uit de geaccepteerde offerte. Geen afzonderlijke SLA of gegarandeerde reactie-/oplostijden tenzij expliciet overeengekomen. Kernstoringen en beveiligingsincidenten krijgen voorrang; opvolging en voortgang conform artikel 11.1.
+
+2. Door Tim opgegeven architectuur
+- Afzonderlijke database specifiek voor het bedrijf.
+- Meerdere gegevenskopieën in drie datacenters.
+Deze opgave is nog niet met providerinstellingen of een herstelproef gecontroleerd. Niet als generieke garantie voor iedere klantomgeving gebruiken.
+Vóór klantacceptatie vastleggen: provider, database-identificatie (geen geheimen), scheidingsvorm, locaties/regio’s, betrokken datasets, onafhankelijke storingsdomeinen en type replicatie.
+Een afzonderlijke database is geen toezegging van exclusieve servers. AI/telefonie/logging/back-ups kunnen aanvullende gegevensverwerking en opslag kennen; vermeld die in de DPA en leveranciersregistratie.
+
+3. Back-ups en herstel
+Nog te bevestigen: verantwoordelijke partij, meegenomen databasegegevens/bestanden/configuraties, frequentie, bewaartermijn, versleuteling/toegangsbeheer, verwijderbeleid, historische herstelpunten en scheiding van productie.
+Herstelcontrole: datum, geteste gegevens, resultaat en eigenaar vastleggen.
+Hersteldoelen: maximaal nagestreefd gegevensverlies en nagestreefde herstelduur vastleggen; markeer expliciet of het doelen of contractuele garanties zijn.
+Inbegrepen herstelwerk: vastleggen volgens offerte. Herstel van eigen toerekenbare tekortkomingen niet als betaald meerwerk classificeren.
+
+4. Accounts en oplevering
+Per provider vastleggen: contracthouder, betaler, beheerder, overdraagbaarheid, exportwijze en relevante beperkingen.
+Opleverlijst: klantspecifieke workflows, agentinstellingen, kennisbank, gegevensmapping, architectuuroverzicht en beheer-/herstelhandleiding; geef per onderdeel aan wat overeengekomen en beschikbaar is.
+Geen gedeelde sleutels of gegevens van andere klanten overdragen. Nieuwe klantgebonden toegangen voorbereiden.
+
+5. Stoppen en migratie
+Keuze schriftelijk vastleggen: alleen beheer beëindigen / hele dienst beëindigen / overstappen.
+Vastleggen: einddatum, overdrachtsplanning, ontvangende partij, beschikbare doelomgeving, doorlopende diensten en kosten, lopende opdrachten/automatische acties en criteria voor controle van overdracht.
+Aanvullend migratiewerk: aparte begroting met scope, afhankelijkheden, uren/tarief of vaste prijs, plafond en kosten van derden. Eerst schriftelijk akkoord; overschrijdingen opnieuw goedkeuren. Wettelijk verplichte kosteloze overstaphulp niet als meerwerk factureren.
+Data Act-toepasselijkheid en eventuele maatwerkuitzondering feitelijk beoordelen en vóór contractsluiting toelichten; algemene voorwaarden vervangen de verplichte concrete overstapafspraken niet.
+
+6. Afronding
+Ontvangst/export controleren; verantwoordelijke voor beheer, monitoring en incidenten na overdracht vastleggen. Toegangen intrekken of vervangen. Teruggave/verwijdering en back-upcyclus uitvoeren volgens klantinstructie en DPA; uitvoering bevestigen. Wettelijke bewaarplichten afzonderlijk vastleggen.
+
+Deze invulbijlage moet vóór gebruik als contractbijlage worden aangevuld en met de offerte, DPA en daadwerkelijke inrichting overeenkomen. Zij wijzigt geen bestaande overeenkomst en bevat geen nieuwe SLA-garanties.
