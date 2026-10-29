@@ -6,7 +6,7 @@ import { termsDocuments } from "../../i18n/termsContent";
 interface Props { locale?: SupportedLocale }
 const { locale = "nl" } = Astro.props;
 const copy = termsDocuments[locale];
-const pdfPath = "/downloads/autopilots-algemene-servicevoorwaarden-v1.7.pdf";
+const pdfPath = "/downloads/autopilots-algemene-servicevoorwaarden-v1.8.pdf";
 const slug = (index: number) => `artikel-${index + 1}`;
 ---
 
@@ -16,8 +16,8 @@ const slug = (index: number) => `artikel-${index + 1}`;
     <section class="ap-eco-hero"><div class="ap-container ap-eco-copy"><div class="ap-kicker">{copy.kicker}</div><h1>{copy.hero} <span class="ap-title-accent">{copy.accent}</span></h1><p class="ap-lead">{copy.lead}</p><div class="ap-terms-meta"><span>{copy.updated}</span><span>{copy.version}</span></div><div class="ap-actions"><a class="ap-button ap-button-primary" href={pdfPath} download>{copy.download}</a><a class="ap-button ap-button-secondary" href={localizedPath("page.privacy",locale)}>{copy.privacy}</a></div></div></section>
     <section class="ap-section ap-soft-section"><div class="ap-container ap-terms-layout">
       <aside class="ap-terms-toc"><strong>{copy.contents}</strong><ol>{copy.sections.map((section,index)=><li><a href={`#${slug(index)}`}>{section.title.replace(/^\d+\.\s*/,"")}</a></li>)}</ol></aside>
-      <div class="ap-terms-document">
-        <p class="ap-terms-language"><strong>{copy.languageNotice}</strong></p>
+      <div class="ap-terms-document" lang="nl">
+        <p class="ap-terms-language" lang={locale}><strong>{copy.languageNotice}</strong></p>
         {copy.sections.map((section,index)=><section id={slug(index)} class="ap-terms-section"><h2>{section.title}</h2>{section.paragraphs.map(paragraph=><p>{paragraph}</p>)}</section>)}
         <div class="ap-terms-contact"><p>{copy.languageNotice}</p><a class="ap-button ap-button-secondary" href={localizedPath("page.contact",locale)}>{copy.contact}</a></div>
       </div>
