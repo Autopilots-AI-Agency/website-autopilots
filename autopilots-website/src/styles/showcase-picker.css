@@ -148,7 +148,8 @@
 }
 #ap-connected .sp-change {
   position: absolute;
-  right: 22px;
+  left: 50%;
+  transform: translateX(-50%);
   top: 18px;
   z-index: 15;
   max-width: calc(100% - 44px);
@@ -165,7 +166,7 @@
   cursor: pointer;
 }
 #ap-connected .us-sticky > .us-caption {
-  padding-top: 45px;
+  padding-top: 0;
 }
 #ap-connected .us-caption h2,
 #ap-connected .dx-address,
@@ -234,12 +235,11 @@
   }
   #ap-connected .sp-change {
     top: 8px;
-    right: 16px;
     font-size: 11px;
     padding: 7px 12px;
   }
   #ap-connected .us-sticky > .us-caption {
-    padding-top: 34px;
+    padding-top: 0;
   }
 }
 @media (prefers-reduced-motion: reduce) {
