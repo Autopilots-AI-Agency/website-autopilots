@@ -1,0 +1,80 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const providers = [
+  ["Telnyx", "Telefonie en telefonische AI-assistenten", "Telefoonnummers, gespreksmetadata en, afhankelijk van de inrichting, audio en transcripties."],
+  ["ElevenLabs", "Spraaksynthese en spraakassistenten", "Tekst voor spraak en, afhankelijk van de dienst, audio en gespreksinhoud."],
+  ["OpenAI", "AI-verwerking via de API", "De tekst, documenten of gespreksfragmenten die de betreffende toepassing aan het model aanbiedt."],
+  ["GoHighLevel / LeadConnector", "CRM, afspraken en communicatie", "Contactgegevens, aanvragen, afspraken en berichten binnen de gebruikte modules."],
+  ["Hostinger", "Hosting van automatiseringen, waaronder zelfgehoste n8n", "Gegevens die de gehoste automatiseringen verwerken of opslaan, inclusief uitvoeringsgegevens."],
+  ["Supabase", "Database, authenticatie en bestandsopslag", "Applicatiegegevens, gebruikersaccounts en bestanden voor de aangesloten toepassing."],
+  ["Railway", "Hosting van applicaties en achtergrondprocessen", "Gegevens die door de betreffende applicatie worden verwerkt en de bijbehorende technische logs."],
+  ["Render", "Hosting van applicaties en achtergrondprocessen", "Gegevens die door de betreffende applicatie worden verwerkt en de bijbehorende technische logs."],
+  ["Netlify", "Websitehosting en serverfuncties", "Technische bezoekgegevens en gegevens die via de gebruikte formulieren en serverfuncties worden verwerkt."],
+  ["Rumata", "Ontwikkeling, hosting en uitvoering van applicaties en workflows", "Applicatiegegevens, workflow-inhoud en bestanden voor de projecten die op Rumata worden uitgevoerd."],
+  ["Resend", "Verzending van e-mail", "Ontvanger, berichtinhoud en verzend- en aflevergegevens."],
+  ["Pinecone", "Zoeken in een kennisbasis", "Zoekrepresentaties (embeddings), metadata en eventueel opgenomen tekstfragmenten."],
+  ["Airtable", "Gestructureerde gegevens en operationele overzichten", "De contact-, opdracht- en procesgegevens die in de gebruikte tabellen zijn opgenomen."],
+  ["ClickUp", "Projectbeheer en taakopvolging", "Contactgegevens, taken, opmerkingen en bestanden die voor de opdracht worden vastgelegd."],
+  ["Google Drive", "Documentopslag en samenwerking", "Documenten, bijlagen, deelgegevens en eventuele persoonsgegevens in de bestanden."],
+];
+---
+
+<BaseLayout title="Subverwerkers | Autopilots" description="Overzicht van leveranciers voor hosting, AI, telefonie en gegevensverwerking bij Autopilots." canonical="/subprocessors/" locale="nl" noindex>
+  <article id="ap-subprocessors" class="ap-ecosystem">
+    <section class="ap-eco-hero"><div class="ap-container">
+      <div class="ap-kicker">Privacy &amp; gegevensverwerking</div>
+      <h1>Onze <span class="ap-title-accent">subverwerkers.</span></h1>
+      <p class="ap-lead">Welke leveranciers ondersteunen onze dienstverlening en waarvoor worden ze ingezet?</p>
+      <p class="version">Concept · 29 oktober 2026 · Nederlandse versie</p>
+    </div></section>
+    <section class="ap-section ap-soft-section"><div class="ap-container content">
+      <section class="notice" aria-labelledby="review-heading">
+        <h2 id="review-heading">Overzicht in verificatie</h2>
+        <p>Dit concept bevat de door Autopilots bevestigde leveranciers uit onze dienstverlening. Juridische contractpartijen, verwerkingslocaties en doorgifteafspraken moeten nog per dienst worden bevestigd. Dit is nog geen definitieve, volledige subverwerkersbijlage bij een verwerkersovereenkomst.</p>
+      </section>
+      <section>
+        <h2>Toepassing per opdracht</h2>
+        <p>Niet iedere leverancier verwerkt gegevens voor iedere klant. Welke partijen als subverwerker optreden, hangt af van de afgesproken diensten, de gekozen inrichting en wie de overeenkomst met de leverancier heeft. De verwerkersovereenkomst en de vastgelegde projectafspraken bepalen welke verwerking is toegestaan.</p>
+      </section>
+      <section aria-labelledby="providers-heading">
+        <h2 id="providers-heading">Hosting, AI en automatisering</h2>
+        <div class="providers">
+          {providers.map(([name, purpose, data]) => <section class="provider">
+            <h3>{name}</h3><div><p class="purpose">{purpose}</p><p>{data}</p></div>
+          </section>)}
+        </div>
+        <p class="small">De namen hierboven zijn dienstnamen. De contracterende rechtspersoon, opslag- en verwerkingslanden, toegang vanuit andere landen en toepasselijke doorgiftewaarborgen zijn in dit concept nog niet vastgesteld. Een Europees opslagadres alleen is geen bewijs dat alle verwerking binnen de EER plaatsvindt.</p>
+      </section>
+      <section>
+        <h2>Andere leveranciers en klantsystemen</h2>
+        <p><strong>Stripe</strong> ondersteunt betalingen en financiële administratie. De rol van Stripe wordt afzonderlijk beoordeeld; het gebruik van Stripe maakt het niet automatisch een subverwerker voor de inhoud van klantopdrachten.</p>
+        <p><strong>Microsoft Outlook / OneDrive en PCA Planning</strong> kunnen systemen zijn die de klant zelf afneemt. In dat geval leggen we de toegang en gegevensuitwisseling vast, zonder deze partijen automatisch als subverwerker van Autopilots aan te merken.</p>
+        <p><strong>n8n</strong> is bij een zelfgehoste installatie software. De hostingpartij en eventueel ingeschakelde aanvullende diensten bepalen wie persoonsgegevens ontvangt.</p>
+      </section>
+      <section>
+        <h2>Wijzigingen en afspraken</h2>
+        <p>Een vermelding op deze pagina vervangt geen verwerkersovereenkomst. Voor het toevoegen of vervangen van subverwerkers gelden de toestemming, voorafgaande kennisgeving en bezwaarmogelijkheid uit de toepasselijke verwerkersovereenkomst. Alleen deze pagina aanpassen is geen vervanging voor die kennisgeving.</p>
+        <p>Vragen over de partijen die bij jouw opdracht betrokken zijn? Mail <a href="mailto:info@auto-pilots.io">info@auto-pilots.io</a>.</p>
+        <a class="back" href="/nl/privacy/">Terug naar de privacyverklaring →</a>
+      </section>
+    </div></section>
+  </article>
+</BaseLayout>
+
+<style>
+  #ap-subprocessors .ap-eco-hero .ap-container{max-width:1120px}
+  #ap-subprocessors .content{max-width:1000px;display:grid;gap:42px}
+  #ap-subprocessors h2{font-size:clamp(23px,3vw,30px);line-height:1.2;margin:0 0 18px}
+  #ap-subprocessors p{font-size:16px;line-height:1.75;color:var(--ap-muted);overflow-wrap:anywhere}
+  #ap-subprocessors .version,#ap-subprocessors .small{font-size:13px}
+  #ap-subprocessors .notice{padding:26px;border:1px solid var(--ap-line);border-radius:20px;background:var(--ap-soft)}
+  #ap-subprocessors .providers{border-top:1px solid var(--ap-line)}
+  #ap-subprocessors .provider{display:grid;grid-template-columns:210px minmax(0,1fr);gap:28px;padding:24px 0;border-bottom:1px solid var(--ap-line)}
+  #ap-subprocessors h3{margin:0;font-size:18px;line-height:1.5}
+  #ap-subprocessors .provider p{margin:0}
+  #ap-subprocessors .provider .purpose{font-weight:650;color:var(--ap-text);margin-bottom:5px}
+  #ap-subprocessors a{color:var(--ap-brown);text-decoration:underline;text-underline-offset:4px}
+  #ap-subprocessors .back{display:inline-block;margin-top:14px;font-weight:650}
+  @media(max-width:640px){#ap-subprocessors .provider{grid-template-columns:1fr;gap:8px}#ap-subprocessors .content{gap:30px}#ap-subprocessors .notice{padding:20px}}
+</style>
