@@ -15,6 +15,7 @@ const nichePath = (slug: string) => localizedPath(`niche.${slug}`, locale);
 const routeNicheName = (slug: string, fallback: string) => locale === "nl" ? fallback : nichePath(slug).split("/").filter(Boolean).at(-1)!.replaceAll("-", " ").replace(/(^|\s)\p{L}/gu, (letter) => letter.toUpperCase());
 const nicheName = (slug: string, fallback: string) => localizedNiche(locale, slug, routeNicheName(slug, fallback)).name;
 const year = new Date().getFullYear();
+const subprocessorLabel = {nl:"Subverwerkers",en:"Subprocessors (Dutch)",de:"Unterauftragsverarbeiter (NL)",fr:"Sous-traitants ultérieurs (NL)",es:"Subencargados (NL)",it:"Sub-responsabili (NL)"}[locale];
 ---
 
 <footer class="ap-footer" id="footer">
@@ -23,7 +24,7 @@ const year = new Date().getFullYear();
       <div class="ap-footer-brand"><div class="ap-kicker">Autopilots</div><h2>{copy.footer.title}</h2><p>{copy.footer.text}</p><div class="ap-footer-actions"><a class="ap-button ap-button-primary" href={editorial ? intakePath(locale) : localizedPath("page.appointment", locale)}>{editorial ? scanLabels[locale] : copy.footer.analysis}</a><a href={localizedPath("page.order", locale)}>{copy.navigation.order} →</a></div></div>
       <nav class="ap-footer-column" aria-label={copy.navigation.products}><strong>{copy.navigation.products}</strong>{products.map((product)=><a href={productPath(product.slug)}>{copy.products[product.slug]}</a>)}</nav>
       <nav class="ap-footer-column" aria-label={copy.navigation.niches}><strong>{copy.navigation.niches}</strong>{niches.slice(0,8).map((niche)=><a href={nichePath(niche.slug)}>{nicheName(niche.slug, niche.name)}</a>)}<a href={localizedPath("page.niches", locale)}>{copy.footer.allNiches}</a></nav>
-      <nav class="ap-footer-column" aria-label={copy.footer.company}><strong>{copy.footer.company}</strong><a href={localizedPath("page.process", locale)}>{copy.navigation.process}</a><a href={localizedPath("page.crew", locale)}>{copy.navigation.crew}</a><a href={localizedPath("page.knowledge", locale)}>{copy.navigation.knowledge}</a><a href={localizedPath("page.contact", locale)}>Contact</a><a href={localizedPath("page.order", locale)}>{copy.navigation.order}</a><a href={localizedPath("page.privacy", locale)}>{copy.footer.privacy}</a><a href={localizedPath("page.terms", locale)}>{copy.footer.terms}</a></nav>
+      <nav class="ap-footer-column" aria-label={copy.footer.company}><strong>{copy.footer.company}</strong><a href={localizedPath("page.process", locale)}>{copy.navigation.process}</a><a href={localizedPath("page.crew", locale)}>{copy.navigation.crew}</a><a href={localizedPath("page.knowledge", locale)}>{copy.navigation.knowledge}</a><a href={localizedPath("page.contact", locale)}>Contact</a><a href={localizedPath("page.order", locale)}>{copy.navigation.order}</a><a href={localizedPath("page.privacy", locale)}>{copy.footer.privacy}</a><a href={localizedPath("page.terms", locale)}>{copy.footer.terms}</a><a href="/subprocessors/" hreflang="nl">{subprocessorLabel}</a></nav>
     </div>
     <div class="ap-footer-bottom"><p class="ap-footer-small">© {year} Autopilots. {copy.footer.future}</p><span>{copy.system.footerTagline}</span></div>
   </div>
