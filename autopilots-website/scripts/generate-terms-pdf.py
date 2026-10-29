@@ -58,6 +58,18 @@ notice_style = ParagraphStyle("Notice", parent=body_style, fontName="Helvetica-B
 
 def footer(canvas, doc):
     canvas.saveState()
+    logo_size = 8
+    logo_tracking = logo_size * .19
+    logo_width = pdfmetrics.stringWidth("AUTOPILOTS", "AutopilotsLogo", logo_size) + 9 * logo_tracking
+    logo = canvas.beginText(A4[0] - 20*mm - logo_width, A4[1] - 12*mm)
+    logo.setFont("AutopilotsLogo", logo_size)
+    logo.setCharSpace(logo_tracking)
+    logo.setFillColor(HexColor("#102129"))
+    logo.textOut("AUTOPILOTS")
+    canvas.drawText(logo)
+    reset = canvas.beginText()
+    reset.setCharSpace(0)
+    canvas.drawText(reset)
     canvas.setStrokeColor(HexColor("#ddddda")); canvas.line(20*mm, 15*mm, 190*mm, 15*mm)
     canvas.setFont("Helvetica", 7.5); canvas.setFillColor(muted)
     canvas.drawString(20*mm, 10*mm, "Autopilots AI Agency LLC - Algemene servicevoorwaarden - versie 1.10")
