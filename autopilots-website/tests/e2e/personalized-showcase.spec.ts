@@ -113,7 +113,7 @@ test("six branches change all three scenes and keep keyboard-accessible controls
     await expect(page.locator(".dx-atelier-copy h4")).toContainText(
       "Mijn eigen titel",
     );
-    await page.locator(".sp-change").click();
+    await page.locator(".sp-picker").scrollIntoViewIfNeeded();
   }
   expect(canvases.size).toBe(6);
   expect(requests).toEqual([]);
@@ -209,7 +209,7 @@ test("unsupported saved branches are cleared and the extra selector is absent", 
   ).not.toHaveAttribute("href", /branche=/);
 });
 
-test("normal scrolling keeps the branch switch clear of the caption", async ({
+test("normal scrolling preserves the caption without a branch switch", async ({
   page,
 }) => {
   await page.goto("/nl/");
@@ -226,10 +226,8 @@ test("normal scrolling keeps the branch switch clear of the caption", async ({
       "aria-current",
       "true",
     );
-  const chip = await page.locator(".sp-change").boundingBox();
-  const eyebrow = await page.locator(".us-caption .cs-eyebrow").boundingBox();
-  expect(chip!.y + chip!.height).toBeLessThanOrEqual(eyebrow!.y);
-  await page.locator(".sp-change").click();
+  await expect(page.locator(".sp-change")).toHaveCount(0);
+  await page.locator(".sp-picker").scrollIntoViewIfNeeded();
   await page.locator(".sp-start").click();
   await expect(page.locator(".us-caption h2")).toHaveText(
     "Drie bouwgebieden. Eén partner.",
@@ -259,7 +257,8 @@ test("featured choices support keyboard selection and clearing", async ({
     "general",
   );
   await expect(page.locator(".sp-option input:checked")).toHaveCount(0);
-  await page.locator(".sp-change").click();
+  await expect(page.locator(".sp-change")).toHaveCount(0);
+  await first.focus();
   await expect(first).toBeFocused();
 });
 
