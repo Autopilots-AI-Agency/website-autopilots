@@ -34,7 +34,7 @@ for (const locale of languages) {
       t("Je bedrijf kan meer."),
     );
     await expect(page.locator("#sp-title")).toContainText(
-      t("Kies jullie branche"),
+      t("en zie wat wij kunnen betekenen."),
     );
     await expect(page.locator("#home-language summary")).toContainText(
       locale.toUpperCase(),
@@ -113,7 +113,7 @@ for (const locale of languages) {
   }) => {
     await page.goto(`/${locale}/`);
     await page.locator("[data-consent-reject]").click();
-    await expect(page.locator(".sp-option")).toHaveCount(6);
+    await expect(page.locator(".sp-option")).toHaveCount(8);
     await expect(
       page.locator(".sp-dropdown, .sp-feedback, [name='showcase-other']"),
     ).toHaveCount(0);
@@ -145,7 +145,9 @@ for (const locale of languages) {
     await page
       .locator('.sp-option input[value="Zakelijke dienstverlening"]')
       .check();
-    await page.locator(".sp-start").click();
+    await page
+      .locator('.sp-option input[value="Zakelijke dienstverlening"]')
+      .click();
     for (const step of [1, 2, 3]) {
       if (page.viewportSize()!.width < 701) {
         const panel = page.locator(`[data-panel="${step - 1}"]`);
