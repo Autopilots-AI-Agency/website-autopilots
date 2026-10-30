@@ -8,7 +8,7 @@ const suggestions = {nl:'Bekijk in het Nederlands',en:'View in English',de:'Auf 
 ---
 <div class="home-language" id="home-language">
   <details>
-    <summary aria-label={t('Taal wijzigen')}>{locale.toUpperCase()} <span aria-hidden="true">⌄</span></summary>
+    <summary aria-label={t('Taal wijzigen')}>{locale.toUpperCase()} <svg class="language-chevron" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
     <nav aria-label={t('Taal kiezen')}>
       {supportedLocales.map(item=><a href={item.path} lang={item.tag} hreflang={item.tag} data-home-locale={item.code} data-suggestion={suggestions[item.code]} aria-current={item.code===locale?'page':undefined}>{item.name}</a>)}
     </nav>
@@ -40,6 +40,10 @@ const suggestions = {nl:'Bekijk in het Nederlands',en:'View in English',de:'Auf 
  #home-language{position:relative;margin-left:auto;z-index:30}
  #home-language summary{display:flex;align-items:center;gap:9px;cursor:pointer;list-style:none;border:1px solid #bd875d55;border-radius:6px;padding:12px;color:#f6f1e9;font-size:12px}
  #home-language summary::-webkit-details-marker{display:none}
+ #home-language summary{justify-content:center;line-height:1}
+ #home-language .language-chevron{display:block;flex:0 0 14px;width:14px;height:14px;transition:transform .2s ease}
+ #home-language details[open] .language-chevron{transform:rotate(180deg)}
+ @media(prefers-reduced-motion:reduce){#home-language .language-chevron{transition:none}}
  #home-language nav{position:absolute;top:calc(100% + 8px);right:0;width:170px;padding:8px;display:grid!important;gap:0;background:#1a2d36;border:1px solid #bd875d55;border-radius:8px;box-shadow:0 15px 40px #0006}
  #home-language nav a{display:block;color:#f6f1e9;padding:11px;font-size:13px;border-radius:4px}
  #home-language nav a:hover,#home-language nav a[aria-current]{background:#bd875d22;color:#d8b394}

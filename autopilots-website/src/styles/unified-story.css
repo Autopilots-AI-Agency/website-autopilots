@@ -3,7 +3,7 @@
 #ap-connected.us-ready .cs-bottom{border:0;margin-top:35px;opacity:.65}
 #ap-connected .us-story{height:520svh;position:relative}
 #ap-connected .us-sticky{position:sticky;top:0;height:100svh;min-height:650px;display:flex;flex-direction:column;justify-content:center;overflow:hidden;padding:30px 0;background:radial-gradient(ellipse at 50% 55%,#28404a66,transparent 62%)}
-#ap-connected .us-caption{text-align:center;position:relative;z-index:8;padding:0 22px;flex-shrink:0}
+#ap-connected .us-caption{text-align:center;position:relative;z-index:8;padding:24px 22px 0;flex-shrink:0}
 #ap-connected .us-caption .cs-eyebrow{margin-bottom:16px}
 #ap-connected .us-caption h2{font-size:clamp(28px,3vw,44px)}
 #ap-connected .us-caption p{font-size:14px;max-width:620px;margin:15px auto 0;min-height:48px}

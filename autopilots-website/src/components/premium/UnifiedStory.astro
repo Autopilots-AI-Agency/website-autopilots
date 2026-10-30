@@ -207,8 +207,8 @@ if(root){
  }
  function enterStory(){stage.scrollIntoView({behavior:quiet()?'instant':'smooth',block:'start'});const heading=stage.querySelector<HTMLElement>('h2')!;heading.tabIndex=-1;heading.focus({preventScroll:true});}
  radios.forEach(r=>r.addEventListener('change',()=>applySelection(r.value)));
+ radios.forEach(r=>r.addEventListener('click',(event)=>{applySelection(r.value);if(event.detail>0)enterStory();}));
  form.addEventListener('submit',event=>{event.preventDefault();applySelection(branch);enterStory();});
- form.querySelector('.sp-skip')!.addEventListener('click',()=>{applySelection('');enterStory();});
  try{const saved=JSON.parse(sessionStorage.getItem('ap-showcase-v1')||'null');if(saved&&typeof saved.branch==='string')applySelection(saved.branch);}catch{/* Ignore corrupt or blocked session storage. */}
  root.querySelector('[data-cs-motion]')?.addEventListener('click',()=>{layoutDirty=true;requestAnimationFrame(schedule);});
  document.fonts.ready.then(()=>{layoutDirty=true;schedule();});schedule();

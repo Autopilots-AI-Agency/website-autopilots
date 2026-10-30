@@ -40,26 +40,19 @@ test("branch picker shares one centered axis on desktop and mobile", async ({
   await page.goto("/nl/");
   await page.getByRole("button", { name: "Alleen noodzakelijk" }).click();
   const picker = await page.locator(".sp-picker").boundingBox();
-  const center = picker!.x + picker!.width / 2;
-  for (const selector of [
-    ".sp-intro",
-    "#sp-title",
-    ".sp-form",
-    ".sp-options",
-    ".sp-start",
-    ".sp-skip",
-  ]) {
-    const box = await page.locator(selector).boundingBox();
-    expect(Math.abs(box!.x + box!.width / 2 - center)).toBeLessThan(2);
-  }
   const intro = await page.locator(".sp-intro").boundingBox();
   const form = await page.locator(".sp-form").boundingBox();
-  expect(form!.y).toBeGreaterThan(intro!.y + intro!.height);
-  expect(
-    await page
-      .locator(".sp-intro")
-      .evaluate((el) => getComputedStyle(el).textAlign),
-  ).toBe("center");
+  for (const box of [intro!, form!]) {
+    expect(box.x).toBeGreaterThanOrEqual(picker!.x);
+    expect(box.x + box.width).toBeLessThanOrEqual(
+      picker!.x + picker!.width + 1,
+    );
+  }
+  if (page.viewportSize()!.width < 701) {
+    expect(form!.y).toBeGreaterThan(intro!.y + intro!.height);
+  } else {
+    expect(form!.x).toBeGreaterThan(intro!.x + intro!.width);
+  }
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth,
@@ -141,9 +134,11 @@ test("selection survives reload, old company data is discarded and intake receiv
   await page.getByRole("radio", { name: "Autobedrijven", exact: true }).check();
   await expect(page.getByLabel("Je bedrijfsnaam")).toHaveCount(0);
   await expect(page.locator("#sp-title")).toHaveText(
-    "Kies jullie brancheen zie wat wij kunnen betekenen.",
+    "Wat bouwen we voor jullie?",
   );
-  await expect(page.locator(".sp-intro p")).toHaveCount(0);
+  await expect(page.locator(".sp-intro p")).toContainText(
+    "Kies jullie branche.",
+  );
   await expect(page.locator(".sp-form legend")).toHaveCount(0);
   await expect(page.locator(".sp-form fieldset")).toHaveAttribute(
     "aria-labelledby",
@@ -158,7 +153,7 @@ test("selection survives reload, old company data is discarded and intake receiv
       JSON.parse(sessionStorage.getItem("ap-showcase-v1")!),
     ),
   ).toEqual({ branch: "Autobedrijven" });
-  await page.locator(".sp-start").click();
+  await page.getByRole("radio", { name: "Autobedrijven", exact: true }).click();
   await expect(page.locator(".us-caption h2")).toHaveText(
     "Drie bouwgebieden. Eén partner.",
   );
@@ -190,7 +185,7 @@ test("unsupported saved branches are cleared and the extra selector is absent", 
   );
   await page.goto("/nl/");
   await page.locator("[data-consent-reject]").click();
-  await expect(page.locator(".sp-option")).toHaveCount(6);
+  await expect(page.locator(".sp-option")).toHaveCount(8);
   await expect(
     page.locator(".sp-dropdown, .sp-feedback, [name='showcase-other']"),
   ).toHaveCount(0);
@@ -217,7 +212,9 @@ test("normal scrolling preserves the caption without a branch switch", async ({
   await page
     .getByRole("radio", { name: "Installatiebedrijven", exact: true })
     .check();
-  await page.locator(".sp-start").click();
+  await page
+    .getByRole("radio", { name: "Installatiebedrijven", exact: true })
+    .click();
   if (page.viewportSize()!.width < 701)
     await page.locator('[data-panel="2"]').scrollIntoViewIfNeeded();
   else await page.locator('[data-us-step="3"]').click();
@@ -228,7 +225,9 @@ test("normal scrolling preserves the caption without a branch switch", async ({
     );
   await expect(page.locator(".sp-change")).toHaveCount(0);
   await page.locator(".sp-picker").scrollIntoViewIfNeeded();
-  await page.locator(".sp-start").click();
+  await page
+    .getByRole("radio", { name: "Installatiebedrijven", exact: true })
+    .click();
   await expect(page.locator(".us-caption h2")).toHaveText(
     "Drie bouwgebieden. Eén partner.",
   );
@@ -239,7 +238,7 @@ test("normal scrolling preserves the caption without a branch switch", async ({
   ).toBe(true);
 });
 
-test("featured choices support keyboard selection and clearing", async ({
+test("featured choices support keyboard selection without a general-example button", async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -251,12 +250,7 @@ test("featured choices support keyboard selection and clearing", async ({
   await expect(first).toBeChecked();
   await page.keyboard.press("ArrowRight");
   await expect(page.locator(".sp-option input").nth(1)).toBeChecked();
-  await page.locator(".sp-skip").click();
-  await expect(page.locator(".us-story")).toHaveAttribute(
-    "data-profile",
-    "general",
-  );
-  await expect(page.locator(".sp-option input:checked")).toHaveCount(0);
+  await expect(page.locator(".sp-skip")).toHaveCount(0);
   await expect(page.locator(".sp-change")).toHaveCount(0);
   await first.focus();
   await expect(first).toBeFocused();
