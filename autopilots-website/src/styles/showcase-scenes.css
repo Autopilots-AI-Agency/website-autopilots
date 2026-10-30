@@ -841,21 +841,38 @@
     margin: 12px 0 18px;
   }
   #ap-connected .sx-workspace-title h3 {
-    font-size: 24px;
+    font-size: clamp(19px, 5.5vw, 24px);
+    line-height: 1.18;
+    letter-spacing: -.035em;
   }
   #ap-connected .sx-module-row {
-    gap: 5px;
-    margin-bottom: 18px;
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-bottom: 20px;
+    border: 1px solid #ffffff14;
+    border-radius: 9px;
+    overflow: hidden;
   }
   #ap-connected .sx-module-row > div {
-    padding: 9px 6px;
+    display: grid;
+    grid-template-columns: 76px minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 0;
+    border-radius: 0;
+    min-width: 0;
   }
+  #ap-connected .sx-module-row > div + div { border-top: 1px solid #ffffff14; }
   #ap-connected .sx-module-row small {
-    font-size: 5px;
+    font-size: 7px;
+    letter-spacing: .08em;
   }
   #ap-connected .sx-module-row strong {
-    font-size: 9px;
-    margin: 7px 0;
+    font-size: 11px;
+    line-height: 1.4;
+    margin: 0;
+    overflow-wrap: anywhere;
   }
   #ap-connected .sx-module-row span {
     display: none;
@@ -867,9 +884,10 @@
     display: none;
   }
   #ap-connected .sx-board-columns {
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
   }
+  #ap-connected .sx-board-columns > div { display: flex; flex-direction: column; min-width: 0; }
   #ap-connected .sx-board-columns > div:first-child {
     display: none;
   }
@@ -877,9 +895,15 @@
     font-size: 6px;
   }
   #ap-connected .sx-board-columns article {
-    padding: 10px 8px;
-    min-height: 100px;
+    padding: 12px 10px;
+    min-height: 0;
+    flex: 1;
+    overflow-wrap: anywhere;
   }
+  #ap-connected .sx-board-columns .sx-customer-portal > span { display: none; }
+  #ap-connected .sx-board-columns .sx-customer-portal > small { display: block; margin: 0 0 10px; font-size: 6px; }
+  #ap-connected .sx-avatars { flex-wrap: wrap; row-gap: 5px; }
+  #ap-connected .sx-sync > span { display: none; }
   #ap-connected .sx-board-columns article p { margin:6px 0; font-size:9px; line-height:1.45; }
   #ap-connected .sx-board-columns article > span { font-size:7px; line-height:1.4; }
   #ap-connected .sx-site-label { display:none; }
