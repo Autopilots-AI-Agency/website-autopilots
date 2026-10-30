@@ -2,25 +2,25 @@
 import '../../styles/home-cases.css';
 ---
 <section id="ap-home-cases" aria-labelledby="hc-title">
- <header class="hc-heading"><p>ONS WERK</p><h2 id="hc-title">Voorbeeld cases per dienst</h2></header>
+ <header class="hc-heading"><span class="cs-eyebrow">ONS WERK</span><h2 id="hc-title">Voorbeeld cases per AI oplossing</h2><p>Wij besparen tijd of genereren extra omzet met AI.</p></header>
  <div class="hc-grid">
   <article class="hc-card">
    <header><img src="/samenwerkingen/animals-faith.png" alt="Animals Faith" loading="lazy"/></header>
    <div class="hc-art hc-call" role="img" aria-label="Illustratie van een AI-telefoongesprek"><div class="hc-call-disc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="m8 3 3 5-2 2c1 3 2 4 5 5l2-2 5 3c-1 4-3 5-6 4C8 18 4 14 3 8c-1-3 1-5 5-5Z"/></svg></div><div class="hc-wave">{[10,20,32,18,40,26,34,18,28,14,8].map(h=><i style={`height:${h}px`}></i>)}</div></div>
-   <div class="hc-copy"><p class="hc-type">AI Telefoniste</p><h3>Animals Faith</h3><p>Kwalificeert en plant afspraken.</p><div class="hc-result"><strong>300+</strong> afspraken in 2026</div></div>
+   <div class="hc-copy"><p class="hc-type">AI Telefoniste</p><h3>Animals Faith</h3><p>Kwalificeert en plant afspraken.</p><div class="hc-result"><strong aria-label="300+"><span data-hc-count aria-hidden="true">300</span><span aria-hidden="true">+</span></strong> afspraken in 2026</div></div>
    <footer><a href="/nl/cases/animals-faith/">Bekijk de case</a></footer>
   </article>
   <article class="hc-card">
    <header><img src="/samenwerkingen/dakcentrale-nederland.png" alt="Dakcentrale Nederland" loading="lazy"/></header>
    <div class="hc-art hc-software" role="img" aria-label="Conceptillustratie van CRM-software"><div class="hc-mini-app"><div class="hc-mini-nav"><i></i><i></i><i></i></div><div class="hc-mini-board">{[0,1,2].map(n=><div><span></span>{Array.from({length:n===1?2:3},()=> <i></i>)}</div>)}</div></div><small>Conceptvisual</small></div>
-   <div class="hc-copy"><p class="hc-type">AI Software</p><h3>Dakcentrale Nederland</h3><p>Een eigen systeem voor jullie werk.</p><div class="hc-result">CRM op maat</div></div>
-   <footer><span>Case binnenkort</span></footer>
+   <div class="hc-copy"><p class="hc-type">AI Software</p><h3>Dakcentrale Nederland</h3><p>Een eigen systeem voor jullie werk.</p><div class="hc-result"><strong>4000+</strong> leads verwerkt in 2026</div></div>
+   <footer><a href="/nl/cases/dakcentrale-nederland/">Bekijk de case</a></footer>
   </article>
   <article class="hc-card">
    <header><img class="hc-h3a-logo" src="/samenwerkingen/h3a.png" alt="Heeren 3 Architecten" loading="lazy"/></header>
    <div class="hc-art hc-architecture" role="img" aria-label="Conceptillustratie van een architectuurwebsite"><div class="hc-mini-site"><div><b>HEEREN 3</b><i></i></div><svg viewBox="0 0 300 145" fill="none" aria-hidden="true"><path fill="#b6b19f" d="M48 55 192 25 260 51 115 83Z"/><path fill="#d6cfbf" d="M48 55 115 83 260 51V111L115 140 48 110Z"/><path fill="#344b48" d="M132 88 176 79V119L132 128ZM191 76 242 65V106L191 116ZM62 70 97 85V121L62 104Z"/><path stroke="#8f8774" d="m48 55 144-30 68 26-145 32Z"/></svg><span></span></div><small>Conceptvisual</small></div>
-   <div class="hc-copy"><p class="hc-type">AI Website</p><h3>Heeren 3 Architecten</h3><p>Ontwerp en beheer, samen gebouwd.</p><div class="hc-result">Website met eigen backend</div></div>
-   <footer><span>Case binnenkort</span></footer>
+   <div class="hc-copy"><p class="hc-type">AI Website</p><h3>Heeren 3 Architecten</h3><p>Ontwerp en beheer, samen gebouwd.</p><div class="hc-result"><strong>7.000+</strong> Interne SEO-links</div></div>
+   <footer><a href="/nl/cases/heeren-3-architecten/">Bekijk de case</a></footer>
   </article>
  </div>
 </section>
@@ -29,6 +29,22 @@ import '../../styles/home-cases.css';
  if(section){
   const cards=[...section.querySelectorAll<HTMLElement>('.hc-card')];
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+  const counter=section.querySelector<HTMLElement>('[data-hc-count]');
+  if(counter&&!reduced.matches&&!section.closest('.cs-quiet')){
+   const observer=new IntersectionObserver(entries=>{
+    if(!entries.some(entry=>entry.isIntersecting))return;
+    observer.disconnect();
+    const start=performance.now();
+    const tick=(now:number)=>{
+     const progress=Math.min(1,(now-start)/2400);
+     if(reduced.matches||section.closest('.cs-quiet')){counter.textContent='300';return;}
+     counter.textContent=String(Math.round(300*(1-Math.pow(1-progress,3))));
+     if(progress<1)requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+   },{threshold:.8});
+   observer.observe(counter);
+  }
   let frame=0;
   const activate=(index:number)=>cards.forEach((card,i)=>card.classList.toggle('hc-active',i===index));
   const draw=()=>{

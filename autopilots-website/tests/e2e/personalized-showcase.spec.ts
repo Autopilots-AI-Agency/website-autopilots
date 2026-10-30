@@ -47,7 +47,6 @@ test("branch picker shares one centered axis on desktop and mobile", async ({
     ".sp-form",
     ".sp-options",
     ".sp-start",
-    ".sp-skip",
   ]) {
     const box = await page.locator(selector).boundingBox();
     expect(Math.abs(box!.x + box!.width / 2 - center)).toBeLessThan(2);
@@ -239,7 +238,7 @@ test("normal scrolling preserves the caption without a branch switch", async ({
   ).toBe(true);
 });
 
-test("featured choices support keyboard selection and clearing", async ({
+test("featured choices support keyboard selection without a general-example button", async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -251,12 +250,7 @@ test("featured choices support keyboard selection and clearing", async ({
   await expect(first).toBeChecked();
   await page.keyboard.press("ArrowRight");
   await expect(page.locator(".sp-option input").nth(1)).toBeChecked();
-  await page.locator(".sp-skip").click();
-  await expect(page.locator(".us-story")).toHaveAttribute(
-    "data-profile",
-    "general",
-  );
-  await expect(page.locator(".sp-option input:checked")).toHaveCount(0);
+  await expect(page.locator(".sp-skip")).toHaveCount(0);
   await expect(page.locator(".sp-change")).toHaveCount(0);
   await first.focus();
   await expect(first).toBeFocused();

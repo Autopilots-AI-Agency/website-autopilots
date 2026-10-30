@@ -1,0 +1,19 @@
+/* Soft light behind the homepage content; no overlays over controls. */
+#ap-connected {
+  --home-light: rgba(235, 245, 250, .07);
+}
+#ap-connected .cs-content .cs-hero,
+#ap-connected #jouw-bedrijf,
+#ap-connected .cs-content .cs-approach,
+#ap-connected .cs-content .cs-cta {
+  background-image: radial-gradient(ellipse closest-side at 50% 50%, var(--home-light), transparent 100%);
+}
+#ap-connected .us-story .us-sticky {
+  background-image: radial-gradient(ellipse closest-side at 50% 50%, var(--home-light), transparent 100%);
+}
+#ap-connected #ap-home-cases {
+  background-image: radial-gradient(ellipse closest-side at 50% 50%, var(--home-light), transparent 100%);
+}
+@media (max-width: 700px) {
+  #ap-connected { --home-light: rgba(235, 245, 250, .045); }
+}

@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import QuizCTA from '../../../../components/premium/QuizCTA.astro';
+import '../../../../styles/h3a-case.css';
+---
+<BaseLayout title="Een website met eigen beheeromgeving | Heeren 3 Architecten" description="Voor Heeren 3 Architecten: een architectuurwebsite met projectbeheer, een SEO-linkstructuur, contactfunnel en inzicht in websitegegevens." locale="nl" customChrome>
+ <Fragment slot="head">
+  <link rel="alternate" hreflang="nl-NL" href={new URL('/nl/cases/heeren-3-architecten/', Astro.site ?? Astro.url.origin).toString()} />
+  <link rel="alternate" hreflang="x-default" href={new URL('/nl/cases/heeren-3-architecten/', Astro.site ?? Astro.url.origin).toString()} />
+ </Fragment>
+<div id="h3a-case">
+ <header class="ha-nav ha-wrap"><a class="ha-brand" href="/nl/">AUTOPILOTS</a><QuizCTA label="Start de AI-scan" compact/></header>
+ <main>
+  <section class="ha-hero ha-wrap">
+   <a class="ha-back" href="/nl/"><span aria-hidden="true">←</span> Terug naar Autopilots</a>
+   <img class="ha-logo" src="/samenwerkingen/h3a.png" alt="Heeren 3 Architecten"/>
+   <h1>Een AI website die razendsnel is.<br/><em>en SEO vriendelijk.</em></h1>
+   <p class="ha-eyebrow ha-period">GEREALISEERD IN 2026:</p>
+   <div class="ha-metrics">{[[80,'+','Projecten'],[300,'+','Pagina’s'],[7000,'+','Interne SEO-links'],[1,'','Eigen beheeromgeving']].map(([n,s,label])=><article><strong><span data-ha-count={n}>{Number(n).toLocaleString('nl-NL')}</span><small>{s}</small></strong><span>{label}</span></article>)}</div>
+  </section>
+  <section class="ha-section ha-wrap">
+   <div class="ha-heading"><p class="ha-eyebrow">ARCHITECTUUR VERDIENT RUIMTE</p><h2>Het werk op de voorgrond.<br/><em>De techniek op de achtergrond.</em></h2><p>Een beeldrijke website die projecten centraal zet. Met een snelle basis en een duidelijke route voor particuliere en zakelijke bezoekers.</p></div>
+   <figure class="ha-browser" data-ha-reveal><figcaption><span class="ha-dots" aria-hidden="true">● ● ●</span><span>Heeren 3 Architecten · website</span><a href="https://h3a.nl/" target="_blank" rel="noopener">Bekijk de website</a></figcaption><img src="/cases/h3a/website.png" alt="H3A-website met particuliere en zakelijke architectuurprojecten" width="3456" height="1802" loading="lazy"/></figure>
+  </section>
+  <section class="ha-section ha-wrap">
+   <div class="ha-heading"><p class="ha-eyebrow">EIGEN BEHEEROMGEVING</p><h2>Een nieuw project?<br/><em>Zelf toevoegen. Zelf aanpassen.</em></h2><p>Projecten, beelden en teksten beheren op één plek. Zonder voor iedere aanpassing een ontwikkelaar nodig te hebben.</p></div>
+   <div class="ha-editor" data-ha-reveal>
+    <div class="ha-editor-bar"><strong>Projectbeheer</strong><span>Interactief voorbeeld</span></div>
+    <div class="ha-editor-grid"><form class="ha-demo-form"><p class="ha-eyebrow">PROJECT BEWERKEN</p><label>Projectnaam<input name="project" value="Villa aan het water" maxlength="55"/></label><label>Categorie<select name="category"><option>Wonen</option><option>Renovatie</option><option>Utiliteit</option><option>Zorg</option></select></label><label>Beschrijving<textarea name="description" rows="3" maxlength="180">Een lichte woning met ruimte voor uitzicht en ontmoeting.</textarea></label><button type="submit">Voorbeeld bijwerken</button><p class="ha-save-status" role="status">Probeer het zelf. Er wordt niets opgeslagen.</p></form><div class="ha-project-preview"><span class="ha-eyebrow">ZO ZIET DE BEZOEKER HET</span><img src="/cases/h3a/projecten.png" alt="Projectoverzicht van de H3A-website" width="3456" height="1828" loading="lazy"/><div><small data-ha-category>Wonen</small><h3 data-ha-title>Villa aan het water</h3><p data-ha-description>Een lichte woning met ruimte voor uitzicht en ontmoeting.</p></div></div></div>
+   </div>
+  </section>
+  <section class="ha-section ha-wrap">
+   <div class="ha-heading"><p class="ha-eyebrow">VINDBAARHEID IS MEEGEBOUWD</p><h2>Geen losse pagina’s.<br/><em>Een samenhangende structuur.</em></h2><p>Projecten, diensten en kennis verwijzen naar elkaar. Zo kunnen bezoekers verder ontdekken en zoekmachines de samenhang beter begrijpen.</p></div>
+   <div class="ha-seo ha-network" data-ha-reveal>
+    <div class="ha-network-top"><span>DE WEBSITE ALS NETWERK</span><span>300+ pagina’s</span></div>
+    <div class="ha-seo-root">HEEREN 3 <small>ARCHITECTEN</small></div>
+    <div class="ha-seo-branches">{[['Projecten','Laat het werk zien','Villa aan het water'],['Diensten','Laat zien wat mogelijk is','Woning ontwerpen'],['Kennis & regio','Geeft antwoord op vragen','Bouwen in Friesland']].map(([title,description,example],index)=><article><div class="ha-node-number">0{index+1}</div><h3>{title}</h3><p>{description}</p><span class="ha-page-example">{example}</span></article>)}</div>
+    <div class="ha-network-summary"><strong>7.000+</strong><div>Interne verbindingen<small>Van inspiratie naar een passend antwoord.</small></div><span class="ha-network-note">Schematisch voorbeeld</span></div>
+   </div>
+   <div class="ha-pagespeed" aria-label="PageSpeed Insights resultaten voor mobiel">
+    <header><p class="ha-eyebrow">PAGESPEED INSIGHTS</p><h3>Snel, ook op mobiel.</h3><span>Mobiel · 19 oktober 2026</span></header>
+    <div class="ha-pagespeed-scores">{[[99,'Prestaties'],[100,'Toegankelijkheid'],[100,'Best practices'],[100,'SEO']].map(([score,label])=><div class="ha-pagespeed-score"><strong style={`--score:${score}`}><span>{score}</span></strong><span>{label}</span></div>)}</div>
+    <p class="ha-pagespeed-note">Aangeleverde PageSpeed-meting. Scores kunnen per meting verschillen.</p>
+   </div>
+  </section>
+  <section class="ha-section ha-wrap">
+   <div class="ha-heading"><p class="ha-eyebrow">VAN INTERESSE NAAR CONTACT</p><h2>Een goed gesprek.<br/><em>Begint met de juiste context.</em></h2><p>De contactfunnel brengt de plannen van de bezoeker in kaart. Het team ontvangt een gerichte aanvraag en kan het gesprek voorbereid starten.</p></div>
+   <div class="ha-funnel ha-contact-demo" data-ha-reveal>
+    <div class="ha-contact-top"><span>VAN WEBSITE NAAR TEAM</span><span>Interactief voorbeeld</span></div>
+    <div class="ha-contact-grid">
+     <div class="ha-funnel-question"><span class="ha-eyebrow">01 · DE BEZOEKER KIEST</span><h3>Wat wil je realiseren?</h3><p>Kies een plan en bekijk wat het team ontvangt.</p><div class="ha-options">{['Nieuw huis bouwen','Woning verbouwen','Woning uitbreiden'].map((label,i)=><button type="button" data-ha-plan={label} aria-pressed={i===0?'true':'false'}><span>{label}</span><i aria-hidden="true"></i></button>)}</div></div>
+     <div class="ha-contact-connector" aria-hidden="true"><span></span></div>
+     <div class="ha-request"><span class="ha-eyebrow">02 · HET TEAM ONTVANGT</span><div class="ha-request-status"><i></i> Klaar voor kennismaking</div><div class="ha-request-content" aria-live="polite" aria-atomic="true"><span class="ha-request-label">HET PLAN</span><h3 data-ha-request>Nieuw huis bouwen</h3><p data-ha-context>Een eerste gesprek over de wensen voor een nieuwe woning.</p></div><dl><div><dt>Contact</dt><dd>Voorbeeldklant</dd></div><div><dt>Regio</dt><dd>Friesland</dd></div></dl><div class="ha-request-next"><span>VOLGENDE STAP</span><strong>Persoonlijk contact</strong></div></div>
+    </div><p class="ha-contact-note">Probeer de keuzes · fictieve gegevens, er wordt niets verstuurd.</p>
+   </div>
+  </section>
+  <section class="ha-section ha-wrap">
+   <div class="ha-heading"><p class="ha-eyebrow">INZICHT ACHTER DE WEBSITE</p><h2>Niet alleen online.<br/><em>Ook weten wat er gebeurt.</em></h2><p>Bezoeken, aanvragen en vindbaarheid overzichtelijk bij elkaar. Eén backend voor inhoud én inzicht.</p></div>
+   <div class="ha-dashboard" data-ha-reveal><header><h3>Websiteoverzicht</h3><span>Fictieve voorbeelddata · 30 dagen</span></header><div class="ha-dashboard-metrics">{[['1.200','Bezoeken'],['36','Aanvragen'],['3%','Conversie']].map(([n,l])=><article><strong>{n}</strong><span>{l}</span></article>)}</div><div class="ha-dashboard-bottom"><div><p class="ha-eyebrow">BEZOEKEN PER WEEK</p><div class="ha-chart" role="img" aria-label="Voorbeeld: 220, 280, 300 en 400 bezoeken per week">{[55,70,75,100].map((v,i)=><div><i style={`--height:${v}%`}></i><span>Week {i+1}</span></div>)}</div></div><div class="ha-keywords"><p class="ha-eyebrow">INZICHT IN VINDBAARHEID</p>{[['Architect regio','12'],['Woning ontwerpen','18'],['Renovatie architect','24']].map(([term,pos])=><div><span>{term}</span><small>Positie {pos}</small></div>)}<p>Voorbeeldzoekwoorden en posities.</p></div></div></div>
+  </section>
+  <section class="ha-section ha-wrap"><div class="ha-cta ha-closing-card"><p class="ha-eyebrow">JULLIE VOLGENDE STAP</p><h2>Sterk aan de voorkant.<br/><em>Slim aan de achterkant.</em></h2><p>Wat kan een slimme website voor jullie doen? Breng jullie mogelijkheden in kaart met de AI-scan.</p><QuizCTA label="Ontdek jullie AI mogelijkheden"/><a class="ha-closing-secondary" href="/nl/#ap-home-cases">Bekijk ook onze andere cases</a></div></section>
+ </main><footer class="ha-wrap ha-home-footer"><a class="ha-home-logo" href="/nl/">AUTOPILOTS</a><span>Los inzetbaar. Sterker samen.</span><a href="/nl/voor-wie/">Branches</a><a href="/nl/producten/">Oplossingen</a><a href="/nl/privacy/">Privacy</a><a href="/nl/kennisbank/">Kennisbank</a></footer>
+</div>
+<script>import '../../../../scripts/h3a-case';</script>
+</BaseLayout>
