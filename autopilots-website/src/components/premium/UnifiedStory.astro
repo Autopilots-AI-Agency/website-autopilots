@@ -88,6 +88,7 @@ if(root){
  const end=document.createElement('span');end.id='verbonden';end.className='us-marker';end.style.top='80%';stage.append(end);connected.removeAttribute('id');
  const cta=root.querySelector<HTMLElement>('.cs-cta')!;stage.after(cta);
  const cases=root.querySelector<HTMLElement>('#ap-home-cases');if(cases)stage.after(cases);
+ const team=root.querySelector<HTMLElement>('#ap-home-team');if(team)cta.before(team);
  cta.querySelector('h2')!.innerHTML=html('En hoe zou dit<br/><em>voor jouw bedrijf werken?</em>');
  root.classList.add('us-ready');
  let current=0,target=0,frame=0,last=0,layoutDirty=true;

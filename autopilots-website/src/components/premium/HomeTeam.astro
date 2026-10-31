@@ -1,0 +1,50 @@
+---
+const people = [
+ ['Tim Kuiper','Sales & Partnerships','tim-kuiper.png'],
+ ['Larissa Rosanna Pen','Head of Operations','larissa-rosanna-pen.webp'],
+ ['Hasan Shabbir','Head of Development','hasan-shabbir.png'],
+ ['Albert Verlinden','AI Consultant','albert-verlinden.png'],
+ ['Pratt Olan','AI Specialist','pratt-olan.webp'],
+ ['Luca van der Meer','Online Marketeer','luca-van-der-meer.webp'],
+ ['Mit Dong','AI Specialist','mit-dong.webp'],
+ ['Rohail Zuberi','AI Specialist','rohail-zuberi.webp'],
+];
+---
+<section id="ap-home-team" aria-labelledby="ap-team-title">
+ <header><p class="cs-eyebrow">DE MENSEN ACHTER AUTOPILOTS</p><h2 id="ap-team-title">Slimme systemen.<br/><em>Een betrokken team.</em></h2><p>Dit zijn de mensen achter jullie AI, software en website.</p></header>
+ <div class="team-grid" id="ap-team-slider" tabindex="0" role="region" aria-label="Teamleden, horizontaal scrollbaar">{people.map(([name,role,photo])=><article><div class="team-photo"><img src={`/team/${photo}`} alt={name} width="480" height="480" loading="lazy" decoding="async" draggable="false"/></div><h3>{name}</h3><p>{role}</p></article>)}</div>
+ <div class="team-controls"><div><button type="button" data-team-prev aria-label="Vorige teamleden" aria-controls="ap-team-slider"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg></button><button type="button" data-team-next aria-label="Volgende teamleden" aria-controls="ap-team-slider"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg></button></div></div>
+</section>
+<style>
+ #ap-home-team{max-width:1120px;margin:0 auto;padding:88px 24px;color:#f5f1e9}
+ #ap-home-team header{text-align:center;max-width:760px;margin:0 auto 40px}
+ #ap-home-team h2{font-size:clamp(30px,4vw,52px);line-height:1.1;letter-spacing:-.045em;margin:18px 0 20px;font-weight:800}
+ #ap-home-team h2 em{color:#bd895d}
+ #ap-home-team header>p:last-child{color:#aabdc2;font-size:18px;line-height:1.6}
+ #ap-home-team .team-grid{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 72px)/4);gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:#bd895d55 transparent;padding-bottom:20px;overscroll-behavior-x:contain}
+ #ap-home-team article{min-width:0;text-align:left;scroll-snap-align:start}
+ #ap-home-team .team-controls{display:flex;align-items:center;justify-content:flex-end;margin-top:16px;color:#aabdc2;font-size:13px}
+ #ap-home-team .team-controls>div{display:flex;gap:10px}
+ #ap-home-team button{display:grid;place-items:center;width:44px;height:44px;border:1px solid #bd895d66;border-radius:50%;background:transparent;color:#f5f1e9;cursor:pointer}
+ #ap-home-team button:disabled{opacity:.3;cursor:default}
+ #ap-home-team button svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+ #ap-home-team :focus-visible{outline:2px solid #bd895d;outline-offset:4px}
+ #ap-home-team .team-photo{aspect-ratio:1;overflow:hidden;border-radius:20px;background:#1a3038;border:1px solid #ffffff18}
+ #ap-home-team img{display:block;width:100%;height:100%;object-fit:cover;filter:grayscale(1);transition:filter .4s ease,transform .5s ease}
+ #ap-home-team article:hover img{filter:grayscale(0);transform:scale(1.025)}
+ #ap-home-team h3{font-size:17px;line-height:1.35;margin:16px 0 5px;letter-spacing:-.02em}
+ #ap-home-team article p{font-size:13px;line-height:1.5;color:#aabdc2;margin:0}
+ @media(max-width:700px){#ap-home-team{padding:58px 20px}#ap-home-team .team-grid{grid-auto-columns:76%;gap:16px}#ap-home-team h3{font-size:17px}#ap-home-team article p{font-size:13px}#ap-home-team header>p:last-child{font-size:16px}#ap-home-team .team-photo{border-radius:16px}}
+ @media(prefers-reduced-motion:reduce){#ap-home-team img{transition:none}#ap-home-team article:hover img{transform:none}}
+</style>
+<script>
+ const slider=document.querySelector<HTMLElement>('#ap-team-slider');
+ const prev=document.querySelector<HTMLButtonElement>('[data-team-prev]');
+ const next=document.querySelector<HTMLButtonElement>('[data-team-next]');
+ if(slider&&prev&&next){
+  const update=()=>{prev.disabled=slider.scrollLeft<2;next.disabled=slider.scrollLeft+slider.clientWidth>=slider.scrollWidth-2;};
+  const move=(direction:number)=>{const card=slider.querySelector('article');if(card)slider.scrollBy({left:direction*(card.getBoundingClientRect().width+parseFloat(getComputedStyle(slider).columnGap)),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});};
+  prev.addEventListener('click',()=>move(-1));next.addEventListener('click',()=>move(1));
+  slider.addEventListener('scroll',update,{passive:true});new ResizeObserver(update).observe(slider);update();
+ }
+</script>
