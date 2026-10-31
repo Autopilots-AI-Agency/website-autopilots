@@ -4,6 +4,7 @@ import HomeLanguage from './HomeLanguage.astro';
 import ScrollNarrative from './UnifiedStory.astro';
 import ShowcasePicker from './ShowcasePicker.astro';
 import HomeCases from './HomeCases.astro';
+import HomeTeam from './HomeTeam.astro';
 import '../../styles/connected-story.css';
 import '../../styles/unified-story.css';
 import '../../styles/showcase-scenes.css';
@@ -29,6 +30,7 @@ const chapters = [
  <section class="cs-connected-section cs-wrap" id="verbonden"><p class="cs-eyebrow">04 / HIER KOMT HET SAMEN</p><h2>Niet drie losse oplossingen.<br/><em>Eén bedrijf dat samenwerkt.</em></h2><p>Wij verbinden wat we bouwen met elkaar én met de systemen die je al gebruikt.</p><div class="cs-network"><div class="cs-network-core"><span class="cs-logo">AUTOPILOTS</span><small>DE VERBINDING TUSSEN JOUW SYSTEMEN</small></div><div class="cs-network-nodes">{chapters.map((c,i)=><div class="cs-network-node" style={`--node:${i}`}><span>0{i+1}</span><h3>{c.label}</h3><p>{['Begrijpt de klantvraag','Organiseert het werk','Ontvangt de aanvraag'][i]}</p><i aria-hidden="true"></i></div>)}</div><div class="cs-flow" aria-label="Voorbeeld van een verbonden proces"><span>Aanvraag</span><span>Gesprek</span><span>Verwerking</span><span>Terugkoppeling</span></div></div><small class="cs-disclaimer">Voorbeeld van een mogelijke inrichting. Welke koppelingen mogelijk zijn, onderzoeken we vooraf.</small></section>
  <section class="cs-approach cs-wrap" id="aanpak"><div><p class="cs-eyebrow">05 / VAN IDEE NAAR PRAKTIJK</p><h2>Groot denken.<br/><em>Helder beginnen.</em></h2><p>Een maatwerktraject begint niet met software. Het begint met begrijpen wat jouw bedrijf nodig heeft.</p></div><ol>{[['Begrijpen','We onderzoeken je werkwijze, doelen en bestaande systemen.'],['Bouwen','We ontwerpen, ontwikkelen en testen. Jij kijkt en beslist mee.'],['Doorontwikkelen','We begeleiden de start en spreken beheer en verbeteringen af.']].map((p,i)=><li><span>0{i+1}</span><div><h3>{p[0]}</h3><p>{p[1]}</p></div></li>)}</ol></section>
  <HomeCases/>
+ <HomeTeam/>
  <section class="cs-cta cs-wrap" id="aanvraag"><span class="cs-eyebrow">JOUW BEDRIJF. JOUW VOLGENDE STAP.</span><h2>Wat kunnen we<br/><em>voor jou bouwen?</em></h2><p>Vertel ons waar je naartoe wilt. Ontdek waar AI-medewerkers, software of een betere website kunnen helpen.</p><QuizCTA label="Start de AI-scan"/></section>
  </div><footer class="cs-footer cs-wrap"><a class="cs-logo" href="/nl/">AUTOPILOTS</a><span>Los inzetbaar. Sterker samen.</span><a href="/nl/voor-wie/">Branches</a><a href="/nl/producten/">Oplossingen</a><a href="/nl/privacy/">Privacy</a><a href="/nl/kennisbank/">Kennisbank</a></footer>
 </div>
