@@ -1,5 +1,6 @@
 ---
 import KnowledgeLibrary from "../../../components/ecosystem/KnowledgeLibrary.astro";
+import { solutionCopy } from '../../../data/solutions';
 import type { SupportedLocale } from "../../../i18n/languages";
 import { localizedPath } from "../../../i18n/routes";
 interface Props {locale?:SupportedLocale}
@@ -12,8 +13,10 @@ const rows={
  it:[["Come costruiamo un collaboratore AI pronto al lancio","Da onboarding e architettura a cervello AI, integrazioni, demo, lancio e ottimizzazione.","Implementazione","Processo"],["Il cervello AI: conoscenze, regole e passaggio umano","Come script, contesto, eccezioni e tono creano un collaboratore affidabile.","Cervello AI","Metodo Autopilots"],["I nostri prodotti per un customer journey continuo","Scopri come inbox, follow-up, receptionist, CRM e lead machine lavorano insieme o separati.","Prodotti","Panoramica"],["Dalla conversazione all'azione CRM","Il valore nasce quando appuntamento, attività, ticket, stato o passaggio vengono elaborati.","Azioni CRM","Autopilots CRM"],["Un customer journey per ogni settore","Raccolta, urgenza, agenda, sistemi ed eccezioni sono configurati per settore.","Customer journey","21 settori"],["Come definiamo le integrazioni","Verifichiamo canali, agenda, CRM, moduli, API, permessi e passaggio prima dello sviluppo.","Integrazioni","Architettura"],["Monitoraggio e ottimizzazione dopo il lancio","Le conversazioni reali mostrano dove migliorare risposte, percorsi e azioni.","Ottimizzazione","Dopo il lancio"],["Le persone dietro Autopilots","Conosci il team per strategia, sviluppo, operations e ottimizzazione continua.","Team","Chi siamo"]],
  fr:[["Comment nous construisons un collaborateur IA prêt à être lancé","De l'intégration et l'architecture au cerveau IA, connexions, démo, lancement et optimisation.","Implémentation","Processus"],["Le cerveau IA : connaissances, règles et transfert humain","Comment scripts, contexte, exceptions et ton créent un collaborateur fiable.","Cerveau IA","Méthode Autopilots"],["Nos produits pour un parcours client continu","Découvrez comment messagerie, suivi, standardiste, CRM et machine à leads fonctionnent ensemble ou séparément.","Produits","Vue d'ensemble"],["De la conversation à l'action CRM","La valeur apparaît lorsque rendez-vous, tâche, ticket, statut ou transfert sont traités.","Actions CRM","Autopilots CRM"],["Un parcours propre à chaque secteur","Collecte, urgence, planning, systèmes et exceptions sont configurés par secteur.","Parcours clients","21 secteurs"],["Comment nous définissons les connexions","Nous vérifions canaux, agenda, CRM, formulaires, API, droits et transfert avant la construction.","Connexions","Architecture"],["Suivi et optimisation après lancement","Les conversations réelles montrent où améliorer réponses, parcours et actions.","Optimisation","Après lancement"],["Les personnes derrière Autopilots","Rencontrez l'équipe chargée de la stratégie, du développement, des opérations et de l'optimisation.","Équipe","À propos"]]
 }[locale];
-const routeIds=["page.process","page.process","page.products","product.autopilots-crm","page.niches","page.process","page.process","page.crew"];
+const routeIds=[null,null,"page.products","product.autopilots-crm","page.niches",null,null,"page.crew"];
+const solutions = solutionCopy(locale);
+rows[2] = [solutions.title, solutions.intro, solutions.title, solutions.title];
 const hashes=["","#processtappen","","","","#processtappen","#processtappen",""];
-const items=rows.map(([title,description,category,label],index)=>({title,description,category,label,href:`${localizedPath(routeIds[index],locale)}${hashes[index]}`,keywords:[category,label,title]}));
+const items=rows.flatMap(([title,description,category,label],index)=>routeIds[index] ? [{title,description,category,label,href:`${localizedPath(routeIds[index],locale)}${hashes[index]}`,keywords:[category,label,title]}] : []);
 ---
 <KnowledgeLibrary mode="autopilots" items={items} locale={locale} />

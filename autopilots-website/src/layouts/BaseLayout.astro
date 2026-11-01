@@ -119,7 +119,7 @@ const schemaItems = [...globalSchema, ...(schema ? (Array.isArray(schema) ? sche
         const campaignKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid", "fbclid", "msclkid"];
         const campaign = new URLSearchParams(location.search);
         if (campaignKeys.some((key) => campaign.has(key))) {
-          document.querySelectorAll('a[href^="/nl/afspraak/"],a[href^="/nl/bestel-direct/"],a[href^="/voorstel/"]').forEach((anchor) => {
+          document.querySelectorAll('a[href^="/nl/afspraak/"],a[href^="/voorstel/"]').forEach((anchor) => {
             const url = new URL(anchor.href, location.origin);
             campaignKeys.forEach((key) => { if (campaign.has(key) && !url.searchParams.has(key)) url.searchParams.set(key, campaign.get(key)); });
             anchor.href = `${url.pathname}${url.search}${url.hash}`;

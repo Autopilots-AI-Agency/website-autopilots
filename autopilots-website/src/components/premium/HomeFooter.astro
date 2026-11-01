@@ -1,0 +1,89 @@
+---
+const groups = [
+  { title: 'Oplossingen', links: [
+    ['AI Agents', '/nl/producten/#ai-agents'],
+    ['AI Software', '/nl/producten/#ai-software'],
+    ['AI Websites', '/nl/producten/#ai-websites'],
+    ['Alle oplossingen', '/nl/producten/'],
+  ] },
+  { title: 'Branches', links: [
+    ['Autobedrijven', '/nl/voor-wie/autobedrijven/'],
+    ['Dakdekkers', '/nl/voor-wie/dakdekkers/'],
+    ['Installatiebedrijven', '/nl/voor-wie/installatietechniek/'],
+    ['Stichtingen & non-profits', '/nl/voor-wie/non-profit/'],
+    ['Alle branches', '/nl/voor-wie/'],
+  ] },
+  { title: 'Ons werk', links: [
+    ['Animals Faith', '/nl/cases/animals-faith/'],
+    ['Dakcentrale Nederland', '/nl/cases/dakcentrale-nederland/'],
+    ['Heeren 3 Architecten', '/nl/cases/heeren-3-architecten/'],
+  ] },
+  { title: 'Autopilots', links: [
+    ['Kennisbank', '/nl/kennisbank/'],
+    ['AI uitgelegd', '/nl/kennisbank/ai/'],
+    ['Ons team', '/nl/#ap-home-team'],
+  ] },
+];
+---
+<footer id="ap-site-footer" class="home-footer cs-wrap">
+  <div class="hf-intro">
+    <div>
+      <a class="cs-logo" href="/nl/" aria-label="Autopilots homepage">AUTOPILOTS</a>
+      <p>AI, software en websites.</p>
+    </div>
+  </div>
+  <nav class="hf-directory" aria-label="Voettekst navigatie">
+    {groups.map(group => <details class="hf-group" open>
+      <summary>{group.title}<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></summary>
+      <ul>{group.links.map(([label, href]) => <li><a href={href}>{label}</a></li>)}</ul>
+    </details>)}
+  </nav>
+  <div class="hf-bottom">
+    <span>© {new Date().getFullYear()} Autopilots</span>
+    <div><a href="/nl/privacy/">Privacy</a><a href="/nl/voorwaarden/">Algemene voorwaarden</a></div>
+  </div>
+</footer>
+<style is:global>
+  #ap-connected #ap-site-footer{max-width:1120px;padding-block:32px 20px;border-top:1px solid var(--line);position:relative}
+  #ap-site-footer .hf-intro{padding-bottom:24px}
+  #ap-site-footer .hf-intro>div{display:flex;align-items:center;gap:24px}
+  #ap-connected #ap-site-footer .cs-logo{font-size:20px;color:var(--fg)}
+  #ap-connected #ap-site-footer p{font-size:12px;line-height:1.6;margin:0}
+  #ap-site-footer .hf-signature{font-size:24px;line-height:1.5;letter-spacing:-.04em;color:var(--muted)}
+  #ap-site-footer .hf-signature strong{font-weight:500;color:var(--copper)}
+  #ap-connected #ap-site-footer .hf-directory{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;padding-block:20px 22px;border-block:1px solid var(--line)}
+  #ap-site-footer summary{display:flex;align-items:center;justify-content:space-between;list-style:none;font-size:14px;font-weight:600;color:var(--fg);line-height:1.5;margin-bottom:16px}
+  #ap-site-footer summary::-webkit-details-marker{display:none}
+  #ap-site-footer summary svg{display:none}
+  #ap-site-footer ul{list-style:none;padding:0;margin:0}
+  #ap-connected #ap-site-footer li a{display:block;padding-block:5px;font-size:12px;line-height:1.6;color:var(--muted);transition:color .2s}
+  #ap-connected #ap-site-footer a:hover{color:var(--copper)}
+  #ap-site-footer .hf-bottom{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-top:24px;font-size:11px;color:var(--muted);line-height:1.6}
+  #ap-site-footer .hf-bottom>div{display:flex;gap:24px}
+  @media(min-width:701px){#ap-site-footer details>ul{display:block!important}#ap-site-footer summary{pointer-events:none}}
+  @media(max-width:700px){
+    #ap-connected #ap-site-footer{padding-top:36px;width:calc(100% - 48px)}
+    #ap-site-footer .hf-intro{padding-bottom:20px}
+    #ap-site-footer .hf-intro>div{display:block}
+    #ap-site-footer .hf-signature{display:none}
+    #ap-connected #ap-site-footer .cs-logo{font-size:20px}
+    #ap-connected #ap-site-footer p{font-size:13px;margin-top:14px}
+    #ap-connected #ap-site-footer .hf-directory{display:block;padding:0;border-bottom:0}
+    #ap-site-footer .hf-group{border-bottom:1px solid var(--line)}
+    #ap-site-footer summary{cursor:pointer;min-height:50px;margin:0;font-size:13px}
+    #ap-connected #ap-site-footer summary svg{display:block;position:static;width:16px;height:16px;flex:0 0 16px;margin:0;transform:none;color:var(--copper);transition:transform .2s}
+    #ap-connected #ap-site-footer details[open] summary svg{transform:rotate(180deg)}
+    #ap-site-footer ul{padding-bottom:18px}
+    #ap-connected #ap-site-footer li a{min-height:44px;padding-block:11px}
+    #ap-site-footer .hf-bottom{flex-direction:column;align-items:flex-start;gap:14px;padding-top:24px}
+    #ap-site-footer .hf-bottom>span:last-child{display:none}
+    #ap-site-footer .hf-bottom a{display:inline-block;padding-block:8px}
+  }
+</style>
+<script>
+  const footer = document.getElementById('ap-site-footer');
+  const mobileFooter = window.matchMedia('(max-width: 700px)');
+  const syncFooter = () => footer?.querySelectorAll('details').forEach(group => { group.open = !mobileFooter.matches; });
+  syncFooter();
+  mobileFooter.addEventListener('change', syncFooter);
+</script>

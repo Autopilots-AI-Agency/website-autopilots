@@ -2,7 +2,7 @@
 import LocalizedRoutePage from "../../components/i18n/LocalizedRoutePage.astro";
 import LocalizedDutchRoute from "../../components/i18n/LocalizedDutchRoute.astro";
 import { supportedLocales, type SupportedLocale } from "../../i18n/languages";
-import { routeFamilies } from "../../i18n/routes";
+import { routeFamilies, localizedPath } from "../../i18n/routes";
 
 export function getStaticPaths() {
   return supportedLocales.flatMap(locale => routeFamilies
@@ -11,5 +11,6 @@ export function getStaticPaths() {
 }
 interface Props { locale: SupportedLocale; family: (typeof routeFamilies)[number] }
 const { locale, family } = Astro.props;
+if (family.id === 'product.leadsmachine-ai') return Astro.redirect(localizedPath('page.products', locale), 301);
 ---
 {locale === "nl" ? <LocalizedDutchRoute family={family}/> : <LocalizedRoutePage locale={locale} family={family}/>}

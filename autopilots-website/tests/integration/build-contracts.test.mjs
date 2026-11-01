@@ -2,10 +2,22 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 
+test("verwijderde bestelroutes worden niet meer gebouwd", () => {
+  for (const route of [
+    "bestel-direct",
+    "nl/bestel-direct",
+    "en/order",
+    "es/pedido",
+    "de/direkt-bestellen",
+    "it/ordina",
+    "fr/commander",
+  ])
+    assert.equal(existsSync(`dist/${route}/index.html`), false, route);
+});
+
 test("canonieke conversieroutes bestaan in de build", () => {
   for (const route of [
     "nl/afspraak/index.html",
-    "nl/bestel-direct/index.html",
     "nl/voor-wie/autobedrijven/index.html",
     "nl/producten/ai-inboxmedewerker/index.html",
   ])
@@ -29,11 +41,9 @@ test("interactieve elementen hebben een herkenbare bestemming of naam", () => {
     "nl/index.html",
     "nl/producten/index.html",
     "nl/voor-wie/index.html",
-    "nl/proces/index.html",
     "nl/crew/index.html",
     "nl/kennisbank/index.html",
     "nl/afspraak/index.html",
-    "nl/bestel-direct/index.html",
   ]) {
     const html = readFileSync(`dist/${route}`, "utf8");
     assert.doesNotMatch(

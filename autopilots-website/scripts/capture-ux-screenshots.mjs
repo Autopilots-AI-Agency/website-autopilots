@@ -13,7 +13,6 @@ const routes = [
   ["kennisbank", "/nl/kennisbank/"],
   ["artikel", "/nl/kennisbank/wat-is-een-ai-medewerker/"],
   ["afspraak", "/nl/afspraak/"],
-  ["bestellen", "/nl/bestel-direct/"],
 ];
 const viewports = [
   ["desktop", { width: 1440, height: 1000 }],

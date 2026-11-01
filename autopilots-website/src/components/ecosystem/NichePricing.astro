@@ -11,7 +11,7 @@ import { pricingRequest } from "../../i18n/pricingRequest";
 interface Props { niche: Niche; locale?: SupportedLocale; copy?: (typeof nichePageCopy)[SupportedLocale]["prices"] }
 const { niche, locale = "nl", copy = nichePageCopy[locale].prices } = Astro.props;
 const ui = uiCopy[locale];
-const packages = getNichePricing(niche.slug);
+const packages = getNichePricing(niche.slug).filter(item => item.product !== 'leadsmachine-ai');
 const quote = pricingRequest[locale];
 ---
 

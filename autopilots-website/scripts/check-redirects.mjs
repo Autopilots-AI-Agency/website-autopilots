@@ -34,10 +34,8 @@ for (const rule of rules) {
 const core = {
   "/producten": "/nl/producten/",
   "/voor-wie": "/nl/voor-wie/",
-  "/proces": "/nl/proces/",
   "/crew": "/nl/crew/",
   "/afspraak": "/nl/afspraak/",
-  "/bestel-direct": "/nl/bestel-direct/",
   "/kennisbank": "/nl/kennisbank/",
 };
 for (const [from, to] of Object.entries(core))

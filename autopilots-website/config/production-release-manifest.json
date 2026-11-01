@@ -14,8 +14,6 @@
     "src/pages/index.astro",
     "src/pages/[lang]/index.astro",
     "src/pages/afspraak/index.astro",
-    "src/pages/bestel-direct/index.astro",
-    "src/pages/contact/index.astro",
     "src/pages/kennisbank/index.astro",
     "src/pages/lp/autobedrijven/ai-medewerker/index.astro",
     "src/pages/lp/autobedrijven/ai-medewerker/ervaring/index.astro",

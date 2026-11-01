@@ -5,10 +5,8 @@ const routes = [
   "/nl/",
   "/nl/producten/",
   "/nl/voor-wie/autobedrijven/",
-  "/nl/proces/",
   "/nl/kennisbank/",
   "/nl/afspraak/",
-  "/nl/bestel-direct/",
 ];
 for (const route of routes)
   test(`${route} rendert zonder overflow`, async ({ page }) => {
@@ -22,16 +20,11 @@ for (const route of routes)
     expect(overflow).toBeLessThanOrEqual(1);
   });
 
-test("homepage naar AI-scan en bestaande bestelling", async ({ page }) => {
+test("homepage naar AI-scan", async ({ page }) => {
   await page.goto("/nl/");
   await page.locator("[data-quiz-cta]:visible").first().click();
   await expect(page).toHaveURL(/\/nl\/ai-scan\//);
   await expect(page.locator("#intake-questions")).toBeVisible();
-  await page.goto("/nl/bestel-direct/?product=ai-telefoniste");
-  await expect(page.locator("[data-order-product]")).toContainText(
-    "AI Telefoniste",
-  );
-  await expect(page.locator("[data-order-niche]")).toHaveCount(21);
 });
 
 test("kernpagina voldoet geautomatiseerd aan WCAG", async ({ page }) => {

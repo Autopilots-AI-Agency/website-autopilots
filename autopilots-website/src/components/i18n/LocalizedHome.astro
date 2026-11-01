@@ -27,7 +27,7 @@ const visibleNiches = niches.slice(0, 8);
 ---
 
 <BaseLayout title={ui.home.title} description={ui.home.description} canonical={localizedPath("page.home", locale)} locale={locale} contentId="page.home">
-  <Hero eyebrow={ui.home.eyebrow} title={ui.home.heading} accent={ui.home.accent} text={ui.home.lead} primaryLabel={ui.navigation.appointment} primaryHref={localizedPath("page.appointment",locale)} secondaryLabel={ui.navigation.order} secondaryHref={localizedPath("page.order",locale)} chips={products.map(p=>ui.products[p.slug])} panelLabel={text.panelLabel} flowRows={text.heroFlow} />
+  <Hero eyebrow={ui.home.eyebrow} title={ui.home.heading} accent={ui.home.accent} text={ui.home.lead} primaryLabel={ui.navigation.appointment} primaryHref={localizedPath("page.appointment",locale)} secondaryLabel="" secondaryHref="" chips={products.map(p=>ui.products[p.slug])} panelLabel={text.panelLabel} flowRows={text.heroFlow} />
 
   <section class="ap-section"><div class="ap-container"><div class="ap-section-head"><div class="ap-kicker">{ui.navigation.products}</div><h2 class="ap-section-title">{text.productsLead}</h2></div><div class="ap-locale-products">{products.map((product,index)=><a href={localizedPath(`product.${product.slug}`,locale)}><div><VisualIcon type="product" name={product.slug} size="small"/><span>{String(index+1).padStart(2,"0")}</span></div><h3>{ui.products[product.slug]}</h3><strong>{text.view} <span>→</span></strong></a>)}</div></div></section>
 
@@ -35,7 +35,7 @@ const visibleNiches = niches.slice(0, 8);
 
   <section class="ap-section"><div class="ap-container"><div class="ap-section-head"><div class="ap-kicker">{ui.navigation.niches}</div><h2 class="ap-section-title">{text.industries}</h2><p class="ap-text">{text.industriesLead}</p></div><div class="ap-locale-niches">{visibleNiches.map(niche=><a href={nichePath(niche.slug)}><span>{label(niche.slug,niche.name)}</span><strong aria-hidden="true">→</strong></a>)}</div><a class="ap-text-link ap-all-niches-link" href={localizedPath("page.niches",locale)}>{text.allNiches} →</a></div></section>
 
-  <section class="ap-section"><div class="ap-container"><div class="ap-locale-delivery"><div><div class="ap-kicker">{ui.navigation.process}</div><h2>{text.delivery}</h2><p>{text.deliveryText}</p></div><a class="ap-button ap-button-primary" href={localizedPath("page.process",locale)}>{text.cta}</a></div></div></section>
+  <section class="ap-section"><div class="ap-container"><div class="ap-locale-delivery"><div><div class="ap-kicker">{ui.navigation.process}</div><h2>{text.delivery}</h2><p>{text.deliveryText}</p></div><a class="ap-button ap-button-primary" href={localizedPath("page.appointment",locale)}>{text.cta}</a></div></div></section>
 </BaseLayout>
 
 <style>

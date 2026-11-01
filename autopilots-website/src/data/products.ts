@@ -119,7 +119,7 @@ export const products: Product[] = [
     fit: [
       { title: "Sterke match", text: "Bedrijven met structurele leadinstroom, offertes of no-shows." },
       { title: "Lichter kan", text: "Bij enkele warme aanvragen per maand kan een simpele taakflow voldoende zijn." },
-      { title: "Combineer wanneer", text: "Leadsmachine AI past wanneer ook advertenties, landingspagina en intake onderdeel zijn." }
+      { title: "Combineer wanneer", text: "AI Software past wanneer klantdossiers, planning en opvolging samen moeten komen." }
     ],
     faq: [
       { question: "Stopt de AI wanneer iemand niet geïnteresseerd is?", answer: "Ja. Afmeldingen en duidelijke negatieve reacties stoppen de route en worden correct vastgelegd." },

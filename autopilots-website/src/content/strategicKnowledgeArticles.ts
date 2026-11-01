@@ -66,7 +66,7 @@ const clusterA: KnowledgeArticle[] = [
     ],
     examples: [{ title: "Scenario: autobedrijf", text: "Een platformlead vraagt buiten openingstijd naar een voorraadmodel. De AI controleert beschikbaarheid, verzamelt inruilgegevens, stelt een proefritmoment voor en zet de context bij de juiste verkoper." }, { title: "Scenario: installatiebedrijf", text: "Een storing komt telefonisch binnen. De AI vraagt foutcode, veiligheid, adres en contract uit en maakt afhankelijk van urgentie een werkbon of menselijke escalatie." }],
     faq: [{ question: "Is een AI-medewerker hetzelfde als ChatGPT?", answer: "Nee. Een taalmodel kan onderdeel zijn van de oplossing. De AI-medewerker bestaat daarnaast uit bedrijfskennis, regels, tools, rechten, logging, monitoring en menselijke fallback." }, { question: "Kan een AI-medewerker zelfstandig beslissen?", answer: "Alleen binnen de vooraf ontworpen rol. Harde regels en autorisatie horen buiten het taalmodel te worden afgedwongen. Impactvolle of onzekere situaties vragen bevestiging of overdracht." }, { question: "Waar begin je met een AI-medewerker?", answer: "Kies één terugkerende klantreis met duidelijke gegevens en uitkomst. Beschrijf uitzonderingen, eigenaar, systemen en kwaliteitscriteria voordat je techniek kiest." }],
-    related: [{ label: "Product", title: "Bekijk de AI Inboxmedewerker.", href: "/nl/producten/ai-inboxmedewerker/" }, { label: "Proces", title: "Bekijk hoe een AI-medewerker live gaat.", href: "/nl/proces/" }, { label: "Branche", title: "Bekijk AI voor autobedrijven.", href: "/nl/voor-wie/autobedrijven/" }],
+    related: [{ label: "Product", title: "Bekijk de AI Inboxmedewerker.", href: "/nl/producten/ai-inboxmedewerker/" }, { label: "Branche", title: "Bekijk AI voor autobedrijven.", href: "/nl/voor-wie/autobedrijven/" }],
     sources: [openAiAgents, openAiTools, openAiSafety, uwvKlantcontact]
   }),
   article({
@@ -213,7 +213,7 @@ const clusterC: KnowledgeArticle[] = [
     ],
     examples: [{ title: "Lead", text: "De AI vult bron, behoefte en voorkeursmoment voor; een gevalideerde tool maakt de taak en koppelt de juiste verkoopeigenaar." }, { title: "Service", text: "De AI schrijft melding en urgentiesignalen naar een ticket, maar technisch of veiligheidsbesluit blijft bij de bevoegde medewerker." }],
     faq: [{ question: "Heeft een AI-agent automatisch toegang tot het hele CRM?", answer: "Nee. De applicatie bepaalt welke tools en rechten bestaan. Geef alleen toegang tot noodzakelijke objecten en acties." }, { question: "Kan AI CRM-data automatisch opschonen?", answer: "AI kan mogelijke duplicaten of ontbrekende velden signaleren. Samenvoegen en verwijderen vraagt sterke regels, audit en vaak menselijke controle." }, { question: "Wat als het CRM tijdelijk niet bereikbaar is?", answer: "Bevestig geen niet-uitgevoerde actie. Gebruik een gecontroleerde wachtrij of menselijke fallback en verwerk pas verder na een aantoonbaar succesvolle write." }],
-    related: [{ label: "Product", title: "Bekijk Autopilots CRM.", href: "/nl/producten/autopilots-crm/" }, { label: "Pillar", title: "Lees over AI voor inboxkanalen.", href: "/nl/kennisbank/ai-email-whatsapp-websitechat/" }, { label: "Proces", title: "Bekijk koppelingen in het implementatieproces.", href: "/nl/proces/" }],
+    related: [{ label: "Product", title: "Bekijk Autopilots CRM.", href: "/nl/producten/autopilots-crm/" }, { label: "Pillar", title: "Lees over AI voor inboxkanalen.", href: "/nl/kennisbank/ai-email-whatsapp-websitechat/" }, ],
     sources: [openAiTools, openAiAgents, openAiSafety]
   }),
   article({
@@ -232,7 +232,7 @@ const clusterC: KnowledgeArticle[] = [
     ],
     examples: [{ title: "Veilige start", text: "Een AI leest een afspraakverzoek, controleert beschikbare blokken en stelt twee opties voor. Boeken gebeurt na bevestiging." }, { title: "Beperkte autonomie", text: "Bij een veiligheidsmelding verzamelt de AI locatie en signalen, geeft alleen goedgekeurde noodinstructie en schakelt direct een medewerker in." }],
     faq: [{ question: "Welke processen automatiseer je meestal eerst?", answer: "Terugkerende intake, statusvragen, afspraakvoorstellen, eenvoudige kwalificatie en interne routering zijn vaak goed af te bakenen. Beoordeel altijd de eigen context." }, { question: "Is meer autonomie altijd efficiënter?", answer: "Nee. Fouten, herstelwerk en klantfrictie kunnen toenemen. De juiste autonomie levert een betrouwbare uitkomst met passende controle." }, { question: "Kun je een slecht proces met AI verbeteren?", answer: "AI kan knelpunten zichtbaar maken, maar een onduidelijk proces wordt niet vanzelf betrouwbaar. Leg eerst eigenaarschap, regels en data vast." }],
-    related: [{ label: "Proces", title: "Bekijk de implementatieroute.", href: "/nl/proces/" }, { label: "Pillar", title: "Lees wat een AI-medewerker is.", href: "/nl/kennisbank/wat-is-een-ai-medewerker/" }, { label: "Branche", title: "Bekijk AI voor installatiebedrijven.", href: "/nl/voor-wie/installatietechniek/" }],
+    related: [{ label: "Pillar", title: "Lees wat een AI-medewerker is.", href: "/nl/kennisbank/wat-is-een-ai-medewerker/" }, { label: "Branche", title: "Bekijk AI voor installatiebedrijven.", href: "/nl/voor-wie/installatietechniek/" }],
     sources: [openAiAgents, openAiTools, openAiSafety, apAcmChatbots]
   })
 ];
@@ -254,7 +254,7 @@ const clusterD: KnowledgeArticle[] = [
     ],
     examples: [{ title: "Pilot autobedrijf", text: "Start met gemiste voorraadoproepen, alleen lezen van voorraad en voorstellen van proefritten. Boeken volgt pas na bevestiging en alle writes worden gecontroleerd." }, { title: "Pilot vastgoedbeheer", text: "Start met classificatie en ticketconcept voor reparatiemeldingen; urgentie en leveranciersopdracht blijven in de eerste fase bij een medewerker." }],
     faq: [{ question: "Hoe lang duurt een implementatie?", answer: "Dat hangt af van scope, bronkwaliteit, integraties, rechten, testcapaciteit en snelheid van besluitvorming. Een vaste universele doorlooptijd is niet betrouwbaar." }, { question: "Moet je eerst alle data opschonen?", answer: "Niet alle data, wel de bronnen en velden die de gekozen route gebruikt. Maak verouderde of tegenstrijdige informatie expliciet." }, { question: "Wie moet eigenaar zijn?", answer: "Een inhoudelijke proceseigenaar met mandaat, ondersteund door IT, privacy/security en de medewerkers die de overdracht ontvangen." }],
-    related: [{ label: "Proces", title: "Bekijk het interactieve Autopilots-proces.", href: "/nl/proces/" }, { label: "Kwaliteit", title: "Lees hoe je verkeerde antwoorden voorkomt.", href: "/nl/kennisbank/verkeerde-ai-antwoorden-hallucinaties-voorkomen/" }, { label: "Afspraak", title: "Bespreek een afgebakende eerste route.", href: "/nl/afspraak/" }],
+    related: [{ label: "Kwaliteit", title: "Lees hoe je verkeerde antwoorden voorkomt.", href: "/nl/kennisbank/verkeerde-ai-antwoorden-hallucinaties-voorkomen/" }, { label: "Afspraak", title: "Bespreek een afgebakende eerste route.", href: "/nl/afspraak/" }],
     sources: [openAiAgents, openAiEvals, openAiSafety, euAiLiteracy]
   }),
   article({
@@ -292,7 +292,7 @@ const clusterD: KnowledgeArticle[] = [
     ],
     examples: [{ title: "Klacht", text: "De AI bevestigt ontvangst, doet geen schuld- of compensatietoezegging en draagt tijdlijn en klantvraag over aan service." }, { title: "Veiligheid", text: "De AI geeft alleen goedgekeurde noodinstructie, verzamelt locatie en contact en schakelt de storingsroute in." }],
     faq: [{ question: "Wanneer moet AI altijd een mens inschakelen?", answer: "Dat volgt uit de eigen risicoanalyse. Veelgebruikte triggers zijn klantverzoek, veiligheid, klachten, privacy, professioneel oordeel, lage zekerheid en mislukte kritieke tools." }, { question: "Is meer zelfstandige afhandeling altijd beter?", answer: "Nee. De juiste klantuitkomst en beheersing wegen zwaarder dan een laag overdrachtspercentage." }, { question: "Wat als geen medewerker beschikbaar is?", answer: "Leg een bevestigde terugbel- of beoordelingsroute vast met eigenaar, urgentie en status. Laat de AI geen oplossing of tijdstip verzinnen." }],
-    related: [{ label: "Kwaliteit", title: "Lees hoe je verkeerde antwoorden beperkt.", href: "/nl/kennisbank/verkeerde-ai-antwoorden-hallucinaties-voorkomen/" }, { label: "Product", title: "Bekijk de AI Telefoniste.", href: "/nl/producten/ai-telefoniste/" }, { label: "Proces", title: "Bekijk livegang en monitoring.", href: "/nl/proces/" }],
+    related: [{ label: "Kwaliteit", title: "Lees hoe je verkeerde antwoorden beperkt.", href: "/nl/kennisbank/verkeerde-ai-antwoorden-hallucinaties-voorkomen/" }, { label: "Product", title: "Bekijk de AI Telefoniste.", href: "/nl/producten/ai-telefoniste/" }, ],
     sources: [apAcmChatbots, openAiSafety, openAiEvals]
   })
 ];

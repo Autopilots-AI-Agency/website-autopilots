@@ -1,5 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { intakePath } from '../../config/intake';
+import { solutionItems } from '../../data/solutions';
 import type { Product } from "../../data/products";
 import { niches } from "../../data/niches";
 import VisualIcon from "../ui/VisualIcon.astro";
@@ -23,9 +25,9 @@ const scopeLabels = {
   fr:{scope:"Spécification du produit",included:"Inclus dans la configuration",result:"Résultat au quotidien",rules:"Connaissances, règles et transfert"}
 }[locale];
 const productPath = localizedPath(`product.${sourceProduct.slug}`, locale);
-const productsPath = localizedPath("page.products", locale);
-const appointmentPath = localizedPath("page.appointment", locale);
-const orderPath = localizedPath("page.order", locale);
+const pillar = solutionItems(locale)[sourceProduct.slug === 'autopilots-crm' ? 1 : 0];
+const productsPath = pillar.href;
+const appointmentPath = intakePath(locale);
 const nicheRoutes = Object.fromEntries(niches.map((niche) => [niche.slug, localizedPath(`niche.${niche.slug}`, locale)]));
 const clientData = JSON.stringify({ product, niches: localizedNiches, locale, copy, nicheRoutes }).replaceAll("<", "\\u003c");
 const schema = [
@@ -42,7 +44,7 @@ const schema = [
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: copy.home, item: new URL(localizedPath("page.home", locale), Astro.site ?? Astro.url.origin).toString() },
-      { "@type": "ListItem", position: 2, name: copy.products, item: new URL(productsPath, Astro.site ?? Astro.url.origin).toString() },
+      { "@type": "ListItem", position: 2, name: pillar.name, item: new URL(productsPath, Astro.site ?? Astro.url.origin).toString() },
       { "@type": "ListItem", position: 3, name: product.name, item: new URL(productPath, Astro.site ?? Astro.url.origin).toString() }
     ]
   },
@@ -57,7 +59,7 @@ const schema = [
 <BaseLayout title={product.seoTitle} description={product.metaDescription} canonical={productPath} schema={schema} locale={locale} contentId={`product.${sourceProduct.slug}`}>
   <article class:list={["ap-ecosystem", "ap-product-page", `is-${product.slug}`]} data-product-root data-product={product.slug}>
     <nav class="ap-breadcrumb" aria-label="Broodkruimel">
-      <div class="ap-container"><a href={localizedPath("page.home", locale)}>{copy.home}</a><span aria-hidden="true">/</span><a href={productsPath}>{copy.products}</a><span aria-hidden="true">/</span><span aria-current="page">{product.name}</span></div>
+      <div class="ap-container"><a href={localizedPath("page.home", locale)}>{copy.home}</a><span aria-hidden="true">/</span><a href={productsPath}>{pillar.name}</a><span aria-hidden="true">/</span><span aria-current="page">{product.name}</span></div>
     </nav>
 
     <section class="ap-eco-hero">
@@ -69,7 +71,7 @@ const schema = [
           <p class="ap-lead">{product.intro}</p>
           <div class="ap-actions">
             <a class="ap-button ap-button-primary" data-ap-event="appointment_cta_clicked" data-ap-product={product.slug} href={`${appointmentPath}?product=${product.slug}`}>{copy.appointment}</a>
-            <a class="ap-text-link" data-ap-event="direct_order_clicked" data-ap-product={product.slug} href={`${orderPath}?product=${product.slug}`}>{copy.order} →</a>
+            
           </div>
           <a class="ap-text-link" href="#interactieve-demo">{copy.demoFirst} →</a>
           <p class="ap-inline-proof"><span class="ap-proof-dot" aria-hidden="true"></span><span>{product.promise}</span></p>
@@ -196,7 +198,7 @@ const schema = [
     <section class="ap-section ap-final-section">
       <div class="ap-container ap-final-card">
         <div><div class="ap-kicker">{copy.next}</div><h2>{copy.nextTitle}</h2><p>{copy.nextText}</p></div>
-        <div class="ap-actions"><a class="ap-button ap-button-primary" data-ap-event="appointment_cta_clicked" data-ap-product={product.slug} href={`${appointmentPath}?product=${product.slug}`}>{copy.appointment}</a><a class="ap-text-link" data-ap-event="direct_order_clicked" data-ap-product={product.slug} href={`${orderPath}?product=${product.slug}`}>{copy.order} →</a></div>
+        <div class="ap-actions"><a class="ap-button ap-button-primary" data-ap-event="appointment_cta_clicked" data-ap-product={product.slug} href={`${appointmentPath}?product=${product.slug}`}>{copy.appointment}</a></div>
       </div>
     </section>
   </article>
