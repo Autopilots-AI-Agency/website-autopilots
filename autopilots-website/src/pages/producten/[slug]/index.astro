@@ -8,6 +8,7 @@ export function getStaticPaths() {
 
 interface Props { product: Product }
 const { product } = Astro.props;
+if (product.slug === 'leadsmachine-ai') return Astro.redirect('/nl/producten/', 301);
 ---
 
 <ProductPage product={product} />

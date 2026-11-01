@@ -24,16 +24,10 @@
 /voor-wie/* /nl/voor-wie/:splat 301!
 /kennisbank /nl/kennisbank/ 301!
 /kennisbank/* /nl/kennisbank/:splat 301!
-/proces /nl/proces/ 301!
-/proces/* /nl/proces/:splat 301!
 /crew /nl/crew/ 301!
 /crew/* /nl/crew/:splat 301!
 /afspraak /nl/afspraak/ 301!
 /afspraak/* /nl/afspraak/:splat 301!
-/bestel-direct /nl/bestel-direct/ 301!
-/bestel-direct/* /nl/bestel-direct/:splat 301!
-/contact /nl/contact/ 301!
-/contact/* /nl/contact/:splat 301!
 /privacy /nl/privacy/ 301!
 /privacy/* /nl/privacy/:splat 301!
 /voorwaarden /nl/voorwaarden/ 301!

@@ -67,7 +67,7 @@ const clientData = JSON.stringify(offers.map((offer) => offer.product)).replaceA
     <section class="ap-section">
       <div class="ap-container ap-two-column">
         <div><div class="ap-section-head"><div class="ap-kicker">{text.after}</div><h2>{text.afterH}</h2></div><ol class="ap-workflow-list">{text.steps.map((step, index) => <li><span>{String(index + 1).padStart(2, "0")}</span><div><h3>{step}</h3><p>{index === 4 ? text.last : text.stepP}</p></div></li>)}</ol></div>
-        <aside class="ap-integration-card"><div class="ap-kicker">{text.legal}</div><h3>{text.legalH}</h3><p>{text.legalP} <a href={localizedPath("page.privacy",locale)}>Privacy</a> · <a href={localizedPath("page.terms",locale)}>Terms</a>.</p><a class="ap-button ap-button-secondary" href={localizedPath("page.contact",locale)}>{text.contact}</a></aside>
+        <aside class="ap-integration-card"><div class="ap-kicker">{text.legal}</div><h3>{text.legalH}</h3><p>{text.legalP} <a href={localizedPath("page.privacy",locale)}>Privacy</a> · <a href={localizedPath("page.terms",locale)}>Terms</a>.</p><a class="ap-button ap-button-secondary" href="mailto:support@auto-pilots.io">{text.contact}</a></aside>
       </div>
     </section>
   </article>

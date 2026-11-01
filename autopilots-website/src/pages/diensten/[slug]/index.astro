@@ -12,5 +12,6 @@ export function getStaticPaths() {
   return Object.keys(redirects).map((slug) => ({ params: { slug }, props: { target: redirects[slug] } }));
 }
 const { target } = Astro.props;
+if (target === 'leadsmachine-ai') return Astro.redirect('/nl/producten/', 301);
 return Astro.redirect(`/nl/producten/${target}/`, 301);
 ---

@@ -7,15 +7,12 @@ import ProductsPage from "../../pages/producten/index.astro";
 import ProductPage from "../ecosystem/ProductPage.astro";
 import NichesPage from "../../pages/voor-wie/index.astro";
 import NichePage from "../ecosystem/NichePage.astro";
-import ProcessPage from "../../pages/proces/index.astro";
 import CrewPage from "../../pages/crew/index.astro";
 import KnowledgePage from "../../pages/kennisbank/index.astro";
 import AiKnowledgePage from "../../pages/kennisbank/ai/index.astro";
 import AutopilotsKnowledgePage from "../../pages/kennisbank/autopilots/index.astro";
 import KnowledgeArticlePage from "../../pages/kennisbank/[slug]/index.astro";
 import AppointmentPage from "../../pages/afspraak/index.astro";
-import OrderPage from "../../pages/bestel-direct/index.astro";
-import ContactPage from "../../pages/contact/index.astro";
 import PrivacyPage from "../../pages/privacy/index.astro";
 import TermsPage from "../../pages/voorwaarden/index.astro";
 import CampaignEntryPage from "../../pages/lp/autobedrijven/ai-medewerker/index.astro";
@@ -33,15 +30,12 @@ const article = family.type === "article" ? knowledgeArticles.find((item) => `ar
 {product && <ProductPage product={product} />}
 {family.id === "page.niches" && <NichesPage />}
 {niche && <NichePage niche={niche} />}
-{family.id === "page.process" && <ProcessPage />}
 {family.id === "page.crew" && <CrewPage />}
 {family.id === "page.knowledge" && <KnowledgePage />}
 {family.id === "page.knowledge.ai" && <AiKnowledgePage />}
 {family.id === "page.knowledge.autopilots" && <AutopilotsKnowledgePage />}
 {article && <KnowledgeArticlePage article={article} />}
 {family.id === "page.appointment" && <AppointmentPage />}
-{family.id === "page.order" && <OrderPage />}
-{family.id === "page.contact" && <ContactPage />}
 {family.id === "page.privacy" && <PrivacyPage />}
 {family.id === "page.terms" && <TermsPage />}
 {family.id === "landing.autobedrijven-ai-medewerker" && <CampaignEntryPage locale="nl" />}

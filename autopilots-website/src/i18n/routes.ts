@@ -12,14 +12,11 @@ const generalRoutes: RouteFamily[] = [
   page("page.home", { nl: "", en: "", es: "", de: "", it: "", fr: "" }),
   page("page.products", { nl: "producten", en: "products", es: "productos", de: "produkte", it: "prodotti", fr: "produits" }),
   page("page.niches", { nl: "voor-wie", en: "industries", es: "sectores", de: "branchen", it: "settori", fr: "secteurs" }),
-  page("page.process", { nl: "proces", en: "process", es: "proceso", de: "prozess", it: "processo", fr: "processus" }),
   page("page.crew", { nl: "crew", en: "team", es: "equipo", de: "team", it: "team", fr: "equipe" }),
   page("page.knowledge", { nl: "kennisbank", en: "knowledge", es: "conocimientos", de: "wissen", it: "conoscenza", fr: "connaissances" }),
   page("page.knowledge.ai", { nl: "kennisbank/ai", en: "knowledge/ai", es: "conocimientos/ia", de: "wissen/ki", it: "conoscenza/ai", fr: "connaissances/ia" }),
   page("page.knowledge.autopilots", { nl: "kennisbank/autopilots", en: "knowledge/autopilots", es: "conocimientos/autopilots", de: "wissen/autopilots", it: "conoscenza/autopilots", fr: "connaissances/autopilots" }),
   page("page.appointment", { nl: "afspraak", en: "book-a-call", es: "cita", de: "termin", it: "appuntamento", fr: "rendez-vous" }),
-  page("page.order", { nl: "bestel-direct", en: "order", es: "pedido", de: "direkt-bestellen", it: "ordina", fr: "commander" }),
-  page("page.contact", { nl: "contact", en: "contact", es: "contacto", de: "kontakt", it: "contatti", fr: "contact" }),
   page("page.privacy", { nl: "privacy", en: "privacy", es: "privacidad", de: "datenschutz", it: "privacy", fr: "confidentialite" }),
   page("page.terms", { nl: "voorwaarden", en: "terms", es: "condiciones", de: "bedingungen", it: "condizioni", fr: "conditions" })
 ];

@@ -19,7 +19,7 @@ const slug = (index: number) => `artikel-${index + 1}`;
       <div class="ap-terms-document" lang="nl">
         <p class="ap-terms-language" lang={locale}><strong>{copy.languageNotice}</strong></p>
         {copy.sections.map((section,index)=><section id={slug(index)} class="ap-terms-section"><h2>{section.title}</h2>{section.paragraphs.map(paragraph=><p>{paragraph}</p>)}</section>)}
-        <div class="ap-terms-contact"><p>{copy.languageNotice}</p><a class="ap-button ap-button-secondary" href={localizedPath("page.contact",locale)}>{copy.contact}</a></div>
+        <div class="ap-terms-contact"><p>{copy.languageNotice}</p><a class="ap-button ap-button-secondary" href="mailto:support@auto-pilots.io">{copy.contact}</a></div>
       </div>
     </div></section>
   </article>

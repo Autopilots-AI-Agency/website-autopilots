@@ -1,5 +1,5 @@
 ---
-import { products } from "../../data/products";
+import { solutionItems } from "../../data/solutions";
 import { niches } from "../../data/niches";
 import VisualIcon from "../ui/VisualIcon.astro";
 import LanguageSwitcher from "./LanguageSwitcher.astro";
@@ -31,7 +31,7 @@ const nicheCopy = (slug: string, fallback: string) => localizedNiche(locale, slu
             <a class="ap-text-link" href={localizedPath("page.products", locale)}>{copy.header.productsCta} →</a>
           </div>
           <div class="ap-mega-grid">
-            {products.map((product) => <a class="ap-mega-link" href={productPath(product.slug)}><VisualIcon type="product" name={product.slug} size="small" /><div><strong>{copy.products[product.slug]}</strong><span>{localizedProductPromise(locale, product.slug, product.promise)}</span></div></a>)}
+            {solutionItems(locale).map((solution) => <a class="ap-mega-link" href={solution.href}><div><strong>{solution.name}</strong><span>{solution.description}</span></div></a>)}
           </div>
         </div>
       </div>
@@ -47,9 +47,9 @@ const nicheCopy = (slug: string, fallback: string) => localizedNiche(locale, slu
           </div>
         </div>
       </div>
-      <a href={localizedPath("page.process", locale)}>{copy.navigation.process}</a><a href={localizedPath("page.knowledge", locale)}>{copy.navigation.knowledge}</a><a href={localizedPath("page.crew", locale)}>{copy.navigation.crew}</a><a class="ap-nav-mobile-only" href={localizedPath("page.appointment", locale)}>{copy.navigation.appointment}</a><a class="ap-nav-mobile-only" href={localizedPath("page.order", locale)}>{copy.navigation.order}</a>
+      <a href={localizedPath("page.knowledge", locale)}>{copy.navigation.knowledge}</a><a href={localizedPath("page.crew", locale)}>{copy.navigation.crew}</a><a class="ap-nav-mobile-only" href={localizedPath("page.appointment", locale)}>{copy.navigation.appointment}</a>
     </nav>
-    <div class="ap-header-actions"><a class="ap-header-order" href={localizedPath("page.order", locale)}>{copy.navigation.order}</a><a class="ap-button ap-button-primary ap-header-cta" href={localizedPath("page.appointment", locale)}>{copy.navigation.appointment}</a><LanguageSwitcher locale={locale} contentId={contentId} /></div>
+    <div class="ap-header-actions"><a class="ap-button ap-button-primary ap-header-cta" href={localizedPath("page.appointment", locale)}>{copy.navigation.appointment}</a><LanguageSwitcher locale={locale} contentId={contentId} /></div>
   </div>
 </header>
 

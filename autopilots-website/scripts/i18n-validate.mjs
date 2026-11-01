@@ -15,6 +15,20 @@ for (const locale of locales) {
   }
   for (const file of walk(root).filter((file) => file.endsWith(".html"))) {
     const html = readFileSync(file, "utf8");
+    // Astro emits minimal HTML for redirects, without a language-bearing document.
+    // Only exempt localised, existing destinations with noindex and canonical.
+    const redirect = html.match(
+      /http-equiv="refresh" content="0;url=([^"?]+)"/,
+    );
+    if (
+      redirect &&
+      html.includes('name="robots" content="noindex"') &&
+      html.includes('rel="canonical"') &&
+      redirect[1].startsWith(`/${locale}/`) &&
+      !redirect[1].includes("..") &&
+      existsSync(join("dist", redirect[1], "index.html"))
+    )
+      continue;
     if (
       !html.includes(`<html lang="${locale}-`) &&
       !(locale === "en" && html.includes('<html lang="en-GB"'))

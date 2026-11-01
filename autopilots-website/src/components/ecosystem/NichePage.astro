@@ -1,434 +1,179 @@
 ---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import type { Niche } from '../../data/niches';
+import type { SupportedLocale } from '../../i18n/languages';
+import { localizedNicheData } from '../../i18n/catalog';
+import { localizedPath } from '../../i18n/routes';
+import { nichePageCopy } from '../../i18n/nichePage';
+import { solutionCopy, solutionItems } from '../../data/solutions';
 import { intakePath } from '../../config/intake';
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import { productBySlug, products } from "../../data/products";
-import type { Niche } from "../../data/niches";
-import { pricingRequest } from "../../i18n/pricingRequest";
-import { getNicheProposalBlueprint } from "../../data/nicheProposals";
-import VisualIcon from "../ui/VisualIcon.astro";
-import NichePricing from "./NichePricing.astro";
-import RoiCalculator from "./RoiCalculator.astro";
-import type { SupportedLocale } from "../../i18n/languages";
-import { localizedPath } from "../../i18n/routes";
-import { localizedNicheData } from "../../i18n/catalog";
-import { localizedProductData } from "../../i18n/productPage";
-import { uiCopy } from "../../i18n/ui";
-import { nichePageCopy } from "../../i18n/nichePage";
-
 interface Props { niche: Niche; locale?: SupportedLocale }
-const { niche: sourceNiche, locale = "nl" } = Astro.props;
-const niche = localizedNicheData(locale, sourceNiche);
+const { niche: source, locale = 'nl' } = Astro.props;
+const niche = localizedNicheData(locale, source);
 const c = nichePageCopy[locale];
-const ui = uiCopy[locale];
-const a11y={
- nl:{home:"Home",icon:"icoon",conversation:"Voorbeeldgesprek voor",route:"Route die de AI-agent opbouwt",demo:"AI-demonstratie voor",brain:"AI-brein voor"},
- en:{home:"Home",icon:"icon",conversation:"Example conversation for",route:"Route built by the AI agent",demo:"AI demonstration for",brain:"AI brain for"},
- es:{home:"Inicio",icon:"icono",conversation:"Conversación de ejemplo para",route:"Ruta creada por el agente de IA",demo:"Demostración de IA para",brain:"Cerebro de IA para"},
- de:{home:"Startseite",icon:"Symbol",conversation:"Beispielgespräch für",route:"Von der KI aufgebaute Route",demo:"KI-Demonstration für",brain:"KI-Gehirn für"},
- it:{home:"Home",icon:"icona",conversation:"Conversazione di esempio per",route:"Percorso creato dall'agente AI",demo:"Dimostrazione AI per",brain:"Cervello AI per"},
- fr:{home:"Accueil",icon:"icône",conversation:"Exemple de conversation pour",route:"Parcours construit par l'agent IA",demo:"Démonstration IA pour",brain:"Cerveau IA pour"}
+const s = solutionCopy(locale);
+const solutions = solutionItems(locale);
+const labels = {
+ nl: ['In de praktijk', 'Eén klantvraag.', 'Een helder vervolg.', 'Voorbeeld voor jullie branche', 'Wat bouwen we voor', 'Aansluiten op jullie werkwijze.', 'Afstemming en technische mogelijkheden bepalen welke koppelingen passen.', 'Van plan naar praktijk.', 'Eenmalige implementatie. Maandelijks beheer.', 'Waar kan jullie bedrijf tijd winnen?', 'Menselijk wanneer het nodig is.', 'Aanvraag', 'Klantdossier', 'Website', 'Relevante toepassingen', 'Jullie dagelijkse praktijk'],
+ en: ['In practice', 'One customer question.', 'A clear next step.', 'Example for your industry', 'What we build for', 'Built around your workflow.', 'Scope and technical capabilities determine suitable integrations.', 'From plan to practice.', 'One-time implementation. Monthly management.', 'Where could your business save time?', 'Human support when needed.', 'Enquiry', 'Customer record', 'Website', 'Relevant applications', 'Your daily work'],
+ de: ['In der Praxis', 'Eine Kundenfrage.', 'Ein klarer nächster Schritt.', 'Beispiel für Ihre Branche', 'Was wir bauen für', 'Passend zu Ihren Abläufen.', 'Umfang und technische Möglichkeiten bestimmen passende Schnittstellen.', 'Vom Plan zur Praxis.', 'Einmalige Implementierung. Monatliche Betreuung.', 'Wo kann Ihr Unternehmen Zeit sparen?', 'Menschen, wenn es darauf ankommt.', 'Anfrage', 'Kundendossier', 'Website', 'Passende Anwendungen', 'Ihr Arbeitsalltag'],
+ fr: ['En pratique', 'Une question client.', 'Une suite claire.', 'Exemple pour votre secteur', 'Ce que nous créons pour', 'Adapté à votre façon de travailler.', 'Le périmètre et les possibilités techniques déterminent les intégrations adaptées.', 'Du projet à la pratique.', 'Mise en place initiale. Gestion mensuelle.', 'Où votre entreprise peut-elle gagner du temps ?', 'Un relais humain si nécessaire.', 'Demande', 'Dossier client', 'Site web', 'Applications pertinentes', 'Votre quotidien'],
+ es: ['En la práctica', 'Una consulta.', 'Un siguiente paso claro.', 'Ejemplo para tu sector', 'Lo que creamos para', 'Adaptado a vuestra forma de trabajar.', 'El alcance y las posibilidades técnicas determinan las integraciones adecuadas.', 'Del plan a la práctica.', 'Implementación inicial. Gestión mensual.', '¿Dónde puede ahorrar tiempo tu empresa?', 'Personas cuando hacen falta.', 'Solicitud', 'Ficha de cliente', 'Sitio web', 'Aplicaciones relevantes', 'Tu trabajo diario'],
+ it: ['In pratica', 'Una domanda.', 'Un prossimo passo chiaro.', 'Esempio per il tuo settore', 'Cosa creiamo per', 'Adatto al vostro lavoro.', 'Ambito e possibilità tecniche determinano le integrazioni adatte.', 'Dal progetto alla pratica.', 'Implementazione iniziale. Gestione mensile.', 'Dove può risparmiare tempo la tua azienda?', 'Persone quando serve.', 'Richiesta', 'Scheda cliente', 'Sito web', 'Applicazioni pertinenti', 'Il tuo lavoro quotidiano']
 }[locale];
-const contentId = `niche.${sourceNiche.slug}`;
-const recommended = [...niche.primaryProducts, ...niche.optionalProducts].map((slug) => localizedProductData(locale, productBySlug[slug]));
-const productLabels = {
-  nl:{solves:"Dit lost het op",included:"Inbegrepen in de inrichting",result:"Operationeel resultaat"},
-  en:{solves:"What this solves",included:"Included in the setup",result:"Operational result"},
-  de:{solves:"Das wird gelöst",included:"In der Einrichtung enthalten",result:"Operatives Ergebnis"},
-  es:{solves:"Esto resuelve",included:"Incluido en la configuración",result:"Resultado operativo"},
-  it:{solves:"Cosa risolve",included:"Incluso nella configurazione",result:"Risultato operativo"},
-  fr:{solves:"Ce que cela résout",included:"Inclus dans la configuration",result:"Résultat opérationnel"}
-}[locale];
-const proposal = locale === "nl" ? getNicheProposalBlueprint(niche) : {
-  ...getNicheProposalBlueprint(niche),
-  handoff: c.team,
-  brainSteps: niche.workflow.slice(0, 4).map((step, index) => ({ key:`step-${index}`, label:step.title, title:step.title, text:step.text }))
-};
-const demoConversations: Record<string, { customer: string; ai: string; followup: string }> = {
-  tandartsen: {
-    customer: "Hebben jullie morgen na 15:00 uur nog plek voor een controle?",
-    ai: "Zeker. Bent u al patiënt en gaat het om een reguliere controle of heeft u klachten?",
-    followup: "Ik ben al patiënt. Het gaat om een gewone controle."
-  }
-};
-const demoConfirmations: Record<string, string> = {
-  autobedrijven: "Geregeld. De proefrit staat zaterdag om 11:00 uur als optie klaar en sales heeft alle inruilgegevens ontvangen.",
-  dakdekkers: "Geregeld. De spoedmelding staat bovenaan bij de juiste ploeg; de klant ontvangt direct veiligheidsadvies en een tijdvak.",
-  hoveniers: "Geregeld. De schouw is voorbereid met oppervlak, foto's, budgetrichting en een logisch moment in de regio.",
-  installatietechniek: "Geregeld. De storing is veilig getrieerd en met foutcode, contractstatus en locatie naar de juiste monteur gestuurd.",
-  vastgoedbeheerders: "Geregeld. Het pand en dossier zijn herkend, de reparatie is toegewezen en de huurder krijgt automatisch statusupdates.",
-  kapperszaken: "Geregeld. De juiste behandeltijd is gevonden, de afspraak staat in de salonagenda en de klant heeft bevestiging.",
-  tandartsen: "Gevonden. Morgen om 15:40 uur is er ruimte; de controle staat in de agenda en de patiënt ontvangt direct bevestiging.",
-  makelaars: "Geregeld. De bezichtiging is als optie vastgelegd en de makelaar ontvangt woonwensen, financieringsstatus en contactgegevens.",
-  "cosmetische-klinieken": "Geregeld. De consultaanvraag staat bij de juiste behandelaar, inclusief hulpvraag, voorgeschiedenis en veilige overdracht.",
-  verzekeraars: "Geregeld. Polis en melding zijn gekoppeld, ontbrekende stukken zijn opgevraagd en het dossier heeft een eigenaar.",
-  glaszetters: "Geregeld. De veiligheidsmelding is geprioriteerd en maatvoering, foto's en locatie staan klaar voor planning.",
-  hotels: "Geregeld. Beschikbaarheid en voorwaarden zijn gecontroleerd en de gast ontvangt direct een passende reserveringsoptie.",
-  restaurants: "Geregeld. De tafel is gecontroleerd, dieetwensen zijn vastgelegd en de gast krijgt meteen bevestiging.",
-  evenementen: "Geregeld. Datum, capaciteit en wensen zijn gekwalificeerd en sales ontvangt een complete aanvraag met vervolgmoment.",
-  kozijnen: "Geregeld. Woningtype, maten en foto's staan klaar en de inmeetafspraak is als optie ingepland.",
-  zonnepanelen: "Geregeld. Verbruik, daktype en adres zijn gecontroleerd en een passend adviesmoment staat klaar.",
-  vloerenleggers: "Geregeld. Oppervlakte, ondervloer en vloerverwarming zijn bekend en de inmeetroute is ingepland.",
-  woningcorporaties: "Geregeld. De melding is aan woning en dossier gekoppeld, geprioriteerd en naar de juiste servicepartner gestuurd.",
-  "non-profit": "Geregeld. De vraag is aan het juiste programma gekoppeld en vrijwilliger of coördinator ontvangt een complete overdracht.",
-  dierenarts: "Geregeld. De urgentie is beoordeeld en de praktijk ontvangt dier, klachten, duur en eigenaar vóór het contactmoment.",
-  dierenverzorging: "Geregeld. Verzorging, ras, bijzonderheden en behandeltijd zijn bepaald en een passend moment is bevestigd."
-};
-const demoTimes: Record<string, string> = {
-  autobedrijven: "8,4 sec", dakdekkers: "11,2 sec", hoveniers: "9,7 sec", installatietechniek: "8,9 sec",
-  vastgoedbeheerders: "7,8 sec", kapperszaken: "6,6 sec", tandartsen: "9,8 sec", makelaars: "8,1 sec",
-  "cosmetische-klinieken": "10,4 sec", verzekeraars: "11,6 sec", glaszetters: "8,7 sec", hotels: "6,9 sec",
-  restaurants: "6,2 sec", evenementen: "9,5 sec", kozijnen: "9,1 sec", zonnepanelen: "8,8 sec",
-  vloerenleggers: "8,5 sec", woningcorporaties: "7,9 sec", "non-profit": "8,6 sec", dierenarts: "7,4 sec", dierenverzorging: "6,8 sec"
-};
-const demoConversation = locale === "nl" ? (demoConversations[niche.slug] ?? niche.conversation) : niche.conversation;
-const confirmation = locale === "nl" ? (demoConfirmations[niche.slug] ?? `Geregeld. ${niche.conversation.result}`) : niche.conversation.result;
-const demoScenario = {
-  messages: [
-    { role: "customer", label: c.customer, text: demoConversation.customer },
-    { role: "ai", label: c.ai, text: demoConversation.ai },
-    { role: "customer", label: c.customer, text: demoConversation.followup },
-    { role: "ai", label: c.ai, text: confirmation }
-  ],
-  route: niche.workflow.slice(0, 4).map((item, index) => ({
-    label: item.title,
-    detail: index === 3 ? niche.conversation.result : (niche.intake[index] ?? item.text)
-  })),
-  result: confirmation,
-  time: demoTimes[niche.slug] ?? "9,6 sec"
-};
-const clientData = JSON.stringify({ niche, proposal, demoScenario, copy:{ statuses:c.statuses, replay:c.replay, continue:c.continue, selected:c.selected }, validProducts: recommended.map((item) => item.slug) }).replaceAll("<", "\\u003c");
-const firstProduct = recommended[0];
-const directNicheCheckout = niche.slug === "autobedrijven";
-const canonical = localizedPath(contentId, locale);
-const schema = [
-  {
-    "@context": "https://schema.org", "@type": "Service", name: `${c.forIndustry} ${niche.name}`,
-    serviceType: c.forIndustry, description: niche.metaDescription,
-    provider: { "@type": "Organization", name: "Autopilots", url: "https://auto-pilots.io" },
-    url: new URL(canonical, Astro.site ?? Astro.url.origin).toString()
-  },
-  {
-    "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
-      { "@type": "ListItem", position: 1, name: a11y.home, item: new URL(localizedPath("page.home", locale), Astro.site ?? Astro.url.origin).toString() },
-      { "@type": "ListItem", position: 2, name: ui.navigation.niches, item: new URL(localizedPath("page.niches", locale), Astro.site ?? Astro.url.origin).toString() },
-      { "@type": "ListItem", position: 3, name: niche.name, item: new URL(canonical, Astro.site ?? Astro.url.origin).toString() }
-    ]
-  },
-  {
-    "@context": "https://schema.org", "@type": "FAQPage", mainEntity: niche.faq.map((item) => ({ "@type": "Question", name: item.question, acceptedAnswer: { "@type": "Answer", text: item.answer } }))
-  }
-];
+const canonical = localizedPath(`niche.${source.slug}`, locale);
+const steps = niche.workflow.slice(0,4);
+const faq = [...niche.faq, ...c.extraFaq.map(([question, answer]) => ({question, answer}))];
+const schema = [{ '@context':'https://schema.org', '@type':'Service', name: `${s.title}: ${niche.name}`, description:niche.metaDescription, provider:{'@type':'Organization',name:'Autopilots',url:'https://auto-pilots.io'} }, {'@context':'https://schema.org','@type':'FAQPage',mainEntity:faq.map(item=>({'@type':'Question',name:item.question,acceptedAnswer:{'@type':'Answer',text:item.answer}}))}];
 ---
-
-<BaseLayout title={niche.seoTitle} description={niche.metaDescription} canonical={canonical} locale={locale} contentId={contentId} schema={schema}>
-  <article class="ap-ecosystem ap-niche-page" data-niche-root data-niche={niche.slug}>
-    <nav class="ap-breadcrumb" aria-label="Breadcrumb"><div class="ap-container"><a href={localizedPath("page.home",locale)}>{a11y.home}</a><span aria-hidden="true">/</span><a href={localizedPath("page.niches",locale)}>{ui.navigation.niches}</a><span aria-hidden="true">/</span><span aria-current="page">{niche.name}</span></div></nav>
-
-    <section class="ap-eco-hero ap-niche-hero">
-      <div class="ap-container ap-eco-hero-grid">
-        <div class="ap-eco-copy">
-          <VisualIcon type="niche" name={niche.slug} size="large" label={`${niche.name} ${a11y.icon}`} />
-          <div class="ap-kicker ap-icon-kicker">{c.forIndustry} {niche.name}</div>
-          <h1>{niche.hero} <span class="ap-title-accent">{niche.accent}</span></h1>
-          <p class="ap-lead">{niche.lead}</p>
-          <div class="ap-actions"><a class="ap-button ap-button-primary" data-ap-event="appointment_cta_clicked" data-ap-niche={niche.slug} href={`${localizedPath("page.appointment",locale)}?branche=${niche.slug}`}>{c.appointment}</a><a class="ap-text-link" data-ap-event={directNicheCheckout ? "direct_order_clicked" : "pricing_viewed"} data-ap-niche={niche.slug} data-ap-product={firstProduct.slug} href={directNicheCheckout ? `${localizedPath("page.order",locale)}?product=${firstProduct.slug}` : "#tarieven"}>{directNicheCheckout ? c.order : c.pricing} →</a></div>
-          <a class="ap-text-link" href="#praktijkdemo">{c.journey} →</a>
-          <p class="ap-inline-proof"><span class="ap-proof-dot" aria-hidden="true"></span><span>{c.configured} {niche.singular}.</span></p>
-        </div>
-        <aside class="ap-conversation-card" aria-label={`${a11y.conversation} ${niche.name}`}>
-          <div class="ap-conversation-head"><span>{c.liveIntake}</span><strong>{niche.name}</strong></div>
-          <div class="ap-message is-customer">{niche.conversation.customer}</div>
-          <div class="ap-message is-ai">{niche.conversation.ai}</div>
-          <div class="ap-conversation-result"><small>{c.systemAction}</small><strong>{niche.conversation.result}</strong></div>
-        </aside>
-      </div>
-    </section>
-
-    <section class="ap-section ap-soft-section">
-      <div class="ap-container">
-        <div class="ap-section-head"><div class="ap-kicker">{c.day}</div><h2>{c.leakTitle} <span class="ap-title-accent">{c.leakAccent}</span></h2></div>
-        <ol class="ap-niche-pain-list">{niche.painPoints.map((item, index) => <li><span>{String(index + 1).padStart(2, "0")}</span><div><h3>{item.title}</h3><p>{item.text}</p></div></li>)}</ol>
-      </div>
-    </section>
-
-    <section class="ap-section" id="praktijkdemo">
-      <div class="ap-container">
-        <div class="ap-section-head"><div class="ap-kicker">{c.agentAction}</div><h2>{c.demoTitle} <span class="ap-title-accent">{c.demoAccent}</span></h2><p>{c.demoLead}</p></div>
-        <div class="ap-agent-demo" data-agent-demo>
-          <header class="ap-agent-demo-head">
-            <div class="ap-agent-live"><i aria-hidden="true"></i><span>{c.agentActive}</span><strong>{niche.name}</strong></div>
-            <div class="ap-agent-time"><span>{c.questionToAction}</span><strong data-agent-time>0,0 sec</strong></div>
-          </header>
-          <div class="ap-agent-demo-body">
-            <article class="ap-agent-chat" role="tabpanel" aria-live="polite">
-              <div class="ap-agent-chat-head"><div><span>{c.liveConversation}</span><strong>{c.newQuestion}</strong></div><small data-agent-status>{c.received}</small></div>
-              <div class="ap-agent-messages">
-                {demoScenario.messages.map((message, index) => <div class:list={["ap-agent-message", `is-${message.role}`, { "is-visible": index === 0 }]} data-agent-message={index}><span>{message.label}</span><p>{message.text}</p></div>)}
-              </div>
-              <div class="ap-agent-controls">
-                <button class="is-previous" type="button" data-niche-previous aria-label={c.previous}>←</button>
-                <button class="is-next" type="button" data-niche-next>{c.continue} <span>→</span></button>
-                <button class="is-reset" type="button" data-niche-reset>{c.reset}</button>
-              </div>
-            </article>
-            <aside class="ap-agent-route" aria-label={a11y.route}>
-              <div class="ap-agent-route-head"><span>{c.liveRoute}</span><strong>{c.autoRoute}</strong></div>
-              <ol>
-                {demoScenario.route.map((item, index) => <li class:list={[{ "is-active": index === 0 }]} data-agent-route={index}><span>{String(index + 1).padStart(2, "0")}</span><div><strong>{item.label}</strong><small>{item.detail}</small></div><i aria-hidden="true">✓</i></li>)}
-              </ol>
-              <div class="ap-agent-result" data-agent-result><span>{c.arranged}</span><strong>{demoScenario.result}</strong><small><i aria-hidden="true"></i> {c.updated}</small></div>
-            </aside>
-          </div>
-          <div class="ap-agent-progress"><i data-agent-progress></i></div>
-          <div class="ap-agent-steps" role="tablist" aria-label={`${a11y.demo} ${niche.name}`}>
-            {c.steps.map((step, index) => <button type="button" role="tab" aria-selected={index === 0 ? "true" : "false"} tabindex={index === 0 ? 0 : -1} class:list={[{ "is-active": index === 0 }]} data-niche-step={index}><span>{String(index + 1).padStart(2, "0")}</span><div><strong>{step[0]}</strong><small>{step[1]}</small></div></button>)}
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="ap-section ap-soft-section" id="ai-brein">
-      <div class="ap-container">
-        <div class="ap-section-head"><div class="ap-kicker">{c.brainFor} {niche.name}</div><h2>{c.brainTitle}</h2><p>{c.brainLead}</p></div>
-        <div class="ap-branch-brain" data-branch-brain>
-          <div class="ap-branch-brain-visual">
-            <div class="ap-brain-ticket"><span>AI</span><div><strong>{c.newRequest}</strong><p>{niche.conversation.customer}</p></div><small>live</small></div>
-            <div class="ap-brain-orbit" aria-label={`${a11y.brain} ${niche.name}`}>
-              <div class="ap-brain-core"><span>AP</span><strong>Autopilots<br />{c.brain}</strong></div>
-              {proposal.brainSteps.map((step, index) => <button class:list={["ap-brain-node", `is-node-${index + 1}`, { "is-active": index === 0 }]} type="button" data-branch-brain-step={index}><span>{String(index + 1).padStart(2, "0")}</span><strong>{step.label}</strong></button>)}
-            </div>
-          </div>
-          <div class="ap-branch-brain-copy">
-            <div class="ap-brain-tabs" role="tablist" aria-label={c.brainSteps}>
-              {proposal.brainSteps.map((step, index) => <button class:list={[{ "is-active": index === 0 }]} type="button" role="tab" aria-selected={index === 0 ? "true" : "false"} tabindex={index === 0 ? 0 : -1} data-branch-brain-tab={index}>{index + 1}. {step.label}</button>)}
-            </div>
-            <article class="ap-brain-panel" role="tabpanel" aria-live="polite">
-              <div class="ap-kicker" data-branch-brain-label>{proposal.brainSteps[0].label}</div>
-              <h3 data-branch-brain-title>{proposal.brainSteps[0].title}</h3>
-              <p data-branch-brain-text>{proposal.brainSteps[0].text}</p>
-            </article>
-            <div class="ap-brain-output-grid"><div><span>{c.forTeam}</span><strong>{c.teamOutput}</strong></div><div><span>{c.forCustomer}</span><strong>{c.customerOutput}</strong></div></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="ap-section" id="producten">
-      <div class="ap-container">
-        <div class="ap-section-head"><div class="ap-kicker">{c.recommended}</div><h2>{c.productTitle} <span class="ap-title-accent">{c.productAccent}</span></h2><p>{c.productLead}</p></div>
-        <div class="ap-product-recommendations">
-          {recommended.slice(0, 2).map((product) => {
-            const primary = niche.primaryProducts.includes(product.slug);
-            return <article class:list={["ap-recommendation-card", { "is-primary": primary }]} data-product-card={product.slug}>
-              <div class="ap-recommendation-head"><VisualIcon type="product" name={product.slug} /><span>{primary ? c.primary : c.additional}</span></div>
-              <div class="ap-recommendation-title"><small>{product.eyebrow}</small><h3>{ui.products[product.slug] ?? product.name}</h3><p>{product.promise}</p></div>
-              <div class="ap-recommendation-scope"><div><span>{productLabels.solves}</span><ul>{product.problems.slice(0,2).map((item)=><li>{item.title}</li>)}</ul></div><div><span>{productLabels.included}</span><ul>{product.core.slice(0,3).map((item)=><li>{item.title}</li>)}</ul></div></div>
-              <div class="ap-recommendation-result"><span>{productLabels.result}</span><strong>{product.workflow.at(-1)?.output}</strong></div>
-              <div class="ap-recommendation-actions"><a href={`${localizedPath(`product.${product.slug}`,locale)}?branche=${niche.slug}`}>{c.viewProduct}</a><a class="is-order" data-ap-event="pricing_configuration_requested" data-ap-product={product.slug} data-ap-niche={niche.slug} href={intakePath(locale)}>{pricingRequest[locale].cta}</a></div>
-            </article>;
-          })}
-        </div>
-        {recommended.length > 2 && <a class="ap-text-link ap-more-products" href={localizedPath("page.products",locale)}>{c.allProducts} →</a>}
-      </div>
-    </section>
-
-    <RoiCalculator niche={niche} locale={locale} copy={c.roi} />
-
-    <NichePricing niche={niche} locale={locale} copy={c.prices} />
-
-    <section class="ap-section ap-soft-section" id="implementatie">
-      <div class="ap-container">
-        <div class="ap-section-head"><div class="ap-kicker">{c.implementation}</div><h2>{c.implementationTitle} <span class="ap-title-accent">{niche.name.toLowerCase()}.</span></h2><p>{c.implementationLead}</p></div>
-        <div class="ap-implementation-roadmap">
-            {c.phases.map((phase, index) => <details class="ap-implementation-phase" open={index === 0}>
-              <summary><span>{String(index + 1).padStart(2, "0")}</span><div><h3>{phase.title}</h3><p>{phase.text}</p></div><b aria-hidden="true">+</b></summary>
-              <div class="ap-phase-items">{phase.items.map((item) => <span>{item}</span>)}</div>
-            </details>)}
-        </div>
-      </div>
-    </section>
-
-    <section class="ap-section ap-dark-section">
-      <div class="ap-container">
-        <div class="ap-section-head"><div class="ap-kicker">{c.boundaries}</div><h2>{c.boundariesTitle}</h2></div>
-        <div class="ap-niche-boundaries">{c.boundaryItems.map((item)=><article><h3>{item[0]}</h3><p>{item[1]}</p></article>)}</div>
-      </div>
-    </section>
-
-    <section class="ap-section ap-soft-section">
-      <div class="ap-container ap-faq-layout">
-        <div class="ap-section-head"><div class="ap-kicker">{c.faq}</div><h2>{c.faqTitle} {niche.name.toLowerCase()}.</h2></div>
-        <div class="ap-faq-list">
-          {niche.faq.map((item, index) => <details open={index === 0}><summary>{item.question}<span aria-hidden="true">+</span></summary><p>{item.answer}</p></details>)}
-          {c.extraFaq.map((item)=><details><summary>{item[0]}<span aria-hidden="true">+</span></summary><p>{item[1]}</p></details>)}
-        </div>
-      </div>
-    </section>
-
-    <section class="ap-section ap-final-section"><div class="ap-container ap-final-card"><div><div class="ap-kicker">{c.next} {niche.name}</div><h2>{c.nextTitle}</h2><p>{c.nextLead}</p></div><div class="ap-actions"><a class="ap-button ap-button-primary" data-ap-event="appointment_cta_clicked" data-ap-niche={niche.slug} href={`${localizedPath("page.appointment",locale)}?branche=${niche.slug}`}>{c.appointment}</a><a class="ap-text-link" data-ap-event="direct_order_clicked" data-ap-niche={niche.slug} data-ap-product={firstProduct.slug} href={`${localizedPath("page.order",locale)}?product=${firstProduct.slug}`}>{c.order} →</a></div></div></section>
-  </article>
-
-  <script id="ap-niche-data" type="application/json" set:html={clientData}></script>
+<BaseLayout title={niche.seoTitle} description={niche.metaDescription} canonical={canonical} locale={locale} contentId={`niche.${source.slug}`} schema={schema}>
+ <article id="ap-niche-premium">
+  <header class="np-hero np-wrap">
+   <a class="np-back" href={localizedPath('page.niches',locale)}>{s.title} / {niche.name}</a>
+   <h1>{locale === 'nl' && source.slug === 'installatietechniek' ? 'Meer tijd voor het vak.' : niche.hero}<em>{locale === 'nl' && source.slug === 'installatietechniek' ? 'AI doet het voorwerk.' : niche.accent}</em></h1>
+   <p class="np-lead">{niche.lead}</p>
+   <a class="np-cta" href={intakePath(locale)}>{s.scan}</a>
+   <div class="np-capabilities">{s.names.map(name=><span>{name}</span>)}</div>
+  </header>
+  <section class="np-section np-wrap" id="praktijkdemo">
+   <div class="np-heading"><p class="np-kicker">{labels[0]}</p><h2>{labels[1]}<em>{labels[2]}</em></h2></div>
+   <div class="np-journey" style="--active-step:0">
+    <div class="np-question"><span>{c.customer}</span><p>“{niche.conversation.customer}”</p></div>
+    <div class="np-step-list" aria-label={labels[0]}>{steps.map((step,i)=><button type="button" data-step={i} aria-pressed={i===0}><b>{String(i+1).padStart(2,'0')}</b><span>{step.title}</span></button>)}</div>
+    <div class="np-dossier"><div class="np-window"><span>{niche.name}</span><small>{labels[3]}</small></div>
+     {steps.map((step,i)=><div class="np-step-panel" data-step-panel={i} hidden={i!==0}><span class="np-kicker">{String(i+1).padStart(2,'0')} / {labels[11]}</span><h3>{step.title}</h3><p>{step.text}</p><div class="np-fields">{niche.intake.slice(i, i+3).map(field=><span><i></i>{field}</span>)}</div></div>)}
+     <div class="np-handoff"><span class="np-dot"></span>{c.teamOutput}</div>
+    </div>
+   </div>
+   <details class="np-detail"><summary>{labels[15]}</summary><div class="np-pains">{niche.painPoints.map(item=><div><h3>{item.title}</h3><p>{item.text}</p></div>)}</div></details>
+  </section>
+  <section class="np-section np-wrap" id="producten">
+   <div class="np-heading"><p class="np-kicker">{s.title}</p><h2>{labels[4]}<em>{niche.name.toLowerCase()}.</em></h2></div>
+   <div class="np-solutions"><div class="np-tabs">{solutions.map((item,i)=><button type="button" data-solution={i} aria-pressed={i===0}>{item.name}</button>)}</div>
+    {solutions.map((item,i)=><div class="np-solution-panel" data-solution-panel={i} hidden={i!==0}><div class="np-solution-copy"><span class="np-kicker">0{i+1}</span><h3>{item.name}</h3><p>{item.description}</p><a href={item.href}>{s.detail}</a></div><div class="np-preview"><div class="np-window"><span>{niche.name}</span><small>{labels[3]}</small></div>{i===0 ? <div class="np-chat"><span>{c.customer}</span><p>{niche.conversation.customer}</p><span>{c.ai}</span><p>{niche.conversation.ai}</p></div> : i===1 ? <div class="np-record"><h4>{labels[12]}</h4>{niche.intake.slice(0,4).map(field=><div><span>{field}</span><i></i></div>)}</div> : <div class="np-site"><span>{niche.name}</span><h4>{niche.hero}</h4><p>{niche.accent}</p><div class="np-site-lines"><i></i><i></i></div><b>{labels[11]}</b></div>}</div></div>)}
+   </div>
+   <div class="np-integrations"><h3>{labels[5]}</h3><div>{niche.systems.map(system=><span>{system}</span>)}</div><p>{labels[6]}</p></div>
+  </section>
+  <section class="np-section np-wrap" id="implementatie"><div class="np-heading"><p class="np-kicker">{c.implementation}</p><h2>{labels[7]}</h2></div><div class="np-phases">{c.phases.map((phase,i)=><details><summary><span>0{i+1}</span>{phase.title}</summary><p>{phase.text}</p></details>)}</div><div class="np-human"><h3>{labels[10]}</h3><p>{c.boundaryItems[1][1]}</p></div></section>
+  <section class="np-section np-wrap" id="tarieven"><div class="np-heading"><p class="np-kicker">{c.pricing}</p><h2>{labels[8]}</h2><p>{s.cost}</p></div></section>
+  <section class="np-section np-wrap"><div class="np-heading"><p class="np-kicker">{c.faq}</p><h2>{c.faqTitle} {niche.name.toLowerCase()}.</h2></div><div class="np-faq">{faq.map(item=><details><summary>{item.question}</summary><p>{item.answer}</p></details>)}</div></section>
+  <section class="np-section np-wrap"><div class="np-final"><p class="np-kicker">{niche.name}</p><h2>{labels[9]}</h2><p>{s.intro}</p><a class="np-cta" href={intakePath(locale)}>{s.scan}</a></div></section>
+ </article>
 </BaseLayout>
-
-<script is:inline>
-  (() => {
-    const root = document.querySelector("[data-niche-root]");
-    const node = document.getElementById("ap-niche-data");
-    if (!root || !node) return;
-    const payload = JSON.parse(node.textContent || "{}");
-    const niche = payload.niche;
-    const proposal = payload.proposal;
-    const demoScenario = payload.demoScenario;
-    const copy = payload.copy;
-    const demoStatuses = copy.statuses;
-    const demoStageTimes = ["0,0 sec", "2,4 sec", "6,8 sec", demoScenario.time];
-    const setText = (selector, value) => { const item = root.querySelector(selector); if (item) item.textContent = value; };
-    const showNicheStep = (requestedIndex, focus = false) => {
-      const buttons = [...root.querySelectorAll("[data-niche-step]")];
-      const index = Math.max(0, Math.min(requestedIndex, demoScenario.messages.length - 1));
-      const button = buttons[index];
-      root.querySelectorAll("[data-niche-step]").forEach((item) => { const active = item === button; item.classList.toggle("is-active", active); item.setAttribute("aria-selected", String(active)); item.tabIndex = active ? 0 : -1; });
-      root.querySelectorAll("[data-agent-message]").forEach((item) => item.classList.toggle("is-visible", Number(item.dataset.agentMessage) <= index));
-      root.querySelectorAll("[data-agent-route]").forEach((item) => item.classList.toggle("is-active", Number(item.dataset.agentRoute) <= index));
-      root.querySelector("[data-agent-result]")?.classList.toggle("is-visible", index === demoScenario.messages.length - 1);
-      const progress = root.querySelector("[data-agent-progress]");
-      if (progress) progress.style.width = `${((index + 1) / demoScenario.messages.length) * 100}%`;
-      setText("[data-agent-status]", demoStatuses[index]);
-      setText("[data-agent-time]", demoStageTimes[index]);
-      const nextButton = root.querySelector("[data-niche-next]");
-      if (nextButton) nextButton.innerHTML = index === demoScenario.messages.length - 1 ? `${copy.replay} <span>↻</span>` : `${copy.continue} <span>→</span>`;
-      root.querySelector("[data-agent-demo]")?.setAttribute("data-demo-step", String(index));
-      if (focus) button?.focus({ preventScroll: true });
-    };
-    root.querySelectorAll("[data-niche-step]").forEach((button) => {
-      button.addEventListener("click", () => showNicheStep(Number(button.dataset.nicheStep || 0)));
-      button.addEventListener("keydown", (event) => {
-        if (!["ArrowRight", "ArrowDown", "ArrowLeft", "ArrowUp", "Home", "End"].includes(event.key)) return;
-        event.preventDefault();
-        const current = Number(button.dataset.nicheStep || 0); const last = demoScenario.messages.length - 1;
-        const next = event.key === "Home" ? 0 : event.key === "End" ? last : ["ArrowRight", "ArrowDown"].includes(event.key) ? (current + 1) % (last + 1) : (current - 1 + last + 1) % (last + 1);
-        showNicheStep(next, true);
-      });
-    });
-    root.querySelector("[data-niche-next]")?.addEventListener("click", () => {
-      const current = Number(root.querySelector("[data-niche-step][aria-selected='true']")?.dataset.nicheStep || 0);
-      showNicheStep(current >= demoScenario.messages.length - 1 ? 0 : current + 1);
-    });
-    root.querySelector("[data-niche-previous]")?.addEventListener("click", () => {
-      const current = Number(root.querySelector("[data-niche-step][aria-selected='true']")?.dataset.nicheStep || 0);
-      showNicheStep(Math.max(0, current - 1), true);
-    });
-    root.querySelector("[data-niche-reset]")?.addEventListener("click", () => showNicheStep(0, true));
-    showNicheStep(0);
-    const showBrainStep = (requestedIndex, focus = false) => {
-      const index = Math.max(0, Math.min(requestedIndex, proposal.brainSteps.length - 1));
-      const step = proposal.brainSteps[index];
-      root.querySelectorAll("[data-branch-brain-tab]").forEach((item) => {
-        const active = Number(item.dataset.branchBrainTab) === index;
-        item.classList.toggle("is-active", active); item.setAttribute("aria-selected", String(active)); item.tabIndex = active ? 0 : -1;
-      });
-      root.querySelectorAll("[data-branch-brain-step]").forEach((item) => item.classList.toggle("is-active", Number(item.dataset.branchBrainStep) === index));
-      setText("[data-branch-brain-label]", step.label); setText("[data-branch-brain-title]", step.title); setText("[data-branch-brain-text]", step.text);
-      if (focus) root.querySelector(`[data-branch-brain-tab="${index}"]`)?.focus({ preventScroll: true });
-    };
-    root.querySelectorAll("[data-branch-brain-tab],[data-branch-brain-step]").forEach((button) => {
-      const attr = button.hasAttribute("data-branch-brain-tab") ? "branchBrainTab" : "branchBrainStep";
-      button.addEventListener("click", () => showBrainStep(Number(button.dataset[attr] || 0)));
-      button.addEventListener("keydown", (event) => {
-        if (!["ArrowRight", "ArrowDown", "ArrowLeft", "ArrowUp", "Home", "End"].includes(event.key)) return;
-        event.preventDefault(); const current = Number(button.dataset[attr] || 0); const last = proposal.brainSteps.length - 1;
-        const next = event.key === "Home" ? 0 : event.key === "End" ? last : ["ArrowRight", "ArrowDown"].includes(event.key) ? (current + 1) % (last + 1) : (current - 1 + last + 1) % (last + 1);
-        showBrainStep(next, true);
-      });
-    });
-    const routeData = [
-      { label: "Nieuwe aanvraag", title: niche.conversation.customer, text: "De belangrijkste gegevens worden compleet gemaakt voordat planning of buitendienst wordt belast." },
-      { label: "Route voorbereid", title: "Regio, urgentie, type werk en capaciteit bij elkaar.", text: "De aanvraag krijgt een logische plaats in de planning, zonder dat het team losse berichten hoeft samen te voegen." },
-      { label: "Overdracht gereed", title: niche.conversation.result, text: "Context, eigenaar en vervolgstap worden samen vastgelegd en blijven zichtbaar voor het team." }
-    ];
-    root.querySelectorAll("[data-route-step]").forEach((button) => button.addEventListener("click", () => {
-      const index = Number(button.dataset.routeStep || 0); const item = routeData[index];
-      root.querySelectorAll("[data-route-step]").forEach((node) => node.classList.toggle("is-active", node === button));
-      root.querySelectorAll(".ap-route-line span").forEach((node, nodeIndex) => node.classList.toggle("is-active", nodeIndex <= index));
-      setText("[data-route-label]", item.label); setText("[data-route-title]", item.title); setText("[data-route-text]", item.text);
-    }));
-    const requestedProduct = new URLSearchParams(location.search).get("product");
-    if (payload.validProducts.includes(requestedProduct)) {
-      const selectedCard = root.querySelector(`[data-product-card="${CSS.escape(requestedProduct)}"]`);
-      if (selectedCard) {
-        selectedCard.classList.add("is-selected");
-        selectedCard.setAttribute("aria-label", copy.selected);
-        if (location.hash === "#producten") requestAnimationFrame(() => document.getElementById("producten")?.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" }));
-      }
-    }
-  })();
+<style>
+ #ap-niche-premium{color:#f5f2e9;background:radial-gradient(ellipse at 12% 15%,#ffffff06,transparent 38%),radial-gradient(ellipse at 90% 65%,#ffffff05,transparent 40%);--line:#aec4c324;--bronze:#c18c5b;--muted:#aabdc2}
+ #ap-niche-premium .np-wrap{width:calc(100% - 40px);max-width:1060px;margin-inline:auto}
+ #ap-niche-premium .np-hero{text-align:center;padding:56px 0 20px;max-width:900px}
+ #ap-niche-premium .np-back{color:var(--muted);font-size:13px;text-decoration:none}
+ #ap-niche-premium h1{font-size:clamp(34px,4.6vw,54px);line-height:1.12;letter-spacing:-.045em;margin:38px auto 24px;max-width:850px;font-weight:800}
+ #ap-niche-premium em{display:block;color:var(--bronze)}
+ #ap-niche-premium p{color:var(--muted);line-height:1.8;margin:16px 0;font-size:16px}
+ #ap-niche-premium .np-lead{max-width:680px;margin:0 auto 28px;font-size:18px}
+ #ap-niche-premium .np-cta{display:inline-flex;justify-content:center;align-items:center;max-width:100%;padding:17px 26px;background:linear-gradient(110deg,#78492f,#a57043,#77482f);border:1px solid #c69b72;border-radius:9px;color:#fff8ef;font-size:15px;font-weight:750;text-decoration:none;box-shadow:inset 0 1px #ffffff24;transition:transform .25s}
+ #ap-niche-premium .np-cta:hover{transform:translateY(-2px)}
+ #ap-niche-premium .np-capabilities{display:flex;justify-content:center;gap:26px;flex-wrap:wrap;margin-top:40px;color:var(--muted);font-size:12px;letter-spacing:.06em}
+ #ap-niche-premium .np-section{padding-block:64px}
+ #ap-niche-premium .np-heading{text-align:center;max-width:800px;margin:0 auto 36px}
+ #ap-niche-premium .np-kicker{font-family:Syne,sans-serif;font-size:12px;letter-spacing:.17em;text-transform:uppercase;color:#d4ad87;margin:0 0 18px}
+ #ap-niche-premium h2{font-size:clamp(28px,3.5vw,44px);line-height:1.15;letter-spacing:-.04em;font-weight:800;margin:0}
+ #ap-niche-premium h3{font-size:24px;line-height:1.25;letter-spacing:-.025em;margin:12px 0}
+ #ap-niche-premium h4{font-size:22px;line-height:1.35;margin:16px 0}
+ #ap-niche-premium .np-journey{max-width:850px;margin:auto}
+ #ap-niche-premium .np-question{max-width:620px;text-align:center;margin:0 auto 32px}
+ #ap-niche-premium .np-question>span,#ap-niche-premium .np-chat>span{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:#d4ad87}
+ #ap-niche-premium .np-question p{font-size:18px;color:#f5f2e9}
+ #ap-niche-premium button{font:inherit;cursor:pointer}
+ #ap-niche-premium .np-step-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0 0 26px;gap:10px}
+ #ap-niche-premium .np-step-list button{border:0;border-bottom:1px solid var(--line);background:none;color:var(--muted);padding:12px 5px 16px;display:flex;flex-direction:column;align-items:center;gap:12px;font-size:12px;line-height:1.4;transition:color .3s,border-color .3s}
+ #ap-niche-premium .np-step-list b{display:grid;place-items:center;width:34px;height:34px;border:1px solid var(--line);border-radius:50%;font-family:Syne,sans-serif;font-size:12px}
+ #ap-niche-premium .np-step-list [aria-pressed=true]{color:#fff5e9;border-color:var(--bronze)}
+ #ap-niche-premium .np-step-list [aria-pressed=true] b{background:linear-gradient(120deg,#825136,#ac784e);border-color:#d4ad87}
+ #ap-niche-premium .np-dossier,#ap-niche-premium .np-preview{border:1px solid var(--line);border-radius:22px;background:linear-gradient(125deg,#20353f,#14272e);overflow:hidden}
+ #ap-niche-premium .np-dossier{max-width:660px;margin:auto}
+ #ap-niche-premium .np-window{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 24px;border-bottom:1px solid var(--line);font-size:12px;color:var(--muted)}
+ #ap-niche-premium .np-window small{font-size:10px;text-align:right}
+ #ap-niche-premium .np-step-panel{padding:32px;min-height:240px}
+ #ap-niche-premium .np-fields{display:flex;flex-wrap:wrap;gap:10px 20px;margin-top:22px;font-size:12px;color:var(--muted)}
+ #ap-niche-premium .np-fields span{display:flex;align-items:center;gap:8px}
+ #ap-niche-premium .np-fields i,#ap-niche-premium .np-dot{width:5px;height:5px;background:#c2d1b5;border-radius:50%;display:inline-block;flex-shrink:0}
+ #ap-niche-premium .np-handoff{display:flex;align-items:center;gap:10px;padding:16px 32px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+ #ap-niche-premium .np-detail{max-width:850px;margin:26px auto 0;border-bottom:1px solid var(--line)}
+ #ap-niche-premium summary{cursor:pointer;padding:20px 0;line-height:1.5;font-size:15px}
+ #ap-niche-premium .np-pains{display:grid;grid-template-columns:1fr 1fr;gap:16px 36px;padding:12px 0 24px}
+ #ap-niche-premium .np-pains h3{font-size:17px}
+ #ap-niche-premium .np-pains p{font-size:14px}
+ #ap-niche-premium .np-tabs{display:flex;justify-content:center;gap:8px;margin-bottom:30px}
+ #ap-niche-premium .np-tabs button{background:none;border:1px solid var(--line);border-radius:9px;color:var(--muted);padding:12px 20px;font-size:14px}
+ #ap-niche-premium .np-tabs [aria-pressed=true]{background:#b7835321;border-color:#ba8e62;color:#eed3b8}
+ #ap-niche-premium .np-solution-panel{display:grid;grid-template-columns:1fr 1.15fr;gap:50px;align-items:center;max-width:900px;margin:auto}
+ #ap-niche-premium .np-solution-copy a{color:#dfb78f;font-size:14px;text-underline-offset:5px}
+ #ap-niche-premium .np-chat,#ap-niche-premium .np-record,#ap-niche-premium .np-site{padding:24px;min-height:265px}
+ #ap-niche-premium .np-chat p{font-size:14px;line-height:1.65;margin:8px 0 20px}
+ #ap-niche-premium .np-record>div{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:13px;color:var(--muted)}
+ #ap-niche-premium .np-record i{width:46px;height:5px;background:#a9bdc130;border-radius:9px}
+ #ap-niche-premium .np-site{background:#e9e4d8;color:#183038}
+ #ap-niche-premium .np-site h4{color:#183038}
+ #ap-niche-premium .np-site>span{font-size:12px;letter-spacing:.1em}
+ #ap-niche-premium .np-site p{color:#516665;font-size:15px}
+ #ap-niche-premium .np-site b{font-size:12px;display:inline-block;background:#29453f;color:white;padding:9px 15px;border-radius:5px}
+ #ap-niche-premium .np-site-lines{margin:20px 0;display:grid;gap:8px}
+ #ap-niche-premium .np-site-lines i{height:5px;background:#29453f20;width:85%}
+ #ap-niche-premium .np-site-lines i+ i{width:65%}
+ #ap-niche-premium .np-integrations{text-align:center;margin:48px auto 0;max-width:800px}
+ #ap-niche-premium .np-integrations h3{font-size:18px}
+ #ap-niche-premium .np-integrations>div{display:flex;flex-wrap:wrap;justify-content:center;gap:12px 24px;margin:20px 0;color:#cfdbdb;font-size:13px}
+ #ap-niche-premium .np-integrations p{font-size:12px}
+ #ap-niche-premium .np-phases,#ap-niche-premium .np-faq{max-width:780px;margin:auto}
+ #ap-niche-premium .np-phases details,#ap-niche-premium .np-faq details{border-bottom:1px solid var(--line)}
+ #ap-niche-premium .np-phases summary span{color:var(--bronze);margin-right:20px;font-family:Syne,sans-serif}
+ #ap-niche-premium .np-phases p,#ap-niche-premium .np-faq p{font-size:15px;margin:0 0 22px}
+ #ap-niche-premium .np-human{max-width:680px;margin:32px auto 0;text-align:center}
+ #ap-niche-premium .np-human h3{font-size:18px}
+ #ap-niche-premium .np-human p{font-size:14px}
+ #ap-niche-premium #tarieven{padding-block:28px}
+ #ap-niche-premium #tarieven h2{font-size:28px}
+ #ap-niche-premium .np-final{text-align:center;padding:56px 32px;border:1px solid #c9a07840;border-radius:26px;background:radial-gradient(ellipse at top,#ffffff08,transparent 75%),#182d34}
+ #ap-niche-premium .np-final p:not(.np-kicker){max-width:600px;margin:22px auto}
+ #ap-niche-premium [hidden]{display:none!important}
+ #ap-niche-premium button:focus-visible,#ap-niche-premium a:focus-visible,#ap-niche-premium summary:focus-visible{outline:2px solid #d9b18b;outline-offset:5px}
+ #ap-niche-premium .np-step-panel:not([hidden]),#ap-niche-premium .np-solution-panel:not([hidden]){animation:np-enter .45s ease both}
+ @keyframes np-enter{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+ /* One cohesive workspace: input, route and outcome. */
+ #ap-niche-premium .np-journey{display:grid;grid-template-columns:260px minmax(0,1fr);gap:0 36px;max-width:940px;margin:auto;padding:32px;border:1px solid #cfdfdc24;border-radius:28px;background:radial-gradient(ellipse at 10% 0%,#ffffff09,transparent 65%),linear-gradient(125deg,#1a3038,#12242c);box-shadow:0 24px 70px #00000018,inset 0 1px #ffffff08}
+ #ap-niche-premium .np-question{grid-column:1/-1;text-align:left;margin:0 0 28px;padding:0 0 26px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:110px 1fr;align-items:center;gap:20px}
+ #ap-niche-premium .np-question>span{font-size:10px;letter-spacing:.16em;color:#d9b18b;display:flex;align-items:center;gap:12px}
+ #ap-niche-premium .np-question>span:before{content:'';width:28px;height:28px;border:1px solid #d9b18b60;border-radius:50%;background:radial-gradient(circle,#d9b18b 2px,transparent 3px)}
+ #ap-niche-premium .np-question p{font-size:19px;line-height:1.55;margin:0;color:#f4f0e6;letter-spacing:-.02em}
+ #ap-niche-premium .np-step-list{display:flex;flex-direction:column;gap:8px;margin:0;align-self:center;position:relative}
+ #ap-niche-premium .np-step-list button{position:relative;display:flex;flex-direction:row;align-items:center;gap:15px;text-align:left;border:1px solid transparent;border-radius:12px;padding:16px 12px;background:transparent;transition:background .3s,border-color .3s,color .3s;min-width:0;font-size:13px;line-height:1.5}
+ #ap-niche-premium .np-step-list button b{width:32px;height:32px;display:grid;place-items:center;flex-shrink:0;border-radius:10px;font-size:11px;background:#ffffff04;border:1px solid #ffffff14;color:#9bb0b6}
+ #ap-niche-premium .np-step-list button[aria-pressed=true]{background:#c18c5b10;border-color:#c18c5b45;color:#f8f0e5}
+ #ap-niche-premium .np-step-list button[aria-pressed=true] b{background:linear-gradient(135deg,#b9875d,#795038);border-color:#dcaf8566;color:#fff4e7;box-shadow:0 3px 14px #0002}
+ #ap-niche-premium .np-step-list button:hover{background:#ffffff06}
+ #ap-niche-premium .np-dossier{width:100%;max-width:none;margin:0;border-radius:18px;background:linear-gradient(145deg,#20353e,#192d35);box-shadow:0 12px 32px #0002;align-self:stretch;display:flex;flex-direction:column}
+ #ap-niche-premium .np-dossier .np-window{padding:15px 22px;font-size:11px}
+ #ap-niche-premium .np-dossier .np-window small{max-width:140px;line-height:1.5;font-size:10px}
+ #ap-niche-premium .np-step-panel{padding:28px 24px;min-height:235px;flex:1}
+ #ap-niche-premium .np-step-panel h3{font-size:25px;line-height:1.2;letter-spacing:-.035em;margin:15px 0}
+ #ap-niche-premium .np-step-panel p{font-size:14px;line-height:1.7;margin:14px 0}
+ #ap-niche-premium .np-fields{gap:8px;margin-top:22px}
+ #ap-niche-premium .np-fields span{font-size:10px;padding:7px 9px;background:#ffffff04;border:1px solid #ffffff0b;border-radius:6px;line-height:1.4}
+ #ap-niche-premium .np-handoff{padding:15px 24px;font-size:11px;background:#ffffff02;line-height:1.6}
+ #ap-niche-premium .np-detail{max-width:940px}
+ @media(max-width:700px){#ap-niche-premium .np-section{padding-block:42px}#ap-niche-premium .np-hero{padding-top:30px}#ap-niche-premium .np-lead{font-size:16px}#ap-niche-premium .np-capabilities{gap:16px;font-size:10px}#ap-niche-premium .np-solution-panel{grid-template-columns:1fr;gap:24px}#ap-niche-premium .np-solution-copy{text-align:center}#ap-niche-premium .np-tabs{gap:6px}#ap-niche-premium .np-tabs button{padding:11px 9px;font-size:12px;flex:1}#ap-niche-premium .np-step-list{grid-template-columns:1fr 1fr;gap:8px}#ap-niche-premium .np-step-list button{flex-direction:row;text-align:left;font-size:12px}#ap-niche-premium .np-step-list b{flex-shrink:0}#ap-niche-premium .np-step-panel{padding:24px;min-height:250px}#ap-niche-premium .np-window{padding:14px 20px}#ap-niche-premium .np-handoff{padding:16px 24px}#ap-niche-premium .np-pains{grid-template-columns:1fr}#ap-niche-premium .np-final{padding:36px 20px}#ap-niche-premium .np-question p{font-size:16px}}
+ @media(prefers-reduced-motion:reduce){#ap-niche-premium *{animation:none!important;transition:none!important}}
+ @media(max-width:700px){#ap-niche-premium .np-journey{grid-template-columns:minmax(0,1fr);padding:18px;gap:18px;border-radius:22px}#ap-niche-premium .np-question{grid-template-columns:1fr;gap:12px;margin:0;padding-bottom:20px}#ap-niche-premium .np-question p{font-size:17px}#ap-niche-premium .np-step-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}#ap-niche-premium .np-step-list button{font-size:11px;padding:10px 7px;gap:8px}#ap-niche-premium .np-step-list button b{width:25px;height:25px;font-size:10px}#ap-niche-premium .np-step-panel{padding:22px 18px;min-height:230px}#ap-niche-premium .np-step-panel h3{font-size:23px}#ap-niche-premium .np-dossier .np-window{padding:12px 18px}#ap-niche-premium .np-handoff{padding:14px 18px}#ap-niche-premium .np-dossier{border-radius:14px}}
+</style>
+<script>
+ const root = document.querySelector<HTMLElement>('#ap-niche-premium');
+ if(root){
+  for(const kind of ['step','solution']){
+   const buttons=Array.from(root.querySelectorAll<HTMLButtonElement>(`[data-${kind}]`));
+   const panels=Array.from(root.querySelectorAll<HTMLElement>(`[data-${kind}-panel]`));
+   buttons.forEach((button,index)=>button.addEventListener('click',()=>{
+    buttons.forEach((item,i)=>item.setAttribute('aria-pressed',String(i===index)));
+    panels.forEach((panel,i)=>panel.hidden=i!==index);
+   }));
+  }
+ }
 </script>
-
-<style>
-  .ap-icon-kicker{display:block;margin-top:24px}
-  .ap-recommendation-card :global(.ap-visual-icon){margin-bottom:18px}
-  .ap-proposal-feature-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-  .ap-proposal-feature{overflow:hidden;border:1px solid var(--ap-line);border-radius:28px;background:#fff;box-shadow:0 18px 50px rgba(17,17,17,.045)}
-  .ap-proposal-feature summary{display:grid;grid-template-columns:48px minmax(0,1fr) 28px;gap:16px;align-items:start;min-height:240px;padding:26px;cursor:pointer;list-style:none}
-  .ap-proposal-feature summary::-webkit-details-marker,.ap-implementation-phase summary::-webkit-details-marker{display:none}
-  .ap-proposal-feature summary>span{display:grid;width:48px;height:48px;place-items:center;border-radius:16px;background:#111;color:#fff;font:700 11px/1 "Syne",sans-serif}
-  .ap-proposal-feature h3{margin:3px 0 0;font-size:21px;line-height:1.12}
-  .ap-proposal-feature p{margin:12px 0 0;color:var(--ap-muted);font-size:14px;line-height:1.55}
-  .ap-proposal-feature summary>b,.ap-implementation-phase summary>b{display:grid;width:28px;height:28px;place-items:center;border-radius:50%;background:var(--ap-soft);color:var(--ap-brown);font-size:18px;transition:transform .2s ease}
-  .ap-proposal-feature[open] summary>b,.ap-implementation-phase[open] summary>b{transform:rotate(45deg)}
-  .ap-proposal-feature[open]{border-color:rgba(159,56,38,.24);background:linear-gradient(145deg,#fff,#faf1ed)}
-  .ap-proposal-feature-more{margin:0 26px 26px;border-top:1px solid rgba(159,56,38,.14);padding:18px 0 0;color:var(--ap-muted);font-size:13px;line-height:1.55}
-
-  .ap-agent-demo{overflow:hidden;border:1px solid rgba(255,255,255,.1);border-radius:36px;background:#111;color:#fff;box-shadow:0 30px 80px rgba(17,17,17,.14)}
-  .ap-agent-demo-head{display:flex;min-height:72px;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid rgba(255,255,255,.1);padding:16px 24px}
-  .ap-agent-live,.ap-agent-time{display:flex;align-items:center;gap:10px}.ap-agent-live i{width:9px;height:9px;border-radius:50%;background:#75cf87;box-shadow:0 0 0 7px rgba(117,207,135,.1);animation:apAgentPulse 2s ease-in-out infinite}.ap-agent-live span,.ap-agent-time span{color:rgba(255,255,255,.5);font:700 9px/1 "Syne",sans-serif;letter-spacing:1.25px;text-transform:uppercase}.ap-agent-live strong,.ap-agent-time strong{font-size:12px}.ap-agent-time{justify-content:flex-end}.ap-agent-time strong{min-width:72px;border-radius:999px;background:rgba(255,255,255,.08);padding:9px 11px;color:#fff;text-align:center}
-  .ap-agent-demo-body{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(340px,.82fr);min-height:560px}
-  .ap-agent-chat{display:flex;min-width:0;flex-direction:column;border-right:1px solid rgba(255,255,255,.1);background:linear-gradient(145deg,#fdfdfb,#f4f0ec);padding:28px;color:#111}
-  .ap-agent-chat-head{display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid rgba(17,17,17,.08);padding-bottom:18px}.ap-agent-chat-head span,.ap-agent-route-head>span,.ap-agent-result>span{display:block;color:var(--ap-brown);font:700 9px/1 "Syne",sans-serif;letter-spacing:1.35px;text-transform:uppercase}.ap-agent-chat-head strong,.ap-agent-route-head>strong{display:block;margin-top:7px;font-size:15px}.ap-agent-chat-head>small{border-radius:999px;background:#e8f5ea;padding:8px 10px;color:#347441;font-size:10px;font-weight:800}
-  .ap-agent-messages{display:flex;min-height:348px;flex-direction:column;gap:10px;padding:24px 0}
-  .ap-agent-message{display:none;max-width:78%;animation:apAgentMessage .35s ease both}.ap-agent-message.is-visible{display:block}.ap-agent-message>span{display:block;margin:0 8px 6px;color:#8a8986;font:700 9px/1 "Syne",sans-serif;letter-spacing:1px;text-transform:uppercase}.ap-agent-message>p{margin:0;border:1px solid var(--ap-line);border-radius:7px 22px 22px 22px;background:#fff;padding:14px 16px;font-size:13px;font-weight:750;line-height:1.48;box-shadow:0 10px 28px rgba(17,17,17,.05)}.ap-agent-message.is-customer{align-self:flex-start}.ap-agent-message.is-ai{align-self:flex-end}.ap-agent-message.is-ai>span{text-align:right}.ap-agent-message.is-ai>p{border-color:rgba(159,56,38,.32);border-radius:22px 7px 22px 22px;background:#111;color:#fff}.ap-agent-message.is-ai:last-child>p{background:linear-gradient(135deg,#8e301f,#b5412b);box-shadow:0 14px 34px rgba(159,56,38,.2)}
-  .ap-agent-controls{display:flex;align-items:center;gap:8px;margin-top:auto}.ap-agent-controls button{min-height:46px;border:1px solid var(--ap-line);border-radius:999px;background:#fff;padding:11px 16px;color:#111;font:850 11px/1 "Public Sans",sans-serif;cursor:pointer}.ap-agent-controls button:hover,.ap-agent-controls button:focus-visible{border-color:var(--ap-brown);outline:3px solid rgba(159,56,38,.12)}.ap-agent-controls .is-previous{width:46px;padding:0}.ap-agent-controls .is-next{display:flex;align-items:center;gap:18px;border-color:var(--ap-brown);background:var(--ap-brown);padding-inline:20px;color:#fff}.ap-agent-controls .is-next span{font-size:16px}.ap-agent-controls .is-reset{margin-left:auto;color:var(--ap-muted)}
-  .ap-agent-route{position:relative;overflow:hidden;padding:28px;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px),radial-gradient(circle at 100% 100%,rgba(159,56,38,.3),transparent 42%);background-size:28px 28px,28px 28px,auto}.ap-agent-route-head>span{color:#e7a295}.ap-agent-route-head>strong{color:#fff}.ap-agent-route ol{display:grid;gap:0;margin:26px 0 0;padding:0;list-style:none}.ap-agent-route li{position:relative;display:grid;grid-template-columns:38px minmax(0,1fr) 24px;gap:12px;align-items:center;min-height:84px;border-left:1px solid rgba(255,255,255,.13);padding:9px 0 9px 18px;color:rgba(255,255,255,.35);transition:.3s ease}.ap-agent-route li:before{content:"";position:absolute;left:-4px;top:50%;width:7px;height:7px;transform:translateY(-50%);border-radius:50%;background:#3b3938}.ap-agent-route li>span{display:grid;width:38px;height:38px;place-items:center;border:1px solid rgba(255,255,255,.1);border-radius:13px;background:rgba(255,255,255,.05);font:700 9px/1 "Syne",sans-serif}.ap-agent-route li strong,.ap-agent-route li small{display:block}.ap-agent-route li strong{font-size:12px}.ap-agent-route li small{overflow:hidden;margin-top:5px;font-size:9px;line-height:1.35;text-overflow:ellipsis;white-space:nowrap}.ap-agent-route li>i{display:grid;width:24px;height:24px;place-items:center;border-radius:50%;background:rgba(255,255,255,.06);font-size:10px;font-style:normal}.ap-agent-route li.is-active{border-left-color:rgba(231,162,149,.58);color:#fff}.ap-agent-route li.is-active:before{background:#e7a295;box-shadow:0 0 0 6px rgba(231,162,149,.1)}.ap-agent-route li.is-active>span{border-color:rgba(231,162,149,.36);background:rgba(159,56,38,.32);color:#f5b5a9}.ap-agent-route li.is-active>i{background:#e7f3e8;color:#347441}
-  .ap-agent-result{visibility:hidden;transform:translateY(8px);border:1px solid rgba(231,162,149,.24);border-radius:20px;background:rgba(159,56,38,.18);padding:16px;opacity:0;transition:.35s ease}.ap-agent-result.is-visible{visibility:visible;transform:none;opacity:1}.ap-agent-result>span{color:#f0a697}.ap-agent-result>strong{display:block;margin-top:9px;font-size:11px;line-height:1.42}.ap-agent-result>small{display:flex;align-items:center;gap:7px;margin-top:12px;color:rgba(255,255,255,.55);font-size:9px;font-weight:700}.ap-agent-result>small i{width:6px;height:6px;border-radius:50%;background:#75cf87}
-  .ap-agent-progress{height:3px;background:rgba(255,255,255,.08)}.ap-agent-progress i{display:block;width:25%;height:100%;background:linear-gradient(90deg,var(--ap-brown),#e48d79);transition:width .35s ease}
-  .ap-agent-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:0 12px 12px}.ap-agent-steps button{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:center;border:0;border-right:1px solid rgba(255,255,255,.08);background:transparent;padding:17px 14px;color:rgba(255,255,255,.42);font:inherit;text-align:left;cursor:pointer}.ap-agent-steps button:last-child{border-right:0}.ap-agent-steps button>span{font:700 9px/1 "Syne",sans-serif}.ap-agent-steps strong,.ap-agent-steps small{display:block}.ap-agent-steps strong{font-size:11px}.ap-agent-steps small{overflow:hidden;margin-top:4px;font-size:9px;text-overflow:ellipsis;white-space:nowrap}.ap-agent-steps button:hover,.ap-agent-steps button:focus-visible,.ap-agent-steps button.is-active{color:#fff;outline:none}.ap-agent-steps button.is-active>span{color:#e7a295}
-  @keyframes apAgentPulse{50%{box-shadow:0 0 0 10px rgba(117,207,135,0)}}@keyframes apAgentMessage{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
-
-  .ap-branch-brain{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);overflow:hidden;border:1px solid var(--ap-line);border-radius:34px;background:#111;box-shadow:0 24px 70px rgba(17,17,17,.1)}
-  .ap-branch-brain-visual{position:relative;overflow:hidden;padding:28px;background:linear-gradient(145deg,#111 0%,#1d1715 100%)}
-  .ap-branch-brain-visual:after{content:"";position:absolute;right:-90px;bottom:-110px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(159,56,38,.42),transparent 68%)}
-  .ap-brain-ticket{position:relative;z-index:2;display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid rgba(255,255,255,.13);border-radius:20px;background:rgba(255,255,255,.08);padding:13px;color:#fff}
-  .ap-brain-ticket>span{display:grid;width:44px;height:44px;place-items:center;border-radius:14px;background:#fff;color:var(--ap-brown);font:700 11px/1 "Syne",sans-serif}
-  .ap-brain-ticket strong,.ap-brain-ticket p{display:block;margin:0}.ap-brain-ticket strong{font-size:13px}.ap-brain-ticket p{display:-webkit-box;overflow:hidden;margin-top:4px;color:rgba(255,255,255,.62);font-size:11px;line-height:1.35;-webkit-line-clamp:2;-webkit-box-orient:vertical}
-  .ap-brain-ticket small{border-radius:999px;background:rgba(124,203,134,.14);padding:7px 9px;color:#9ee0a6;font:700 9px/1 "Syne",sans-serif;text-transform:uppercase}
-  .ap-brain-orbit{position:relative;z-index:1;min-height:360px;margin-top:18px;border:1px solid rgba(255,255,255,.08);border-radius:28px;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:30px 30px}
-  .ap-brain-orbit:before,.ap-brain-orbit:after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border:1px solid rgba(231,162,149,.2);border-radius:50%}.ap-brain-orbit:before{width:240px;height:240px}.ap-brain-orbit:after{width:315px;height:315px}
-  .ap-brain-core{position:absolute;z-index:2;left:50%;top:50%;display:grid;width:132px;height:132px;place-items:center;transform:translate(-50%,-50%);border-radius:50%;background:#fff;color:#111;text-align:center;box-shadow:0 0 0 14px rgba(159,56,38,.1)}
-  .ap-brain-core span{color:var(--ap-brown);font:700 14px/1 "Syne",sans-serif}.ap-brain-core strong{margin-top:-28px;font-size:13px;line-height:1.15}
-  .ap-brain-node{position:absolute;z-index:3;display:flex;min-width:124px;align-items:center;gap:9px;border:1px solid rgba(255,255,255,.13);border-radius:999px;background:#201f1e;padding:9px 12px;color:rgba(255,255,255,.68);font:inherit;cursor:pointer;transition:.2s}
-  .ap-brain-node>span{display:grid;width:30px;height:30px;place-items:center;border-radius:50%;background:rgba(255,255,255,.08);color:#e7a295;font:700 9px/1 "Syne",sans-serif}.ap-brain-node>strong{font-size:11px}
-  .ap-brain-node:hover,.ap-brain-node:focus-visible,.ap-brain-node.is-active{border-color:rgba(231,162,149,.46);background:var(--ap-brown);color:#fff;outline:none}.ap-brain-node.is-active>span{background:#fff;color:var(--ap-brown)}
-  .ap-brain-node.is-node-1{left:18px;top:24px}.ap-brain-node.is-node-2{right:18px;top:24px}.ap-brain-node.is-node-3{left:18px;bottom:24px}.ap-brain-node.is-node-4{right:18px;bottom:24px}
-  .ap-branch-brain-copy{display:flex;min-width:0;flex-direction:column;background:#fff;padding:28px}
-  .ap-brain-tabs{display:flex;flex-wrap:wrap;gap:7px}.ap-brain-tabs button{border:1px solid var(--ap-line);border-radius:999px;background:#fff;padding:10px 12px;color:var(--ap-muted);font:800 11px/1 "Public Sans",sans-serif;cursor:pointer}.ap-brain-tabs button:hover,.ap-brain-tabs button:focus-visible,.ap-brain-tabs button.is-active{border-color:var(--ap-brown);background:var(--ap-brown);color:#fff;outline:none}
-  .ap-brain-panel{min-height:235px;display:flex;flex-direction:column;justify-content:center;padding:26px 4px}.ap-brain-panel h3{margin:0;font-size:clamp(27px,3vw,38px);line-height:1.06}.ap-brain-panel p{margin:15px 0 0;color:var(--ap-muted);font-size:15px;line-height:1.58}
-  .ap-brain-output-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:auto}.ap-brain-output-grid>div{border:1px solid var(--ap-line);border-radius:18px;background:var(--ap-soft-2);padding:15px}.ap-brain-output-grid span,.ap-brain-output-grid strong{display:block}.ap-brain-output-grid span{color:var(--ap-brown);font:700 9px/1 "Syne",sans-serif;letter-spacing:1.2px;text-transform:uppercase}.ap-brain-output-grid strong{margin-top:8px;font-size:12px;line-height:1.35}
-
-  .ap-route-planner{display:grid;grid-template-columns:minmax(300px,.78fr) minmax(0,1.22fr);gap:14px;border-radius:34px;background:#111;padding:18px;box-shadow:0 24px 70px rgba(17,17,17,.11)}
-  .ap-route-steps{display:grid;gap:9px}.ap-route-steps button{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:center;border:1px solid rgba(255,255,255,.12);border-radius:20px;background:rgba(255,255,255,.06);padding:14px;color:rgba(255,255,255,.7);font:inherit;text-align:left;cursor:pointer}.ap-route-steps button:hover,.ap-route-steps button:focus-visible,.ap-route-steps button.is-active{border-color:rgba(231,162,149,.38);background:#fff;color:#111;outline:none}.ap-route-steps button>span{display:grid;width:44px;height:44px;place-items:center;border-radius:14px;background:rgba(255,255,255,.08);color:#e7a295;font:700 10px/1 "Syne",sans-serif}.ap-route-steps button.is-active>span{background:var(--ap-brown);color:#fff}.ap-route-steps strong,.ap-route-steps small{display:block}.ap-route-steps strong{font-size:13px}.ap-route-steps small{margin-top:4px;color:inherit;font-size:10px;line-height:1.35}
-  .ap-route-map{position:relative;overflow:hidden;min-height:350px;display:flex;flex-direction:column;justify-content:center;border-radius:26px;background:linear-gradient(145deg,#fff,#f5eee9);padding:34px}.ap-route-map:after{content:"";position:absolute;right:-80px;bottom:-100px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(159,56,38,.18),transparent 68%)}.ap-route-map>*{position:relative;z-index:1}.ap-route-map-head span{display:block;color:var(--ap-brown);font:700 10px/1 "Syne",sans-serif;letter-spacing:1.3px;text-transform:uppercase}.ap-route-map-head strong{display:block;max-width:620px;margin-top:12px;font-size:25px;line-height:1.15}.ap-route-map>p{max-width:620px;margin:24px 0 0;color:var(--ap-muted);font-size:14px;line-height:1.55}
-  .ap-route-line{display:grid;grid-template-columns:auto 1fr auto 1fr auto 1fr auto;gap:8px;align-items:center;margin-top:38px}.ap-route-line span{border-radius:999px;background:#dddcd7;padding:8px 10px;color:var(--ap-muted);font-size:10px;font-weight:850}.ap-route-line span.is-active{background:var(--ap-brown);color:#fff}.ap-route-line i{height:2px;background:#d7d4cf}
-
-  .ap-implementation-shell{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(330px,.8fr);gap:16px;align-items:start}
-  .ap-implementation-roadmap{display:grid;gap:9px}.ap-implementation-phase{overflow:hidden;border:1px solid var(--ap-line);border-radius:24px;background:#fff}.ap-implementation-phase summary{display:grid;grid-template-columns:48px minmax(0,1fr) 30px;gap:15px;align-items:center;padding:20px;cursor:pointer;list-style:none}.ap-implementation-phase summary>span{display:grid;width:48px;height:48px;place-items:center;border-radius:15px;background:#111;color:#fff;font:700 11px/1 "Syne",sans-serif}.ap-implementation-phase h3{margin:0;font-size:19px}.ap-implementation-phase p{margin:6px 0 0;color:var(--ap-muted);font-size:12px;line-height:1.45}.ap-phase-items{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;border-top:1px solid var(--ap-line);padding:16px 20px 20px}.ap-phase-items span{border-radius:15px;background:var(--ap-soft-2);padding:13px;color:#111;font-size:11px;font-weight:800;line-height:1.35}
-  .ap-implementation-summary{position:sticky;top:96px;overflow:hidden;border-radius:30px;background:#111;color:#fff;padding:28px;box-shadow:0 20px 60px rgba(17,17,17,.11)}.ap-implementation-summary:after{content:"";position:absolute;right:-75px;bottom:-90px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(159,56,38,.48),transparent 70%)}.ap-implementation-summary>*{position:relative;z-index:1}.ap-implementation-summary .ap-kicker{color:#e7a295}.ap-implementation-summary h3{margin:0;font-size:32px}.ap-implementation-summary>p{margin:14px 0 0;color:rgba(255,255,255,.68);font-size:13px;line-height:1.55}.ap-implementation-summary .ap-button{margin-top:22px}
-  .ap-proof-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:22px}.ap-proof-metrics>div{border:1px solid rgba(255,255,255,.13);border-radius:16px;background:rgba(255,255,255,.07);padding:12px}.ap-proof-metrics span,.ap-proof-metrics strong{display:block}.ap-proof-metrics span{color:#e7a295;font:700 9px/1 "Syne",sans-serif}.ap-proof-metrics strong{margin-top:8px;font-size:11px;line-height:1.3}
-
-  @media(max-width:980px){.ap-proposal-feature-grid{grid-template-columns:1fr}.ap-proposal-feature summary{min-height:auto}.ap-agent-demo-body,.ap-branch-brain,.ap-route-planner,.ap-implementation-shell{grid-template-columns:1fr}.ap-agent-chat{border-right:0;border-bottom:1px solid rgba(255,255,255,.1)}.ap-agent-route{min-height:500px}.ap-implementation-summary{position:relative;top:auto}.ap-route-steps{grid-template-columns:repeat(3,minmax(0,1fr))}.ap-route-steps button{grid-template-columns:1fr}.ap-route-steps button>span{width:38px;height:38px}}
-  @media(max-width:640px){.ap-proposal-feature summary{grid-template-columns:42px minmax(0,1fr) 26px;padding:21px 18px}.ap-proposal-feature summary>span{width:42px;height:42px}.ap-agent-demo{border-radius:26px}.ap-agent-demo-head{min-height:64px;padding:14px 17px}.ap-agent-live span,.ap-agent-time span{display:none}.ap-agent-chat,.ap-agent-route{padding:20px}.ap-agent-messages{min-height:390px}.ap-agent-message{max-width:92%}.ap-agent-message>p{font-size:12px}.ap-agent-controls{flex-wrap:wrap}.ap-agent-controls .is-next{order:-1;width:100%;justify-content:space-between}.ap-agent-controls .is-reset{margin-left:0}.ap-agent-route{min-height:500px}.ap-agent-steps{grid-template-columns:repeat(2,minmax(0,1fr));padding:6px}.ap-agent-steps button{border-bottom:1px solid rgba(255,255,255,.08);padding:13px 10px}.ap-agent-steps button:nth-child(2){border-right:0}.ap-agent-steps button:nth-child(n+3){border-bottom:0}.ap-branch-brain-visual,.ap-branch-brain-copy{padding:18px}.ap-brain-orbit{min-height:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:170px 12px 12px}.ap-brain-orbit:before,.ap-brain-orbit:after{display:none}.ap-brain-core{top:82px}.ap-brain-node{position:relative;inset:auto!important;min-width:0;justify-content:center}.ap-brain-node>strong{font-size:10px}.ap-brain-output-grid,.ap-proof-metrics{grid-template-columns:1fr}.ap-brain-panel{min-height:260px}.ap-route-planner{padding:12px}.ap-route-steps{grid-template-columns:1fr}.ap-route-steps button{grid-template-columns:44px 1fr}.ap-route-map{min-height:330px;padding:24px}.ap-route-line{grid-template-columns:repeat(4,1fr);gap:5px}.ap-route-line i{display:none}.ap-route-line span{text-align:center}.ap-implementation-phase summary{grid-template-columns:42px minmax(0,1fr) 28px;padding:17px}.ap-implementation-phase summary>span{width:42px;height:42px}.ap-phase-items{grid-template-columns:1fr}.ap-implementation-summary{padding:24px}}
-</style>
-
-<style>
-  .ap-niche-pain-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:0;padding:0;border-block:1px solid var(--ap-line);list-style:none}.ap-niche-pain-list li{display:grid;grid-template-columns:38px minmax(0,1fr);gap:14px;border-bottom:1px solid var(--ap-line);padding:22px 6px}.ap-niche-pain-list li:nth-child(odd){padding-right:28px}.ap-niche-pain-list li:nth-child(even){border-left:1px solid var(--ap-line);padding-left:28px}.ap-niche-pain-list li:nth-last-child(-n+2){border-bottom:0}.ap-niche-pain-list li>span{color:var(--ap-brown);font:700 9px "Syne",sans-serif}.ap-niche-pain-list h3{margin:0;font-size:17px}.ap-niche-pain-list p{margin:7px 0 0;color:var(--ap-muted);font-size:13px;line-height:1.55}.ap-more-products{display:inline-flex;margin-top:24px}.ap-niche-boundaries{border-block:1px solid rgba(255,255,255,.15)}.ap-niche-boundaries article{display:grid;grid-template-columns:minmax(220px,.45fr) minmax(0,1fr);gap:32px;border-bottom:1px solid rgba(255,255,255,.13);padding:20px 0}.ap-niche-boundaries article:last-child{border-bottom:0}.ap-niche-boundaries h3{margin:0;font-size:17px}.ap-niche-boundaries p{margin:0;color:rgba(255,255,255,.62);font-size:13px;line-height:1.55}.ap-implementation-roadmap{max-width:900px}.ap-implementation-phase{border-right:0;border-left:0;border-radius:0;background:transparent}.ap-phase-items span{border-left:1px solid rgba(159,56,38,.28);border-radius:0;background:transparent;padding:8px 12px}@media(max-width:680px){.ap-niche-pain-list{grid-template-columns:1fr}.ap-niche-pain-list li:nth-child(n){border-left:0;border-bottom:1px solid var(--ap-line);padding:18px 0}.ap-niche-pain-list li:last-child{border-bottom:0}.ap-niche-boundaries article{grid-template-columns:1fr;gap:8px}}
-</style>

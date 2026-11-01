@@ -168,7 +168,6 @@ export const legacyKnowledgeArticles: KnowledgeArticle[] = [
     ],
     related: [
       { label: "Product", title: "Bekijk Voice AI voor telefonische opvang.", href: "/nl/producten/" },
-      { label: "Proces", title: "Zo bouwen we een AI-brein met regels en context.", href: "/nl/proces/" },
       { label: "Afspraak", title: "Bespreek welke klantreis geschikt is.", href: "/nl/afspraak/" }
     ],
     sources: [
@@ -284,8 +283,7 @@ export const legacyKnowledgeArticles: KnowledgeArticle[] = [
     related: [
       { label: "Kennis", title: "Lees over AI agents voor klantcontact.", href: "/nl/kennisbank/wat-betekenen-ai-agents-voor-klantcontact/" },
       { label: "Producten", title: "Bekijk Chat AI, Voice AI en Follow-up AI.", href: "/nl/producten/" },
-      { label: "Proces", title: "Ontwerp eerst de workflow.", href: "/nl/proces/" }
-    ],
+      ],
     sources: [
       { label: "OpenAI Agents documentatie", href: "https://platform.openai.com/docs/guides/agents" },
       { label: "Anthropic Claude modeldocumentatie", href: "https://docs.anthropic.com/en/docs/about-claude/models/overview" }
@@ -508,7 +506,6 @@ export const legacyKnowledgeArticles: KnowledgeArticle[] = [
     ],
     related: [
       { label: "Artikel", title: "Bekijk hoe een sterk kennisbankartikel is opgebouwd.", href: "/nl/kennisbank/wat-betekenen-ai-agents-voor-klantcontact/" },
-      { label: "Proces", title: "Van kennis naar systeem.", href: "/nl/proces/" },
       { label: "Afspraak", title: "Bespreek je kennisbankroute.", href: "/nl/afspraak/" }
     ],
     sources: [

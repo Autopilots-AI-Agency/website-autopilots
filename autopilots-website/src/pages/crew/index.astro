@@ -24,7 +24,7 @@ const copy = {
 }[locale];
 ---
 <BaseLayout title={`${copy.kicker} | Autopilots`} description={copy.description} canonical={localizedPath("page.crew",locale)} locale={locale} contentId="page.crew">
-  <main class="ap-crew-page"><section class="ap-section"><div class="ap-container">
+  <main id="ap-crew" class="ap-crew-page"><section class="ap-section"><div class="ap-container">
     <div class="ap-kicker">{copy.kicker}</div><h1 class="ap-page-title">{copy.title} <span class="ap-accent">{copy.accent}</span></h1>
     <p class="ap-lead">{copy.lead}</p>
 
@@ -61,4 +61,61 @@ const copy = {
   .ap-crew-principles strong{font-size:16px}
   @media(max-width:560px){.ap-team-slider img{width:40%;max-width:140px;min-width:108px}}
   @media(max-width:700px){.ap-crew-principles{grid-template-columns:1fr}.ap-crew-principles li+li{padding-left:0}}
+</style>
+
+<style is:inline>
+  #ap-crew{color:#f5f1e8;background:radial-gradient(ellipse at 15% 20%,rgba(228,240,242,.055),transparent 45%),#101f26}
+  #ap-crew .ap-container{max-width:1120px}
+  #ap-crew .ap-container>.ap-kicker,#ap-crew .ap-page-title,#ap-crew .ap-container>.ap-lead{text-align:center;margin-left:auto;margin-right:auto}
+  #ap-crew .ap-page-title{max-width:850px;font-size:clamp(34px,4.3vw,54px);line-height:1.12;letter-spacing:-.045em;text-wrap:balance}
+  #ap-crew .ap-accent{color:#be8a5c;font-style:italic}
+  #ap-crew .ap-kicker{color:#d5ae8d;letter-spacing:.16em;font-size:12px;margin-bottom:20px}
+  #ap-crew .ap-lead{max-width:690px;font-size:18px;line-height:1.75;color:#adbec4;margin-top:24px;text-wrap:pretty}
+  #ap-crew .ap-crew-console{background:linear-gradient(125deg,rgba(255,255,255,.035),transparent 65%),#182d35;border-color:#354a52;box-shadow:0 24px 65px #07151b30;border-radius:24px}
+  #ap-crew .ap-crew-console-head{color:#adbec4;letter-spacing:.09em}
+  #ap-crew .ap-crew-console-head i{background:#cca37f;box-shadow:0 0 0 5px #cca37f12}
+  #ap-crew .ap-crew-story{min-height:360px;padding:36px}
+  #ap-crew .ap-crew-story h2,#ap-crew .ap-crew-connection h2{color:#f5f1e8;font-size:clamp(27px,3vw,36px);line-height:1.18;letter-spacing:-.035em;text-wrap:balance}
+  #ap-crew .ap-crew-story p,#ap-crew .ap-crew-values p,#ap-crew .ap-crew-band p{color:#adbec4}
+  #ap-crew .ap-crew-values>li>span{background:transparent;color:#d5ae8d;border:1px solid #d5ae8d30;border-radius:50%}
+  #ap-crew .ap-crew-values h3{font-size:18px;color:#f5f1e8}
+  #ap-crew .ap-crew-console-foot{color:#adbec4}
+  #ap-crew .ap-crew-console-foot strong{color:#d5ae8d}
+  #ap-crew .ap-crew-connection{margin-top:64px;border-color:#354a52;text-align:center}
+  #ap-crew .ap-crew-connection-copy{margin:auto;max-width:700px}
+  #ap-crew .ap-crew-principles{gap:24px;border:0}
+  #ap-crew .ap-crew-principles li{justify-content:center;padding:20px 0;border-color:#354a52}
+  #ap-crew .ap-crew-principles span{color:#d5ae8d}
+  #ap-crew .ap-team-inline{padding-top:80px;padding-bottom:64px}
+  #ap-crew .ap-section-head{text-align:center;max-width:720px;margin:auto}
+  #ap-crew .ap-section-head .ap-lead{margin-left:auto;margin-right:auto;font-size:16px}
+  #ap-crew .ap-section-title{font-size:clamp(30px,3.5vw,44px);line-height:1.15;letter-spacing:-.035em}
+  #ap-crew .ap-team-shell{background:transparent;border:0;box-shadow:none;border-radius:0;max-width:980px;margin:36px auto 0}
+  #ap-crew .ap-team-slider{gap:24px;padding:0 0 24px;scroll-padding:0}
+  #ap-crew .ap-team-slider article{flex:0 0 calc((100% - 48px)/3);padding:0;align-items:flex-start;text-align:left;min-width:0}
+  #ap-crew .ap-team-slider img{width:100%;max-width:none;min-width:0;aspect-ratio:1/1.08;object-fit:cover;border-radius:20px;border:1px solid #354a52;filter:grayscale(1);transition:filter .5s,transform .5s}
+  #ap-crew .ap-team-slider article:hover img{filter:grayscale(0);transform:translateY(-3px)}
+  #ap-crew .ap-team-slider strong{font-size:18px;color:#f5f1e8;margin-top:18px;line-height:1.4}
+  #ap-crew .ap-team-slider span{color:#adbec4;font-size:13px;font-weight:400}
+  #ap-crew .ap-team-controls{padding:20px 0;border-color:#354a52}
+  #ap-crew .ap-team-controls button{background:#1b3039;border-color:#526069;color:#f5f1e8;transition:background .2s}
+  #ap-crew .ap-team-controls button:hover{background:#805236}
+  #ap-crew .ap-team-controls button:focus-visible{outline:2px solid #d5ae8d;outline-offset:4px}
+  #ap-crew .ap-crew-band{background:radial-gradient(ellipse at 50% 0%,#ffffff09,transparent 75%),#182d35;border:1px solid #354a52;border-radius:24px;text-align:center;padding:48px 32px}
+  #ap-crew .ap-crew-band h2{color:#f5f1e8;max-width:680px;margin:auto;text-wrap:balance}
+  #ap-crew .ap-crew-band p{margin:20px auto 0}
+  @media(max-width:700px){
+    #ap-crew .ap-crew-story{padding:28px 24px;min-height:0}
+    #ap-crew .ap-crew-intro{margin-top:36px}
+    #ap-crew .ap-lead{font-size:16px;line-height:1.65}
+    #ap-crew .ap-crew-principles{gap:0}
+    #ap-crew .ap-team-slider{gap:16px}
+    #ap-crew .ap-team-slider article{flex-basis:80%}
+    #ap-crew .ap-team-inline{padding-top:58px;padding-bottom:40px}
+    #ap-crew .ap-crew-console-foot{display:flex;justify-content:space-between;gap:8px;font-size:9px;letter-spacing:0;padding:20px}
+    #ap-crew .ap-crew-console-foot span,#ap-crew .ap-crew-console-foot strong{padding-left:0}
+    #ap-crew .ap-crew-console-foot span:before,#ap-crew .ap-crew-console-foot strong:before{content:none}
+    #ap-crew .ap-crew-band{padding:32px 22px}
+  }
+  @media(prefers-reduced-motion:reduce){#ap-crew .ap-team-slider img{transition:none;transform:none}}
 </style>
