@@ -83,6 +83,7 @@
 #ap-editorial-site :is(.ap-product-visual,.ap-conversation-card,.ap-niche-result,.ap-calculator-output)::after{background:radial-gradient(circle,#bd875d25,transparent 68%)}
 #ap-editorial-site :is(.ap-visual-node,.ap-demo-output,.ap-brain-ticket,.ap-agent-demo-body,.ap-process-output,.ap-blog-summary,.ap-blog-example,.ap-blog-cta,.ap-niche-boundaries,.ap-niche-pain-list,.ap-recommendation-scope){background:var(--ap-soft);color:var(--ap-text);border-color:var(--ap-line)}
 #ap-editorial-site :is(.ap-info-card>span,.ap-visual-node>span,.ap-chip,.ap-knowledge-pill){background:#bd875d20;color:#dfb48f;border-color:#bd875d55}
+#ap-editorial-site :is(.ap-article-card,.ap-feature-card) .ap-chip-row :is(span,em){background:#13262e;color:#e3bb98;border:1px solid #bd875d55;border-radius:8px;padding:7px 12px;font-size:12px;font-style:normal;font-weight:650;line-height:1.4;box-shadow:none}
 #ap-editorial-site :is(.ap-message.is-ai,.ap-message.is-customer){background:#263e47;color:var(--ap-text);border:1px solid var(--ap-line)}
 #ap-editorial-site .ap-message.is-ai{border-color:#bd875d66}
 #ap-editorial-site :is(.ap-visual-head span,.ap-conversation-head span,.ap-conversation-result small,.ap-demo-tabs button>span,.ap-footer-column>strong,.ap-footer-brand .ap-kicker){color:var(--ap-brown)}
