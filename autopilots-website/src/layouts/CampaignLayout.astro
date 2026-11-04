@@ -1,4 +1,5 @@
 ---
+import Footer from '../components/layout/Footer.astro';
 import SiteIcon from '../components/SiteIcon.astro';
 import "../styles/global.css";
 import "../styles/campaign.css";
@@ -35,6 +36,8 @@ const campaignBackendBase = import.meta.env.VITE_AUTOPILOTS_SCAN_URL || '';
   <body>
     <a class="ap-skip-link" href="#campaign-content">{({nl:"Ga naar de inhoud",en:"Skip to content",es:"Ir al contenido",de:"Zum Inhalt",it:"Vai al contenuto",fr:"Aller au contenu"})[locale]}</a>
     <main id="campaign-content"><slot /></main>
+    <Footer locale={locale}/>
+    <style is:global>#campaign-content :is(.ap-entry-footer,.ap-page-footer){display:none}</style>
     <aside class="ap-campaign-consent" data-campaign-consent hidden aria-label="Cookievoorkeuren">
       <div>
         <strong>Wij vinden je privacy belangrijk</strong>

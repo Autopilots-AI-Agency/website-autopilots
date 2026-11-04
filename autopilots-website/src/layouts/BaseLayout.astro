@@ -94,7 +94,7 @@ const schemaItems = [...globalSchema, ...(schema ? (Array.isArray(schema) ? sche
     <main id="main-content">
       <slot />
     </main>
-    {!customChrome && <Footer locale={locale} editorial={editorial} />}
+    <Footer locale={locale} />
     {editorial && <EditorialMotion/>}
     <ConsentManager locale={locale} />
     <script is:inline>
