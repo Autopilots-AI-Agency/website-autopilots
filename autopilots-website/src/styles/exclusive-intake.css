@@ -1492,3 +1492,6 @@
     opacity: 0.35;
   }
 }
+#ap-intake .choice > b.line-arrow{position:relative;display:block;width:18px;height:18px;font-size:0;transform:none}
+#ap-intake .choice > b.line-arrow::before{content:"";position:absolute;inset:2px 2px auto auto;width:12px;height:12px;border-top:1.5px solid currentColor;border-right:1.5px solid currentColor}
+#ap-intake .choice > b.line-arrow::after{content:"";position:absolute;top:9px;left:0;width:21px;height:1.5px;background:currentColor;transform:rotate(-45deg);transform-origin:center}
