@@ -984,6 +984,39 @@
   #ap-connected .dx-flip-back .dx-admin-body h4 {
     font-size: 28px;
   }
+  /* On touch layouts, don't rely on a nested 3D surface to hide the reverse
+     side. Both faces size the same grid cell so switching can't shift the page. */
+  #ap-connected .dx-flip { perspective: none; }
+  #ap-connected .dx-flip-rotor {
+    transform: none;
+    transform-style: flat;
+    transition: none;
+  }
+  #ap-connected .dx-flip-rotor > :is(.dx-flip-front, .dx-flip-back) {
+    position: relative;
+    inset: auto;
+    min-width: 0;
+    transform: none;
+  }
+  #ap-connected .dx-flip-rotor > .dx-flip-front[aria-hidden="true"],
+  #ap-connected .dx-flip-rotor > .dx-flip-back:not([aria-hidden="false"]) {
+    visibility: hidden;
+  }
+  #ap-connected .dx-admin-top {
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+  }
+  #ap-connected .dx-admin-body input {
+    font-size: 16px;
+  }
+  #ap-connected .dx-flip-toggle {
+    min-height: 44px;
+    font-size: 12px;
+  }
+  #ap-connected:not(.us-static) .dx-flip-rotor > [aria-hidden="false"] {
+    animation: sx-website-face-in .22s ease-out both;
+  }
   #ap-connected .sx-together {
     font-size: 7px;
     gap: 5px;
@@ -1048,6 +1081,10 @@
   #ap-connected .dx-chat-mode .sx-agent > .sx-transcript p { font-size:12px; }
   #ap-connected [data-panel="0"] .dx-bottom { justify-content:center; margin-top:14px; }
   #ap-connected [data-panel="0"] [data-dx-status] { display:none; }
+}
+@keyframes sx-website-face-in {
+  from { opacity: .75; }
+  to { opacity: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
   #ap-connected .sx-phone {

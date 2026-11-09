@@ -108,19 +108,48 @@ test("scroll builds the house, flips to its backend and reverses correctly", asy
       expect(box!.width).toBeGreaterThan(page.viewportSize()!.width * 0.9);
       expect(box!.x).toBe(16);
     }
-    // Scrolling may already have revealed the backend; the toggle must respect it.
-    if (
-      (await page.locator(".dx-flip-back").getAttribute("aria-hidden")) ===
-      "true"
-    ) {
-      await page.locator(".dx-flip-toggle").click();
-    }
-    await expect(page.locator(".dx-flip-back")).toHaveAttribute(
-      "aria-hidden",
-      "false",
+    const website = panels.nth(2);
+    const front = website.locator(".dx-flip-front");
+    const back = website.locator(".dx-flip-back");
+    const rotor = website.locator(".dx-flip-rotor");
+    const scrollToProgress = (progress: number) =>
+      website.evaluate((panel, progress) => {
+        const track = panel.parentElement!;
+        const travel = Math.max(
+          0,
+          track.offsetHeight - (panel as HTMLElement).offsetHeight,
+        );
+        const line = innerHeight * 0.75;
+        window.scrollTo({
+          top:
+            scrollY +
+            track.getBoundingClientRect().top -
+            line +
+            progress * (line + travel - 20),
+          behavior: "instant",
+        });
+      }, progress);
+    await scrollToProgress(0.55);
+    await expect(front).toBeVisible();
+    await expect(back).toBeHidden();
+    const height = (await rotor.boundingBox())!.height;
+    await scrollToProgress(0.96);
+    await expect(back).toBeVisible();
+    await expect(front).toBeHidden();
+    await expect(rotor).toHaveCSS("transform", "none");
+    expect(Math.abs((await rotor.boundingBox())!.height - height)).toBeLessThan(
+      1,
     );
+    await scrollToProgress(0.55);
+    await expect(front).toBeVisible();
+    await expect(back).toBeHidden();
+    await scrollToProgress(0.96);
+    await expect(back).toBeVisible();
+    await expect(front).toBeHidden();
     await page.getByLabel("Titel op je website").fill("Ruimte om te groeien.");
-    await page.locator(".dx-flip-toggle").click();
+    await website.locator(".dx-flip-toggle").click();
+    await expect(front).toBeVisible();
+    await expect(back).toBeHidden();
     await expect(page.locator(".dx-flip-front h4")).toContainText(
       "Ruimte om te groeien.",
     );
