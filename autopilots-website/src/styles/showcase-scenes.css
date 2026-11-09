@@ -1008,6 +1008,9 @@
     flex-wrap: wrap;
     gap: 6px 12px;
   }
+  #ap-connected .dx-admin-body > small {
+    color: #4e5d49;
+  }
   #ap-connected .dx-admin-body input {
     font-size: 16px;
   }
