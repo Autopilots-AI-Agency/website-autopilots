@@ -41,7 +41,7 @@ const copy = {
 
     <section class="ap-crew-connection"><div class="ap-crew-connection-copy"><div class="ap-kicker">{copy.connection}</div><h2>{copy.connectionTitle}</h2><p>{copy.connectionText}</p></div><ol class="ap-crew-principles">{copy.principles.map((item,index)=><li><span>{String(index+1).padStart(2,"0")}</span><strong>{item}</strong></li>)}</ol></section>
 
-    <section class="ap-section ap-team-inline"><div class="ap-section-head"><div class="ap-kicker">{copy.meet}</div><h2 class="ap-section-title">{copy.built} <span class="ap-accent">{copy.team}</span></h2><p class="ap-lead">{copy.teamText}</p></div><div class="ap-team-shell"><div class="ap-team-slider" data-crew-slider>{crew.map(member=><article><img src={member[2]} alt={member[0]} loading="lazy" /><strong>{member[0]}</strong><span>{member[1]}</span></article>)}</div><div class="ap-team-controls"><span>Autopilots</span><div><button type="button" data-crew-prev aria-label={copy.previous}>←</button><button type="button" data-crew-next aria-label={copy.next}>→</button></div></div></div></section>
+    <section class="ap-section ap-team-inline"><div class="ap-section-head"><div class="ap-kicker">{copy.meet}</div><h2 class="ap-section-title">{copy.built} <span class="ap-accent">{copy.team}</span></h2><p class="ap-lead">{copy.teamText}</p></div><div class="ap-team-shell"><div class="ap-team-slider" data-crew-slider>{crew.map(member=><article>{(member[2].endsWith("/larissa-rosanna-pen.webp") || member[2].endsWith("/hasan-shabbir.png") || member[2].endsWith("/albert-verlinden.png") || member[2].endsWith("/luca-van-der-meer.webp") || member[2].endsWith("/pratt-olan.webp") || member[2].endsWith("/mit-dong.webp") || member[2].endsWith("/rohail-zuberi.webp")) ? <div class="ap-team-portrait-frame"><img src={member[2]} alt={member[0]} loading="lazy" /></div> : <img src={member[2]} alt={member[0]} loading="lazy" />}<strong>{member[0]}</strong><span>{member[1]}</span></article>)}</div><div class="ap-team-controls"><span>Autopilots</span><div><button type="button" data-crew-prev aria-label={copy.previous}>←</button><button type="button" data-crew-next aria-label={copy.next}>→</button></div></div></div></section>
     <div class="ap-crew-band"><div class="ap-kicker">{copy.stand}</div><h2>{copy.bandTitle}</h2><p>{copy.bandText}</p></div>
   </div></section></main>
 </BaseLayout>
@@ -95,6 +95,16 @@ const copy = {
   #ap-crew .ap-team-slider article{flex:0 0 calc((100% - 48px)/3);padding:0;align-items:flex-start;text-align:left;min-width:0}
   #ap-crew .ap-team-slider img{width:100%;max-width:none;min-width:0;aspect-ratio:1/1.08;object-fit:cover;border-radius:20px;border:1px solid #354a52;filter:grayscale(1);transition:filter .5s,transform .5s}
   #ap-crew .ap-team-slider article:hover img{filter:grayscale(0);transform:translateY(-3px)}
+  #ap-crew .ap-team-portrait-frame{width:100%;aspect-ratio:1/1.08;overflow:hidden;border-radius:20px;border:1px solid #354a52;transition:transform .5s}
+  #ap-crew .ap-team-portrait-frame img{height:100%;border:0;border-radius:0;scale:1.045;transform-origin:center top}
+  #ap-crew .ap-team-portrait-frame img[src$="/hasan-shabbir.png"]{scale:1.07}
+  #ap-crew .ap-team-portrait-frame img[src$="/albert-verlinden.png"]{scale:1.022;transform-origin:center bottom}
+  #ap-crew .ap-team-portrait-frame img[src$="/luca-van-der-meer.webp"]{scale:1.089;transform-origin:center bottom}
+  #ap-crew .ap-team-portrait-frame img[src$="/pratt-olan.webp"]{scale:1.133}
+  #ap-crew .ap-team-portrait-frame img[src$="/mit-dong.webp"]{scale:1.096}
+  #ap-crew .ap-team-portrait-frame img[src$="/rohail-zuberi.webp"]{scale:1.075;transform-origin:center bottom}
+  #ap-crew .ap-team-slider article:hover .ap-team-portrait-frame img{transform:none}
+  @media(prefers-reduced-motion:no-preference){#ap-crew .ap-team-slider article:hover .ap-team-portrait-frame{transform:translateY(-3px)}}
   #ap-crew .ap-team-slider strong{font-size:18px;color:#f5f1e8;margin-top:18px;line-height:1.4}
   #ap-crew .ap-team-slider span{color:#adbec4;font-size:13px;font-weight:400}
   #ap-crew .ap-team-controls{padding:20px 0;border-color:#354a52}
