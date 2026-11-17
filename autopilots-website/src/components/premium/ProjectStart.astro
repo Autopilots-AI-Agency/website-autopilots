@@ -1,0 +1,148 @@
+---
+import HomeTeam from './HomeTeam.astro';
+import SiteIcon from '../SiteIcon.astro';
+import '../../styles/projectstart.css';
+
+const { preview = false } = Astro.props;
+
+const steps = [
+  ['Kick-off', 'We bespreken jullie doelen, prioriteiten en wat we nodig hebben om te starten.'],
+  ['Akkoord op afspraken', 'Jullie ontvangen de afspraken en geven akkoord op wat we bouwen en wie wat aanlevert.'],
+  ['Bouwen en testen', 'Na jullie akkoord bouwen we de eerste versie, testen we en verwerken we jullie feedback.'],
+  ['Livegang', 'Als alles klaar is, zetten we de oplossing live. We spreken vooraf af wie wat doet.'],
+  ['Het vervolg', 'We verzorgen updates, onderhoud, beheer en hosting. De eerste week na livegang monitoren we jullie oplossing dagelijks om fouten snel op te sporen.'],
+];
+const cases = [
+  { kind: 'AI-medewerkers', name: 'Animals Faith', copy: 'Een AI-telefoniste die gerichte vragen stelt en afspraken plant.', slug: 'animals-faith', logo: 'animals-faith.png', art: 'voice' },
+  { kind: 'Software', name: 'Dakcentrale Nederland', copy: 'Eén systeem voor leadopvolging, inspecties en werkplanning.', slug: 'dakcentrale-nederland', logo: 'dakcentrale-nederland.png', art: 'board' },
+  { kind: 'Websites', name: 'Heeren 3 Architecten', copy: 'Een snelle website die het team zelf kan bijwerken.', slug: 'heeren-3-architecten', logo: 'h3a.png', art: 'site' },
+];
+---
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="description" content="Welkom bij Autopilots. Plan jullie kick-off en bekijk hoe we samenwerken." />
+    <meta name="theme-color" content="#101e25" />
+    <title>Jullie projectstart | Autopilots</title>
+    <SiteIcon />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800;900&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+  </head>
+  <body id="ap-projectstart">
+    <header class="ps-wrap ps-top">
+      <a href="/nl/" class="ps-wordmark" aria-label="Autopilots homepage">AUTOPILOTS</a>
+      {preview && <span class="ps-preview">Lokale preview</span>}
+    </header>
+    <main>
+      <section class="ps-hero" aria-labelledby="ps-title">
+        <div class="ps-wrap">
+          <p class="ps-paid">{preview && <svg aria-hidden="true" viewBox="0 0 20 20"><path d="m5.5 10 3 3 6-6"/></svg>} {preview ? 'Betaling geslaagd' : 'Jullie projectstart'} <span>· Gefeliciteerd</span></p>
+          <h1 id="ps-title">Welkom bij Autopilots.<br /><em>We gaan samen aan de slag.</em></h1>
+          <p class="ps-intro">De eerste stap is jullie kick-off. Daar bespreken we wat jullie willen bereiken, wat er al staat en wat we als eerste oppakken.</p>
+          <a class="ps-button" href="#kick-off">Plan jullie kick-off <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h11m-4-4 4 4-4 4"/></svg></a>
+        </div>
+      </section>
+      <section class="ps-wrap ps-booking" id="kick-off" aria-labelledby="ps-booking-title">
+        <header class="ps-heading"><p class="cs-eyebrow">De eerste stap</p><h2 id="ps-booking-title">Plan jullie kick-off.</h2><p>Kies een moment dat jullie uitkomt.</p></header>
+        <iframe
+          class="ps-booking-frame"
+          src="https://api.leadconnectorhq.com/widget/booking/MRSiGxfxpgsty6K9TVrP"
+          allow="payment"
+          scrolling="no"
+          id="MRSiGxfxpgsty6K9TVrP_1794906097174"
+          title="Boek jullie kick-off met Autopilots"
+        ></iframe>
+        <script is:inline src="https://link.msgsndr.com/js/form_embed.js"></script>
+      </section>
+      <section class="ps-wrap ps-process" aria-labelledby="ps-process-title">
+        <header class="ps-heading"><p class="cs-eyebrow">Jullie projectstart</p><h2 id="ps-process-title">Zo werken we samen.</h2></header>
+        <ol class="ps-timeline">
+          {steps.map(([title, copy], i) => <li aria-current={i === 0 ? 'step' : undefined}><span class="ps-step" aria-hidden="true">0{i + 1}</span><div><h3>{title}</h3><p>{copy}</p></div></li>)}
+        </ol>
+      </section>
+      <section class="ps-wrap ps-prep" id="voorbereiding" aria-labelledby="ps-prep-title">
+        <div class="ps-prep-card">
+          <div class="ps-prep-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 6H4v14h16v-4M11 13l2.5-.5L21 5l-2-2-7.5 7.5L11 13Z"/></svg></div>
+          <div><p class="cs-eyebrow">Voor jullie kick-off</p><h2 id="ps-prep-title">Jullie checklist komt eraan.</h2><p>Vóór de kick-off stuurt jullie contactpersoon een checklist per e-mail. Daarin staat wat we voor jullie project nodig hebben en wat jullie alvast kunnen voorbereiden.</p></div>
+        </div>
+      </section>
+      <HomeTeam />
+      <section class="ps-wrap ps-work" aria-labelledby="ps-work-title">
+        <header class="ps-heading"><p class="cs-eyebrow">Ons werk</p><h2 id="ps-work-title">Wat we nog meer bouwen</h2><p>Drie voorbeelden van hoe we ideeën omzetten in iets dat werkt.</p></header>
+        <div class="ps-cases">
+          {cases.map(item => <article class="ps-case">
+            <div class="ps-case-top"><span>{item.kind}</span><img src={`/samenwerkingen/${item.logo}`} loading="lazy" alt="" /></div>
+            <div class:list={['ps-art', `ps-art--${item.art}`]} aria-hidden="true">
+              {item.art === 'voice' && <svg viewBox="0 0 260 95" fill="none"><path d="M16 47h34m160 0h34" opacity=".25"/>{[10,24,38,20,53,30,67,35,47,25,36,19,10].map((height, i)=><path stroke-width="3" stroke-linecap="round" d={`M${64+i*11} ${47-height/2}v${height}`}/>)}</svg>}
+              {item.art === 'board' && <div class="ps-mini-board"><div><i></i><i></i><i></i></div><section>{[0,1,2].map(() => <span><i></i><i></i><i></i></span>)}</section></div>}
+              {item.art === 'site' && <img src="/cases/h3a/website.png" loading="lazy" alt="" />}
+            </div>
+            <h3>{item.name}</h3><p>{item.copy}</p>
+            <a href={`/nl/cases/${item.slug}/`}>Bekijk de case <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h11m-4-4 4 4-4 4"/></svg><span class="ps-sr-only">: {item.name}</span></a>
+          </article>)}
+        </div>
+      </section>
+    </main>
+    <footer class="ps-wrap ps-footer"><a href="/nl/" class="ps-wordmark">AUTOPILOTS</a><a href="mailto:support@auto-pilots.io">Stel een vraag</a></footer>
+    <script>
+      const timeline = document.querySelector<HTMLOListElement>('.ps-timeline');
+      const processTitle = document.querySelector<HTMLElement>('#ps-process-title');
+      if (timeline && processTitle) {
+        const nodes = [...timeline.querySelectorAll<HTMLElement>('.ps-step')];
+        const mobile = matchMedia('(max-width: 760px)');
+        const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+        let frame = 0;
+        let active = -1;
+
+        const paint = () => {
+          frame = 0;
+          if (reduced.matches || nodes.length < 2) {
+            delete timeline.dataset.scrollMotion;
+            nodes.forEach(node => node.parentElement?.classList.remove('ps-scroll-active'));
+            active = -1;
+            return;
+          }
+          const bounds = timeline.getBoundingClientRect();
+          const centers = nodes.map(node => {
+            const { x, y, width, height } = node.getBoundingClientRect();
+            return { x: x - bounds.x + width / 2, y: y - bounds.y + height / 2 };
+          });
+          const first = centers[0];
+          const last = centers[centers.length - 1];
+          const clamp = (value: number) => Math.min(1, Math.max(0, value));
+          const isMobile = mobile.matches;
+          // The heading anchor and desktop scroll start share the same offset.
+          const start = isMobile ? 0 : parseFloat(getComputedStyle(processTitle).scrollMarginTop);
+          const progress = isMobile
+            ? clamp((innerHeight * .6 - bounds.top - first.y) / (last.y - first.y))
+            : clamp((start - processTitle.getBoundingClientRect().top - 1) / Math.min(310, innerHeight * .45));
+          const x = first.x + (last.x - first.x) * progress;
+          const y = first.y + (last.y - first.y) * progress;
+          timeline.style.setProperty('--ps-marker-x', `${x}px`);
+          timeline.style.setProperty('--ps-marker-y', `${y}px`);
+          timeline.toggleAttribute('data-marker-at-start', !isMobile && progress === 0);
+          timeline.dataset.scrollMotion = 'on';
+
+          const next = centers.reduce((closest, point, index) =>
+            Math.hypot(point.x - x, point.y - y) < Math.hypot(centers[closest].x - x, centers[closest].y - y)
+              ? index : closest, 0);
+          if (next !== active) {
+            nodes.forEach((node, index) => node.parentElement?.classList.toggle('ps-scroll-active', index === next));
+            active = next;
+          }
+        };
+        const schedule = () => { if (!frame) frame = requestAnimationFrame(paint); };
+        addEventListener('scroll', schedule, { passive: true });
+        addEventListener('resize', schedule);
+        reduced.addEventListener('change', schedule);
+        new ResizeObserver(schedule).observe(timeline);
+        schedule();
+      }
+
+    </script>
+  </body>
+</html>
