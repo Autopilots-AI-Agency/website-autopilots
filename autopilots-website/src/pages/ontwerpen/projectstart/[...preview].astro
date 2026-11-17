@@ -1,0 +1,8 @@
+---
+import ProjectStart from '../../../components/premium/ProjectStart.astro';
+
+export function getStaticPaths() {
+  return import.meta.env.DEV ? [{ params: { preview: undefined } }] : [];
+}
+---
+<ProjectStart preview />
