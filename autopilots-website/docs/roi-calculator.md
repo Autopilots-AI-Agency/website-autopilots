@@ -25,7 +25,9 @@ De copy is verder ingekort: geen herhaalde introducties onder de drie invoergroe
 ## Rekenmodel
 
 - Beschikbare telefonie-uren = FTE × contracturen/week × 52 / 12 × telefonieaandeel.
-- Vergelijkbare uren = minimum van factureerbare minuten / 60 en beschikbare telefonie-uren. Geen optelling van FTE-waarde en belminutenwaarde.
+- Huidige arbeidswaarde = beschikbare telefonie-uren × werkgeversuurtarief. Deze volgt FTE, contracturen en telefonieaandeel, ook bij fractionele FTE zoals 1,2. Bij 1 FTE, 40 uur, 100% telefonie en € 50/uur is dit € 8.666,67 per maand; bij 1,2 FTE of 48 contracturen is dit € 10.400.
+- Voor AI in aanmerking komende uren = minimum van factureerbare minuten / 60 en beschikbare telefonie-uren. Alleen de AI-tijdwinst is hiermee begrensd; de huidige arbeidswaarde niet. Geen optelling van FTE-waarde en belminutenwaarde.
+- Vergelijkingskaart met AI = huidige arbeidswaarde minus vrijgemaakte arbeidswaarde plus AI-maandkosten. Bij gelijk belvolume stijgen huidige en resterende arbeidswaarde evenveel wanneer de FTE/contracturen stijgen. Netto AI-voordeel wordt daardoor niet fictief hoger.
 - Zelfstandig door AI = vergelijkbare uren × zelfstandig-afhandelingspercentage.
 - Netto vrijgemaakte uren = maximaal 0, zelfstandig door AI minus extra menselijke opvolging. Bij meer opvolging dan automatisering wordt de extra arbeidswaarde wel als nadeel meegenomen.
 - Resterend werk = vergelijkbare uren minus zelfstandig door AI plus extra menselijke opvolging.
