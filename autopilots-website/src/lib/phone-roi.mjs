@@ -128,6 +128,8 @@ export function calculatePhoneRoi(input) {
   const availableHours =
     (((values.fte * values.weeklyHours * 52) / 12) * values.phoneShare) / 100;
   const volumeHours = values.minutes / 60;
+  // Current labour value follows the entered staff capacity. Only the hours
+  // eligible for AI time savings are capped by the entered call volume.
   const baselineHours = Math.min(volumeHours, availableHours);
   const automatedHours = (baselineHours * values.automation) / 100;
   const savedHours = Math.max(0, automatedHours - values.followup);
@@ -174,7 +176,7 @@ export function calculatePhoneRoi(input) {
     firstMonthBenefit,
     usageCost,
     aiMonthly,
-    baselineValue: money(baselineHours * hourlyCost),
+    baselineValue: money(availableHours * hourlyCost),
     capacityLimited: volumeHours > availableHours + 0.000001,
     followupExceedsAutomation: values.followup > automatedHours,
   };

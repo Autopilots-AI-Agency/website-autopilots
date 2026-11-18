@@ -39,13 +39,38 @@ test("known capacity example includes usage, residual work and implementation on
   assert.equal(r.aiMonthly, 970);
   assert.equal(r.monthlyNet, 255);
   assert.equal(r.remainingHours, 15);
-  assert.equal(r.withAiValue, 1495);
+  assert.equal(r.baselineValue, 2426.67);
+  assert.equal(r.withAiValue, 2171.67);
   assert.equal(r.firstMonthNet, -357.5);
   assert.equal(r.yearOne, 1447.5);
   assert.equal(r.followingYear, 3060);
   assert.equal(r.breakEvenWholeMonth, 7);
   assert.equal(r.cumulative[0].value, -1000);
   assert.equal(r.cumulative[12].value, r.yearOne);
+});
+test("current labour value scales with fractional FTE and contract hours without inflating AI savings", () => {
+  const input = { ...phoneRoiDefaults, implementation: 1000, management: 100 };
+  const base = calculatePhoneRoi(input);
+  const fractional = calculatePhoneRoi({ ...input, fte: 1.2 });
+  const longerWeek = calculatePhoneRoi({ ...input, weeklyHours: 48 });
+  assert.equal(base.baselineValue, 8666.67);
+  assert.equal(fractional.availableHours, 208);
+  assert.equal(fractional.baselineValue, 10400);
+  assert.equal(longerWeek.baselineValue, 10400);
+  for (const result of [base, fractional, longerWeek]) {
+    assert.equal(result.savedHours, 42.5);
+    assert.equal(result.monthlyNet, 1155);
+    assert.equal(result.usageCost, 870);
+    assert.equal(
+      Math.round((result.baselineValue - result.withAiValue) * 100),
+      115500,
+    );
+  }
+  assert.equal(
+    calculatePhoneRoi({ ...input, phoneShare: 50 }).baselineValue,
+    4333.33,
+  );
+  assert.equal(calculatePhoneRoi({ ...input, fte: 0 }).baselineValue, 0);
 });
 test("missing proposal costs produce no fictional ROI; explicit zero is accepted", () => {
   const r = calculatePhoneRoi(phoneRoiDefaults);

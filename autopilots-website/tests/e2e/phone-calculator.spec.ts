@@ -57,6 +57,29 @@ test("proposal costs remain blank until entered; known calculation is exact", as
   await expect(page.locator("[data-chart-line]")).not.toHaveAttribute("d");
 });
 
+test("current labour value follows fractional FTE and contract hours; AI savings keep their volume limit", async ({
+  page,
+}) => {
+  await page.locator("#rc-implementation").fill("1000");
+  await page.locator("#rc-management").fill("100");
+  const current = page.locator('[data-output="current"]');
+  const withAi = page.locator('[data-output="with"]');
+  await expect(current).toHaveText(/8.667/);
+  await expect(withAi).toHaveText(/7.512/);
+  await page.locator("#rc-fte").fill("1.2");
+  await expect(current).toHaveText(/10.400/);
+  await expect(withAi).toHaveText(/9.245/);
+  await expect(page.locator('[data-output="net"]')).toHaveText(/1.155/);
+  await page.locator("#rc-fte").fill("1");
+  await page.locator("#rc-weeklyHours").fill("48");
+  await expect(current).toHaveText(/10.400/);
+  await expect(withAi).toHaveText(/9.245/);
+  await expect(page.locator('[data-output="hours"]')).toHaveText("42,5 uur");
+  await page.locator("#rc-phoneShare").fill("50");
+  await expect(current).toHaveText(/5.200/);
+  await expect(page.locator('[data-output="net"]')).toHaveText(/1.155/);
+});
+
 test("visible usage equation and monthly breakdown follow minutes and tariff", async ({
   page,
 }) => {
