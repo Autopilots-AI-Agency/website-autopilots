@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import '../../styles/phone-calculator.css';
+import { phoneRoiDefaults as defaults } from '../../lib/phone-roi.mjs';
+const field = (name:string,label:string,value:number|string,min=0,max=10000000,step='1',help='') => ({name,label,value,min,max,step,help});
+const groups = [
+ { kind:'people', title:'Jullie huidige personeelskosten', fields:[field('fte','Aantal betrokken FTE',1,0,1000,'0.1','Alleen medewerkers die telefonie verzorgen. 1 FTE = één voltijdfunctie.'),field('weeklyHours','Contracturen per FTE / week',40,0,80,'1'),field('phoneShare','Werktijd voor telefonie (%)',defaults.phoneShare,0,100,'1')]},
+ { kind:'usage', title:'AI-inzet en minutenverbruik', fields:[field('minutes','Verwacht AI-verbruik (minuten / maand)',3000,0,1000000,'1','Alle factureerbare AI-belminuten volgens jullie voorstel.'),field('minuteRate','Tarief per AI-belminuut (€)',0.29,0,100,'0.01'),field('automation','Zelfstandig afgehandeld door AI (%)',defaults.automation,0,100,'1','Schat dit inclusief controles en nazorg. Het overige werk blijft bij het team.')]},
+ { kind:'costs', title:'Inrichting en vaste AI-kosten', fields:[field('implementation','Eenmalige implementatie (€)','',0,10000000,'0.01'),field('management','Beheer, support & onderhoud (€ / maand)','',0,10000000,'0.01'),field('otherMonthly','Overige kosten (€ / maand)',0,0,10000000,'0.01','Alleen extra kosten, zoals nummerhuur of licenties.')]},
+];
+const schema={'@context':'https://schema.org','@type':'WebApplication',name:'ROI-calculator AI Telefoniste',url:new URL('/calculator/',Astro.site),applicationCategory:'BusinessApplication',operatingSystem:'Web browser',inLanguage:'nl-NL',description:'Bereken de indicatieve capaciteitswaarde, kosten en terugverdientijd van een AI Telefoniste.'};
+---
+<BaseLayout title="ROI-calculator AI Telefoniste: kosten & terugverdientijd | Autopilots" description="Bereken de mogelijke tijdwinst en terugverdientijd van een AI Telefoniste. Inclusief implementatie, beheer, € 0,29 per minuut en resterende menselijke opvolging." canonical="/calculator/" locale="nl" standalone schema={schema}>
+ <Fragment slot="head"><link rel="alternate" hreflang="nl-NL" href={new URL('/calculator/',Astro.site).toString()}/><link rel="alternate" hreflang="x-default" href={new URL('/calculator/',Astro.site).toString()}/></Fragment>
+ <div id="ap-phone-calculator">
+  <section class="rc-hero rc-wrap" aria-labelledby="rc-title">
+   <a class="rc-back" href="/nl/">Terug naar Autopilots</a>
+   <p class="rc-eyebrow">INZICHT IN JULLIE INVESTERING</p>
+   <h1 id="rc-title">Wat levert een AI Telefoniste op?<br/><em>Bereken jullie mogelijke voordeel.</em></h1>
+   <p class="rc-intro">Tijdwinst en kosten in één overzicht. Inclusief inrichting, beheer en verbruik.</p>
+   <a class="rc-button" href="#berekenen">Bereken jullie voordeel <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16m-6-6 6 6 6-6"/></svg></a>
+   <p class="rc-caption">Jullie cijfers blijven in deze browser. Geen account nodig.</p>
+  </section>
+  <ol class="rc-steps rc-wrap" aria-label="Zo werkt de calculator"><li><span>01</span><div><strong>Huidige kosten</strong><p>Team, uren en uurtarief.</p></div></li><li><span>02</span><div><strong>AI-inzet en verbruik</strong><p>Minuten, tarief en afhandeling.</p></div></li><li><span>03</span><div><strong>Het netto resultaat</strong><p>Maandkosten en terugverdientijd.</p></div></li></ol>
+  <section id="berekenen" class="rc-wrap rc-calculator" aria-labelledby="rc-calc-title">
+   <div class="rc-section-head"><div><p class="rc-eyebrow">JULLIE BEDRIJF. JULLIE BEREKENING.</p><h2 id="rc-calc-title">Van aannames naar inzicht.</h2></div><p>Pas de voorbeeldinvoer aan.<br/>Bedragen excl. btw.</p></div>
+   <noscript><p class="rc-notice">Zet JavaScript aan om te rekenen. Jullie invoer wordt niet verstuurd.</p></noscript>
+   <div class="rc-workspace">
+    <form id="rc-form" class="rc-inputs" novalidate>
+     {groups.map((group,index)=><fieldset data-group={group.kind}><legend><span>0{index+1}</span>{group.title}</legend><div class="rc-fields">{group.fields.map(f=><div class="rc-field"><label for={`rc-${f.name}`}>{f.label}</label><div class="rc-input"><input id={`rc-${f.name}`} name={f.name} type="number" min={f.min} max={f.max} step={f.step} value={f.value} inputmode="decimal" required aria-describedby={f.help?`rc-${f.name}-help`:undefined} placeholder={f.value===''?'Bedrag uit jullie voorstel':undefined}/></div>{f.help&&<p id={`rc-${f.name}-help`} class="rc-help">{f.help}</p>}</div>)}</div>
+      {group.kind==='people'&&<div class="rc-salary"><div class="rc-field"><label for="rc-costMode">Werkgeverskosten berekenen</label><select id="rc-costMode" name="costMode"><option value="total">Volledig werkgeversuurtarief</option><option value="breakdown">Uurtarief zelf opbouwen</option></select></div><div data-salary-total class="rc-field"><label for="rc-hourlyCost">Volledig werkgeversuurtarief (€)</label><input id="rc-hourlyCost" name="hourlyCost" type="number" min="0" max="1000" step="0.01" value={defaults.hourlyCost} required/><p class="rc-help">Inclusief vakantiegeld, werkgeverslasten, pensioen en overige lasten.</p></div><div data-salary-breakdown hidden><div class="rc-fields">{[field('grossHourly','Bruto uurloon (€)',22,0,1000,'0.01'),field('holiday','Vakantiegeld (%)',0,0,100,'0.1'),field('employer','Werkgeverslasten (%)',0,0,100,'0.1'),field('pension','Werkgeversdeel pensioen (%)',0,0,100,'0.1'),field('otherHourly','Overige lasten (€ / uur)',0,0,1000,'0.01')].map(f=><div class="rc-field"><label for={`rc-${f.name}`}>{f.label}</label><input id={`rc-${f.name}`} name={f.name} type="number" min={f.min} max={f.max} step={f.step} value={f.value}/></div>)}</div><p class="rc-help">Eigen percentages, elk apart over het bruto uurloon.</p></div></div>}
+     </fieldset>)}
+     <button class="rc-reset" type="reset">Herstel voorbeeldinvoer</button>
+    </form>
+    <aside class="rc-results" aria-labelledby="rc-result-title">
+     <div class="rc-result-heading"><p class="rc-eyebrow">KOSTEN EN RESULTAAT</p><h2 id="rc-result-title">Jullie maandoverzicht.</h2><p>Rekent direct mee met jullie invoer.</p></div>
+     <section class="rc-usage-summary" data-usage-summary aria-labelledby="rc-usage-title">
+      <h3 id="rc-usage-title">Minutenverbruik per maand</h3>
+      <p class="rc-usage-equation"><span><b data-output="minutes">3.000</b> min <span aria-label="maal">×</span> <b data-output="minuteRate">€ 0,29</b></span><strong>= <span data-output="usage">€ 870</span></strong></p>
+      <dl><div><dt>Beheer, support & onderhoud</dt><dd data-output="management">—</dd></div><div><dt>Overige maandkosten</dt><dd data-output="otherMonthly">€ 0</dd></div><div class="rc-cost-total"><dt>Totaal AI per maand</dt><dd data-output="ai">—</dd></div></dl>
+      <p class="rc-help">Eenmalige inrichting: <b data-output="setup">—</b>. Meegenomen in de terugverdientijd.</p>
+     </section>
+     <section class="rc-launch" aria-labelledby="rc-launch-title">
+      <h3 id="rc-launch-title">Een rustige start.</h3>
+      <p>Maand 1 rekenen we met halve AI-inzet, voor monitoring en bijsturing.</p>
+      <dl><div><dt>Maand 1 · opstart</dt><dd data-output="firstAutomation">42,5%</dd></div><div><dt>Vanaf maand 2</dt><dd data-output="fullAutomation">85%</dd></div></dl>
+      <p class="rc-help">Volledige maandkosten. Meegenomen in de prognose en terugverdientijd.</p>
+     </section>
+     <p id="rc-status" class="rc-notice" role="status" aria-live="polite">Vul inrichting en maandbeheer in. Niet van toepassing? Vul 0 in.</p>
+     <div class="rc-metrics"><article><span>Uren vrijgespeeld / maand</span><strong data-output="hours">42,5 <small>uur</small></strong><small>Vanaf maand 2.</small></article><article class="rc-featured"><span>Netto capaciteitswaarde / maand</span><strong data-output="net" data-result-state="neutral">—</strong><small>Vanaf maand 2, na AI-kosten. Tijdwaarde, geen automatische loonkostenbesparing.</small></article><article><span>Terugverdientijd inrichting</span><strong data-output="payback">—</strong><small data-payback-note>Inclusief de opstartmaand.</small></article></div>
+     <div class="rc-comparison"><article><h3>Huidige situatie</h3><p data-current-label>Arbeidswaarde telefonie</p><strong data-output="current">€ 2.500</strong><small>per maand</small></article><article><h3>Met AI Telefoniste</h3><p data-with-label>Resterende arbeidswaarde + AI</p><strong data-output="with">—</strong><small>per maand</small></article></div>
+     <p class="rc-help" data-comparison-note>Vanaf maand 2 · telefoniewerk, niet jullie volledige loonsom.</p>
+     <details class="rc-assumptions"><summary>Berekening en aannames</summary><dl><div><dt>Werkgeversuurtarief</dt><dd data-output="hourly">€ 50</dd></div><div><dt>Beschikbare telefonie-uren</dt><dd data-output="available">173,3 uur</dd></div><div><dt>Uren in de vergelijking</dt><dd data-output="baseline">50 uur</dd></div><div><dt>Netto arbeidswaarde vrijgemaakt</dt><dd data-output="gross">€ 2.125</dd></div><div><dt>Minutenverbruik AI</dt><dd data-output="usage">€ 870</dd></div><div><dt>AI-kosten totaal / maand</dt><dd data-output="ai">—</dd></div><div><dt>Eenmalige implementatie</dt><dd data-output="setup">—</dd></div></dl><p>Tijdwinst = telefonie-uren × AI-afhandeling. Telefonie-uren zijn begrensd door belminuten én beschikbare personeelsuren. Schat het AI-percentage inclusief controles en nazorg.</p><p>Alle ingevoerde minuten worden betaald, ook bij menselijke opvolging. Extra telefonie en licenties horen bij overige kosten. Extra omzet, belastingeffecten, ziekte, ontslagkosten, financiering en aanvullende opstartvertraging zijn niet meegerekend.</p><p>Uurtariefopbouw: bruto uurloon × (1 + som van de percentages ÷ 100) + overige uurkosten.</p></details>
+    </aside>
+   </div>
+  </section>
+  <section class="rc-wrap rc-impact" aria-labelledby="rc-impact-title">
+   <div class="rc-impact-head"><div><p class="rc-eyebrow">DE LANGE LIJN</p><h2 id="rc-impact-title">Wanneer wordt de investering waarde?</h2></div><span data-chart-mode>CAPACITEITSWAARDE · GEEN CASHFLOW</span></div>
+   <div class="rc-chart-layout">
+    <div class="rc-chart-panel"><p data-chart-caption>Vul de AI-kosten in om jullie verloop over twaalf maanden te zien.</p>
+     <svg class="rc-chart" viewBox="0 0 640 240" role="img" aria-labelledby="rc-chart-title rc-chart-desc"><title id="rc-chart-title">Cumulatief netto voordeel over twaalf maanden</title><desc id="rc-chart-desc">Na de eenmalige implementatie en maandelijkse AI-kosten. Nog geen complete invoer.</desc><line data-zero-line x1="24" x2="616" y1="120" y2="120"/><text data-zero-label x="24" y="108">€ 0</text><path data-chart-area/><path data-chart-line/><circle data-chart-dot r="5" hidden/><text x="24" y="232">Start</text><text x="320" y="232" text-anchor="middle">6 maanden</text><text x="616" y="232" text-anchor="end">12 maanden</text></svg>
+     <p class="rc-help" data-chart-assumptions>Maand 1 halve AI-afhandeling, daarna het ingestelde percentage. Inclusief inrichting en volledige maandkosten.</p>
+    </div>
+    <div class="rc-year-results"><article><span>Netto voordeel in jaar 1</span><strong data-output="yearOne">—</strong><p>Inclusief eenmalige implementatie.</p></article><article><span>Jaarlijks voordeel daarna</span><strong data-output="followingYear">—</strong><p>Bij dezelfde inzet en tarieven.</p></article><p class="rc-help" data-year-note>Tijdwaarde, geen winst- of omzetprognose.</p></div>
+   </div>
+  </section>
+  <section class="rc-wrap rc-cta"><p class="rc-eyebrow">JULLIE VOLGENDE STAP</p><h2>Wat betekent dit<br/><em>voor jullie bedrijf?</em></h2><p>Bekijk met de AI-scan waar AI jullie werk kan versterken.</p><a class="rc-button" href="/nl/ai-scan/">Ontdek jullie AI mogelijkheden <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a><div class="rc-related"><a href="/nl/producten/#ai-agents">Meer over AI Agents</a><a href="/nl/voor-wie/">Bekijk jullie branche</a></div></section>
+ </div>
+ <script src="../../scripts/phone-calculator.ts"></script>
+</BaseLayout>
