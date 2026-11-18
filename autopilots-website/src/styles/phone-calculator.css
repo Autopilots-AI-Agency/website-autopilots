@@ -1,0 +1,1022 @@
+#ap-phone-calculator {
+  --rc-ink: #f5f1e9;
+  --rc-muted: #b2c2c7;
+  --rc-bronze: #dbb18e;
+  --rc-border: rgba(191, 212, 219, 0.18);
+  color: var(--rc-ink);
+  font-family: "Public Sans", sans-serif;
+  overflow: clip;
+  background: radial-gradient(
+    ellipse 65% 14% at 50% 2%,
+    rgba(221, 236, 240, 0.06),
+    transparent 90%
+  );
+}
+#ap-phone-calculator *,
+#ap-phone-calculator *::before,
+#ap-phone-calculator *::after {
+  box-sizing: border-box;
+}
+#ap-phone-calculator [hidden] {
+  display: none !important;
+}
+#ap-phone-calculator .rc-wrap {
+  width: min(1120px, calc(100% - 48px));
+  margin-inline: auto;
+}
+#ap-phone-calculator h1,
+#ap-phone-calculator h2,
+#ap-phone-calculator h3,
+#ap-phone-calculator p {
+  margin: 0;
+}
+#ap-phone-calculator h1,
+#ap-phone-calculator h2 {
+  font-weight: 750;
+  letter-spacing: -0.045em;
+  line-height: 1.13;
+  text-wrap: balance;
+  color: var(--rc-ink);
+}
+#ap-phone-calculator h1 {
+  font-size: clamp(34px, 4.3vw, 57px);
+}
+#ap-phone-calculator h2 {
+  font-size: clamp(27px, 3vw, 38px);
+}
+#ap-phone-calculator em {
+  color: var(--rc-bronze);
+  font-style: normal;
+}
+#ap-phone-calculator .rc-eyebrow {
+  color: var(--rc-bronze);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.17em;
+  line-height: 1.6;
+}
+#ap-phone-calculator .rc-hero {
+  text-align: center;
+  padding-block: 36px 60px;
+}
+#ap-phone-calculator .rc-back {
+  display: inline-block;
+  color: var(--rc-muted);
+  font-size: 12px;
+  text-decoration: none;
+  margin-bottom: 54px;
+}
+#ap-phone-calculator .rc-hero .rc-eyebrow {
+  margin-bottom: 20px;
+}
+#ap-phone-calculator .rc-intro {
+  max-width: 620px;
+  margin: 24px auto 28px;
+  color: var(--rc-muted);
+  font-size: 17px;
+  line-height: 1.8;
+  text-wrap: pretty;
+}
+#ap-phone-calculator .rc-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 50px;
+  padding: 13px 23px;
+  border-radius: 10px;
+  background: linear-gradient(115deg, #7a4b32, #a87349 55%, #7c4c33);
+  border: 1px solid #c59a72;
+  box-shadow:
+    inset 0 1px 0 #ffffff20,
+    0 12px 36px #0002;
+  color: #fff9f0;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition:
+    transform 0.25s,
+    box-shadow 0.25s;
+}
+#ap-phone-calculator .rc-button:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 #ffffff30,
+    0 16px 36px #0004;
+}
+#ap-phone-calculator svg:not(.rc-chart) {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+#ap-phone-calculator .rc-caption {
+  color: var(--rc-muted);
+  font-size: 11px;
+  line-height: 1.7;
+  margin-top: 17px;
+}
+#ap-phone-calculator .rc-steps {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  padding: 25px 0;
+  border-block: 1px solid var(--rc-border);
+}
+#ap-phone-calculator .rc-steps li {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+#ap-phone-calculator .rc-steps li > span {
+  display: grid;
+  place-items: center;
+  width: 39px;
+  height: 39px;
+  border: 1px solid #b9875d66;
+  border-radius: 50%;
+  color: var(--rc-bronze);
+  font-family: Syne, sans-serif;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+#ap-phone-calculator .rc-steps strong {
+  font-size: 14px;
+  font-weight: 650;
+}
+#ap-phone-calculator .rc-steps p {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--rc-muted);
+  margin-top: 4px;
+}
+#ap-phone-calculator .rc-calculator {
+  padding-top: 70px;
+  scroll-margin-top: 100px;
+}
+#ap-phone-calculator .rc-section-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 32px;
+  margin-bottom: 30px;
+}
+#ap-phone-calculator .rc-section-head h2 {
+  margin-top: 12px;
+}
+#ap-phone-calculator .rc-section-head > p {
+  color: var(--rc-muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+#ap-phone-calculator .rc-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.03fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+#ap-phone-calculator fieldset {
+  min-width: 0;
+  margin: 0 0 16px;
+  padding: 25px;
+  border: 1px solid var(--rc-border);
+  border-radius: 20px;
+  background: linear-gradient(135deg, #1d333c, #172b33);
+}
+#ap-phone-calculator legend {
+  float: left;
+  width: 100%;
+  padding: 0;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+#ap-phone-calculator legend span {
+  font-size: 11px;
+  font-family: Syne, sans-serif;
+  color: var(--rc-bronze);
+}
+#ap-phone-calculator fieldset > .rc-fields {
+  clear: both;
+  padding-top: 12px;
+}
+#ap-phone-calculator .rc-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 19px 16px;
+}
+#ap-phone-calculator .rc-fields > .rc-field:first-child:last-child {
+  grid-column: 1/-1;
+}
+#ap-phone-calculator
+  .rc-inputs
+  [data-group="usage"]
+  > .rc-fields
+  > .rc-field:first-child,
+#ap-phone-calculator
+  .rc-inputs
+  [data-group="costs"]
+  > .rc-fields
+  > .rc-field:last-child {
+  grid-column: 1/-1;
+}
+#ap-phone-calculator .rc-field {
+  min-width: 0;
+}
+#ap-phone-calculator label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #e3e9e8;
+  line-height: 1.55;
+  margin-bottom: 8px;
+}
+#ap-phone-calculator input,
+#ap-phone-calculator select {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 47px;
+  padding: 11px 13px;
+  background: #10232b;
+  border: 1px solid #49616a;
+  border-radius: 9px;
+  color: #fff9f0;
+  font:
+    500 16px "Public Sans",
+    sans-serif;
+  font-variant-numeric: tabular-nums;
+  box-shadow: inset 0 2px 6px #0001;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+  color-scheme: dark;
+}
+#ap-phone-calculator select {
+  font-size: 13px;
+  padding-right: 24px;
+}
+#ap-phone-calculator input::placeholder {
+  font-size: 12px;
+  color: #92a7b0;
+  opacity: 1;
+}
+#ap-phone-calculator input:focus,
+#ap-phone-calculator select:focus {
+  outline: 0;
+  border-color: var(--rc-bronze);
+  box-shadow: 0 0 0 3px #b6845b24;
+}
+#ap-phone-calculator input[aria-invalid="true"] {
+  border-color: #f1a18b;
+}
+#ap-phone-calculator .rc-help {
+  color: var(--rc-muted);
+  font-size: 11px;
+  line-height: 1.7;
+  margin-top: 8px;
+}
+#ap-phone-calculator .rc-salary {
+  display: grid;
+  gap: 18px;
+  border-top: 1px solid var(--rc-border);
+  padding-top: 20px;
+  margin-top: 22px;
+}
+#ap-phone-calculator .rc-reset {
+  background: none;
+  border: 0;
+  color: var(--rc-muted);
+  font:
+    500 12px "Public Sans",
+    sans-serif;
+  padding: 8px 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+#ap-phone-calculator .rc-results {
+  padding: 27px;
+  border: 1px solid #b88a5e55;
+  border-radius: 22px;
+  background:
+    radial-gradient(ellipse at 100% 0, #d6e8ef09, transparent 60%), #142831;
+  box-shadow: 0 24px 70px #0002;
+}
+#ap-phone-calculator .rc-result-heading h2 {
+  font-size: 29px;
+  margin-top: 13px;
+}
+#ap-phone-calculator .rc-result-heading > p:last-child {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--rc-muted);
+  margin-top: 12px;
+}
+#ap-phone-calculator .rc-notice {
+  padding: 13px 15px;
+  background: #d6e4e80a;
+  border-left: 2px solid #c99b75;
+  border-radius: 0 8px 8px 0;
+  margin-top: 18px;
+  color: #d1dcde;
+  font-size: 11px;
+  line-height: 1.75;
+}
+#ap-phone-calculator .rc-launch {
+  margin-top: 22px;
+  padding: 20px 0 4px;
+  border-top: 1px solid var(--rc-border);
+}
+#ap-phone-calculator .rc-launch h3 {
+  font-size: 19px;
+  line-height: 1.3;
+  margin: 0 0 10px;
+}
+#ap-phone-calculator .rc-launch > p:not(.rc-eyebrow) {
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--rc-muted);
+}
+#ap-phone-calculator .rc-launch dl {
+  margin: 16px 0 12px;
+  display: grid;
+  gap: 12px;
+  font-size: 11px;
+}
+#ap-phone-calculator .rc-launch dl > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+}
+#ap-phone-calculator .rc-launch dt {
+  color: var(--rc-muted);
+}
+#ap-phone-calculator .rc-launch dd {
+  margin: 0;
+  color: var(--rc-ink);
+  font-weight: 700;
+  white-space: nowrap;
+}
+#ap-phone-calculator .rc-notice[data-error="true"] {
+  color: #ffd2c5;
+  border-color: #f1a18b;
+}
+#ap-phone-calculator .rc-metrics {
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0 22px;
+}
+#ap-phone-calculator .rc-metrics .rc-featured {
+  grid-column: 1/-1;
+  grid-row: 1;
+}
+#ap-phone-calculator .rc-usage-summary {
+  margin-top: 23px;
+  padding: 18px;
+  background: #0c2028;
+  border: 1px solid var(--rc-border);
+  border-radius: 13px;
+}
+#ap-phone-calculator .rc-usage-summary h3 {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--rc-muted);
+}
+#ap-phone-calculator .rc-usage-equation {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+#ap-phone-calculator .rc-usage-equation b {
+  font-weight: 600;
+  color: var(--rc-ink);
+}
+#ap-phone-calculator .rc-usage-equation strong {
+  font-size: 21px;
+  color: var(--rc-bronze);
+  white-space: nowrap;
+}
+#ap-phone-calculator .rc-usage-summary dl {
+  margin: 14px 0 0;
+}
+#ap-phone-calculator .rc-usage-summary dl > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 9px;
+  font-size: 11px;
+  color: var(--rc-muted);
+}
+#ap-phone-calculator .rc-usage-summary dt {
+  font-weight: 400;
+  line-height: 1.7;
+}
+#ap-phone-calculator .rc-usage-summary dd {
+  margin: 0;
+  color: var(--rc-ink);
+  white-space: nowrap;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+#ap-phone-calculator .rc-usage-summary .rc-cost-total {
+  border-top: 1px solid var(--rc-border);
+  margin-top: 6px;
+  padding-top: 13px;
+}
+#ap-phone-calculator .rc-cost-total dt,
+#ap-phone-calculator .rc-cost-total dd {
+  font-weight: 700;
+  color: var(--rc-bronze);
+}
+#ap-phone-calculator .rc-usage-summary .rc-help {
+  font-size: 10px;
+}
+#ap-phone-calculator .rc-metrics article {
+  padding: 22px 0;
+  border-bottom: 1px solid var(--rc-border);
+}
+#ap-phone-calculator .rc-metrics article > span {
+  display: block;
+  font-size: 12px;
+  color: var(--rc-muted);
+  line-height: 1.6;
+}
+#ap-phone-calculator .rc-metrics strong {
+  display: block;
+  font-family: Syne, "Public Sans", sans-serif;
+  font-size: 29px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.04em;
+  margin-top: 7px;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+#ap-phone-calculator .rc-metrics strong small {
+  font:
+    500 15px "Public Sans",
+    sans-serif;
+  letter-spacing: 0;
+}
+#ap-phone-calculator .rc-metrics article > small {
+  display: block;
+  font-size: 10px;
+  color: var(--rc-muted);
+  line-height: 1.7;
+  margin-top: 8px;
+}
+#ap-phone-calculator .rc-metrics .rc-featured strong {
+  font-size: 43px;
+}
+#ap-phone-calculator [data-output][data-result-state="positive"] {
+  color: #9ed7b6;
+}
+#ap-phone-calculator [data-output][data-result-state="negative"] {
+  color: #ffaaa1;
+}
+#ap-phone-calculator [data-output][data-result-state="neutral"] {
+  color: var(--rc-ink);
+}
+#ap-phone-calculator .rc-comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 13px;
+  margin-top: 24px;
+}
+#ap-phone-calculator .rc-comparison article {
+  min-width: 0;
+  background: #0c202880;
+  padding: 15px 12px;
+  border: 1px solid var(--rc-border);
+  border-radius: 12px;
+}
+#ap-phone-calculator .rc-comparison h3 {
+  font-size: 11px;
+  line-height: 1.5;
+  color: #e7e9e5;
+}
+#ap-phone-calculator .rc-comparison p {
+  font-size: 10px;
+  color: var(--rc-muted);
+  line-height: 1.6;
+  margin: 7px 0 10px;
+  min-height: 32px;
+}
+#ap-phone-calculator .rc-comparison strong {
+  font-size: 20px;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  display: block;
+  overflow-wrap: anywhere;
+}
+#ap-phone-calculator .rc-comparison small {
+  display: block;
+  font-size: 10px;
+  color: var(--rc-muted);
+  margin-top: 5px;
+}
+#ap-phone-calculator .rc-assumptions {
+  border-top: 1px solid var(--rc-border);
+  margin-top: 22px;
+  padding-top: 18px;
+  color: var(--rc-muted);
+  font-size: 11px;
+  line-height: 1.8;
+}
+#ap-phone-calculator .rc-assumptions summary {
+  cursor: pointer;
+  color: #e3dfd6;
+  font-weight: 600;
+  padding: 3px 0;
+}
+#ap-phone-calculator .rc-assumptions dl {
+  margin: 16px 0;
+}
+#ap-phone-calculator .rc-assumptions dl > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 7px 0;
+  border-bottom: 1px solid #ffffff0c;
+}
+#ap-phone-calculator .rc-assumptions dt {
+  font-weight: 400;
+}
+#ap-phone-calculator .rc-assumptions dd {
+  margin: 0;
+  color: #f1c9a4;
+  white-space: nowrap;
+}
+#ap-phone-calculator .rc-assumptions p {
+  margin-top: 12px;
+}
+#ap-phone-calculator .rc-impact {
+  padding-block: 78px 64px;
+}
+#ap-phone-calculator .rc-impact-head {
+  display: flex;
+  align-items: end;
+  gap: 20px;
+  justify-content: space-between;
+  margin-bottom: 26px;
+}
+#ap-phone-calculator .rc-impact-head h2 {
+  margin-top: 12px;
+  max-width: 580px;
+}
+#ap-phone-calculator .rc-impact-head > span {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--rc-bronze);
+  line-height: 1.8;
+  text-align: right;
+  max-width: 200px;
+}
+#ap-phone-calculator .rc-chart-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr);
+  gap: 30px;
+  border-block: 1px solid var(--rc-border);
+  padding-block: 27px;
+}
+#ap-phone-calculator .rc-chart-panel > p:first-child {
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--rc-muted);
+  min-height: 44px;
+}
+#ap-phone-calculator .rc-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 10px 0;
+}
+#ap-phone-calculator .rc-chart text {
+  fill: var(--rc-muted);
+  font:
+    11px "Public Sans",
+    sans-serif;
+}
+#ap-phone-calculator [data-zero-line] {
+  stroke: #8ba0aa66;
+  stroke-width: 1;
+  stroke-dasharray: 4 5;
+}
+#ap-phone-calculator [data-chart-line] {
+  fill: none;
+  stroke: var(--rc-bronze);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+#ap-phone-calculator [data-chart-area] {
+  fill: #c18b5d12;
+  stroke: none;
+}
+#ap-phone-calculator [data-chart-dot] {
+  fill: #e5bc95;
+  stroke: #10232b;
+  stroke-width: 3;
+}
+#ap-phone-calculator .rc-year-results {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-left: 1px solid var(--rc-border);
+  padding-left: 28px;
+}
+#ap-phone-calculator .rc-year-results article {
+  padding-block: 17px;
+}
+#ap-phone-calculator .rc-year-results article + article {
+  border-top: 1px solid var(--rc-border);
+}
+#ap-phone-calculator .rc-year-results span {
+  color: var(--rc-muted);
+  font-size: 11px;
+}
+#ap-phone-calculator .rc-year-results strong {
+  display: block;
+  font:
+    700 29px Syne,
+    sans-serif;
+  color: var(--rc-bronze);
+  letter-spacing: -0.04em;
+  line-height: 1.2;
+  margin-block: 7px;
+  overflow-wrap: anywhere;
+}
+#ap-phone-calculator .rc-year-results article p {
+  color: var(--rc-muted);
+  font-size: 10px;
+  line-height: 1.7;
+}
+#ap-phone-calculator .rc-case {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 80px;
+  align-items: center;
+  padding-block: 35px 80px;
+}
+#ap-phone-calculator .rc-case h2 {
+  margin-top: 14px;
+}
+#ap-phone-calculator .rc-case > div > p:not(.rc-eyebrow) {
+  color: var(--rc-muted);
+  font-size: 14px;
+  line-height: 1.9;
+  margin-top: 18px;
+}
+#ap-phone-calculator .rc-text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--rc-ink);
+  text-decoration: none;
+  margin-top: 23px;
+}
+#ap-phone-calculator .rc-text-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+#ap-phone-calculator .rc-case-proof {
+  padding: 26px;
+  text-align: center;
+  border: 1px solid var(--rc-border);
+  border-radius: 20px;
+  background: radial-gradient(ellipse at top, #d8e3e508, transparent), #172c35;
+}
+#ap-phone-calculator .rc-case-proof img {
+  display: block;
+  width: 142px;
+  height: 58px;
+  object-fit: contain;
+  margin: 0 auto 23px;
+  filter: brightness(0) invert(1);
+}
+#ap-phone-calculator .rc-case-proof > strong {
+  display: block;
+  color: var(--rc-bronze);
+  font:
+    700 56px Syne,
+    sans-serif;
+  letter-spacing: -0.05em;
+}
+#ap-phone-calculator .rc-case-proof > strong span {
+  font-size: 30px;
+}
+#ap-phone-calculator .rc-case-proof > p {
+  margin-top: 5px !important;
+  color: var(--rc-ink) !important;
+  font-size: 13px !important;
+}
+#ap-phone-calculator .rc-case-proof small {
+  display: block;
+  font-size: 10px;
+  line-height: 1.75;
+  color: var(--rc-muted);
+  max-width: 270px;
+  margin: 15px auto 0;
+}
+#ap-phone-calculator .rc-cta {
+  text-align: center;
+  border: 1px solid #c5976a55;
+  border-radius: 24px;
+  padding: 48px 26px;
+  margin-bottom: 65px;
+  background:
+    radial-gradient(ellipse at 50% 0, #e3f1f00a, transparent 75%), #172c35;
+}
+#ap-phone-calculator .rc-cta h2 {
+  font-size: clamp(30px, 3.4vw, 44px);
+  margin-top: 19px;
+}
+#ap-phone-calculator .rc-cta > p:not(.rc-eyebrow) {
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--rc-muted);
+  max-width: 510px;
+  margin: 20px auto 25px;
+}
+#ap-phone-calculator .rc-related {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 25px;
+}
+#ap-phone-calculator .rc-related a {
+  font-size: 11px;
+  text-decoration: none;
+  color: var(--rc-muted);
+}
+#ap-phone-calculator .rc-related a:hover {
+  color: var(--rc-ink);
+}
+#ap-phone-calculator a:focus-visible,
+#ap-phone-calculator button:focus-visible,
+#ap-phone-calculator summary:focus-visible {
+  outline: 2px solid #ecc199;
+  outline-offset: 5px;
+}
+@media (min-width: 1050px) {
+  #ap-phone-calculator .rc-results {
+    position: sticky;
+    top: 105px;
+  }
+}
+@media (max-width: 850px) {
+  #ap-phone-calculator .rc-workspace {
+    grid-template-columns: 1fr;
+  }
+  #ap-phone-calculator .rc-results {
+    padding: 26px;
+  }
+  #ap-phone-calculator .rc-metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 22px;
+  }
+  #ap-phone-calculator .rc-metrics .rc-featured {
+    grid-column: 1/-1;
+    grid-row: 1;
+  }
+  #ap-phone-calculator .rc-metrics strong {
+    font-size: 29px;
+  }
+  #ap-phone-calculator .rc-comparison p {
+    min-height: 0;
+  }
+  #ap-phone-calculator .rc-impact-head {
+    align-items: start;
+  }
+  #ap-phone-calculator .rc-case {
+    gap: 30px;
+  }
+  #ap-phone-calculator .rc-chart-layout {
+    grid-template-columns: 1fr;
+  }
+  #ap-phone-calculator .rc-year-results {
+    padding: 0;
+    border-left: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    border-top: 1px solid var(--rc-border);
+  }
+  #ap-phone-calculator .rc-year-results article + article {
+    border-top: 0;
+  }
+  #ap-phone-calculator .rc-year-results > .rc-help {
+    grid-column: 1/-1;
+    margin-top: -12px;
+  }
+}
+@media (max-width: 560px) {
+  #ap-phone-calculator .rc-wrap {
+    width: calc(100% - 36px);
+  }
+  #ap-phone-calculator .rc-hero {
+    padding-block: 23px 35px;
+  }
+  #ap-phone-calculator .rc-back {
+    margin-bottom: 35px;
+  }
+  #ap-phone-calculator .rc-hero .rc-eyebrow {
+    font-size: 9px;
+    margin-bottom: 15px;
+  }
+  #ap-phone-calculator h1 {
+    font-size: 34px;
+    line-height: 1.15;
+  }
+  #ap-phone-calculator .rc-intro {
+    font-size: 14px;
+    line-height: 1.8;
+    margin-block: 21px 24px;
+  }
+  #ap-phone-calculator .rc-button {
+    font-size: 12px;
+    padding: 13px 17px;
+    gap: 12px;
+    max-width: 100%;
+  }
+  #ap-phone-calculator .rc-caption {
+    font-size: 10px;
+  }
+  #ap-phone-calculator .rc-steps {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding-block: 24px;
+  }
+  #ap-phone-calculator .rc-steps li {
+    gap: 13px;
+  }
+  #ap-phone-calculator .rc-steps li > span {
+    height: 32px;
+    width: 32px;
+    font-size: 10px;
+  }
+  #ap-phone-calculator .rc-steps li > div {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  #ap-phone-calculator .rc-steps strong {
+    font-size: 12px;
+  }
+  #ap-phone-calculator .rc-steps p {
+    font-size: 11px;
+    margin: 0;
+  }
+  #ap-phone-calculator .rc-calculator {
+    padding-top: 39px;
+  }
+  #ap-phone-calculator .rc-section-head {
+    display: block;
+    margin-bottom: 22px;
+  }
+  #ap-phone-calculator .rc-section-head > p {
+    margin-top: 14px;
+  }
+  #ap-phone-calculator .rc-eyebrow {
+    font-size: 9px;
+  }
+  #ap-phone-calculator fieldset {
+    padding: 21px 18px;
+    border-radius: 16px;
+  }
+  #ap-phone-calculator legend {
+    font-size: 16px;
+  }
+  #ap-phone-calculator .rc-fields {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  #ap-phone-calculator .rc-results {
+    padding: 23px 18px;
+    border-radius: 18px;
+  }
+  #ap-phone-calculator .rc-result-heading h2 {
+    font-size: 27px;
+  }
+  #ap-phone-calculator .rc-metrics {
+    gap: 0 16px;
+  }
+  #ap-phone-calculator .rc-metrics article > span {
+    font-size: 10px;
+  }
+  #ap-phone-calculator .rc-metrics .rc-featured strong {
+    font-size: 36px;
+  }
+  #ap-phone-calculator .rc-metrics strong {
+    font-size: 25px;
+  }
+  #ap-phone-calculator .rc-metrics article {
+    padding-block: 19px;
+  }
+  #ap-phone-calculator .rc-metrics article > small {
+    font-size: 9px;
+  }
+  #ap-phone-calculator .rc-comparison {
+    gap: 10px;
+  }
+  #ap-phone-calculator .rc-comparison article {
+    padding: 13px 10px;
+  }
+  #ap-phone-calculator .rc-comparison h3 {
+    font-size: 10px;
+  }
+  #ap-phone-calculator .rc-comparison p {
+    min-height: 32px;
+  }
+  #ap-phone-calculator .rc-comparison strong {
+    font-size: 18px;
+  }
+  #ap-phone-calculator .rc-impact {
+    padding-block: 43px 35px;
+  }
+  #ap-phone-calculator .rc-impact-head {
+    display: block;
+  }
+  #ap-phone-calculator .rc-impact-head > span {
+    display: block;
+    text-align: left;
+    margin-top: 14px;
+    max-width: none;
+    font-size: 8px;
+  }
+  #ap-phone-calculator .rc-impact h2 {
+    font-size: 29px;
+  }
+  #ap-phone-calculator .rc-chart-layout {
+    gap: 17px;
+    padding-block: 20px;
+  }
+  #ap-phone-calculator .rc-year-results {
+    gap: 13px;
+  }
+  #ap-phone-calculator .rc-year-results strong {
+    font-size: 24px;
+  }
+  #ap-phone-calculator .rc-year-results span {
+    font-size: 10px;
+  }
+  #ap-phone-calculator .rc-case {
+    grid-template-columns: 1fr;
+    gap: 25px;
+    padding-block: 15px 40px;
+  }
+  #ap-phone-calculator .rc-case > div > p:not(.rc-eyebrow) {
+    font-size: 13px;
+  }
+  #ap-phone-calculator .rc-case-proof {
+    padding: 24px 20px;
+  }
+  #ap-phone-calculator .rc-cta {
+    padding: 33px 19px;
+    margin-bottom: 40px;
+    border-radius: 18px;
+  }
+  #ap-phone-calculator .rc-cta > p:not(.rc-eyebrow) {
+    font-size: 13px;
+  }
+  #ap-phone-calculator .rc-related {
+    gap: 15px;
+  }
+  #ap-phone-calculator .rc-related a {
+    font-size: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #ap-phone-calculator *,
+  #ap-phone-calculator *::before,
+  #ap-phone-calculator *::after {
+    scroll-behavior: auto !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}

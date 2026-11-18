@@ -25,6 +25,7 @@ interface Props {
   locale?: SupportedLocale;
   contentId?: string;
   customChrome?: boolean;
+  standalone?: boolean;
 }
 
 const {
@@ -35,6 +36,7 @@ const {
   noindex = false,
   schema,
   customChrome = false,
+  standalone = false,
   locale = getLocaleFromPath(Astro.url.pathname) ?? defaultLocale,
   contentId = contentIdFromPath(Astro.url.pathname)
 } = Astro.props;
@@ -46,7 +48,7 @@ const localeConfig = getLocale(locale);
 const ui = uiCopy[locale];
 const editorial = !customChrome && !contentId?.startsWith('landing.') && !Astro.url.pathname.startsWith('/ontwerpen/');
 const legacyDutchRoute = locale === "nl" && Astro.url.pathname !== "/" && !Astro.url.pathname.startsWith("/nl/") && !Astro.url.pathname.startsWith("/lp/") && !Astro.url.pathname.startsWith("/voorstel/");
-const effectiveNoindex = noindex || legacyDutchRoute;
+const effectiveNoindex = noindex || (legacyDutchRoute && !standalone);
 // Route-family parity is explicit: every localized sibling is emitted so crawlers and
 // visitors can move between the same content family. Incomplete routes remain noindex
 // at page level until their full template is connected.
