@@ -107,3 +107,21 @@ platformchecks en worden niet gelijkgesteld aan succesvolle HTTP-crawlerchecks.
 - Het ontbreken van een release-SHA in een eerste lokale build werd terecht
   afgewezen door release:verify. De definitieve verificatie gebruikt expliciet de
   actuele commit-SHA; er is geen guard omzeild.
+
+## Vervolg op verzoek: Franse taalcontrole herstellen
+
+De ontbrekende Franse formulier- en calculatorteksten worden via de verplichte
+contract- en implementatie-PR’s vrijgegeven. Alleen de twee goedgekeurde
+componentbestanden veranderen daarin. De zichtbare Nederlandse funneltekst,
+veldwaarden, toestemming, transport en rekenregels blijven gelijk.
+
+De Franse voorwaardenpagina krijgt een volledig Franstalige uitleg met links
+naar de geldende Nederlandse v1.8-tekst en PDF. Er wordt geen ongereviewde Franse
+juridische vertaling als actuele voorwaarden gepubliceerd. De Nederlandse bron
+blijft ongewijzigd.
+
+De bestaande Franse taalcontrole wordt ook onderdeel van test:release, zodat de
+centrale GitHub-releasecheck deze terugval voortaan blokkeert. Aanvullende
+browsertests controleren Franse vraagstappen, toestemmingsvereiste, fout/retry,
+attributie, navigatie, calculator en de verwijzing naar de geldende voorwaarden.
+Alle provider-endpoints in die tests zijn onderschept met synthetische fixtures.

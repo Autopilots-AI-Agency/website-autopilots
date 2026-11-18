@@ -17,7 +17,7 @@
     "lint": "eslint scripts netlify/functions tests playwright.config.ts eslint.config.js",
     "test": "node --test tests/unit/*.test.mjs tests/integration/*.test.mjs",
     "test:e2e": "playwright test",
-    "test:release": "node scripts/check-public-safety.mjs && node scripts/check-built-site.mjs && node scripts/check-redirects.mjs && node scripts/i18n-validate.mjs --strict",
+    "test:release": "node scripts/check-public-safety.mjs && node scripts/check-built-site.mjs && node scripts/check-redirects.mjs && node scripts/i18n-validate.mjs --strict && node scripts/audit-visible-language.mjs fr",
     "test:qa": "node scripts/check-public-safety.mjs && node scripts/check-built-site.mjs && node scripts/check-redirects.mjs && node scripts/i18n-validate.mjs --strict && node scripts/audit-visible-language.mjs fr",
     "check:site": "node scripts/check-built-site.mjs",
     "check:public": "node scripts/check-public-safety.mjs",
