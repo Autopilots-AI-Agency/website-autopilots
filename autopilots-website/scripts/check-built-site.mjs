@@ -17,6 +17,30 @@ const errors = [];
 const checked = new Set();
 const seenTitles = new Map();
 const seenCanonicals = new Map();
+const decodeHtml = (value) =>
+  value
+    ?.replace(/&#(x[0-9a-f]+|[0-9]+);/gi, (_, code) =>
+      String.fromCodePoint(
+        code[0].toLowerCase() === "x"
+          ? parseInt(code.slice(1), 16)
+          : Number(code),
+      ),
+    )
+    .replaceAll("&amp;", "&")
+    .replaceAll("&quot;", '"')
+    .replaceAll("&apos;", "'")
+    .replaceAll("&lt;", "<")
+    .replaceAll("&gt;", ">");
+const shareImagePath = "/og/autopilots-social-20261118.png";
+const shareImageUrl = `https://auto-pilots.io${shareImagePath}`;
+const shareImage = readFileSync(join(root, shareImagePath));
+if (
+  shareImage.subarray(0, 8).toString("hex") !== "89504e470d0a1a0a" ||
+  shareImage.readUInt32BE(16) !== 1200 ||
+  shareImage.readUInt32BE(20) !== 630 ||
+  shareImage.length > 5 * 1024 * 1024
+)
+  errors.push("Deelafbeelding moet een PNG van 1200x630 onder 5 MB zijn.");
 const publicBuildTerms =
   /\b(lorem ipsum|placeholder|previewpagina|demo content|interne notitie)\b|\bTODO\s*:/i;
 
@@ -36,6 +60,48 @@ for (const file of htmlFiles) {
   if (!title && !redirect) errors.push(`${page}: title ontbreekt`);
   if (!/<meta name="description" content="[^"]+"/.test(html) && !redirect)
     errors.push(`${page}: meta description ontbreekt`);
+  if (!redirect) {
+    // Inspect server-rendered head tags: social crawlers do not run page scripts.
+    const head = html.match(/<head[\s>][\s\S]*?<\/head>/)?.[0] ?? "";
+    const metadata = new Map();
+    for (const tag of head.match(/<meta\b[^>]*>/g) ?? []) {
+      const key = tag.match(/(?:name|property)="([^"]+)"/)?.[1];
+      const value = tag.match(/content="([^"]*)"/)?.[1];
+      if (key) metadata.set(key, [...(metadata.get(key) ?? []), value]);
+    }
+    const expected = {
+      "og:site_name": "Autopilots",
+      "og:title": title,
+      "og:description": metadata.get("description")?.[0],
+      "og:url": canonical,
+      "og:image": shareImageUrl,
+      "og:image:secure_url": shareImageUrl,
+      "og:image:type": "image/png",
+      "og:image:width": "1200",
+      "og:image:height": "630",
+      "og:image:alt": "Autopilots",
+      "twitter:card": "summary_large_image",
+      "twitter:title": title,
+      "twitter:description": metadata.get("description")?.[0],
+      "twitter:image": shareImageUrl,
+      "twitter:image:alt": "Autopilots",
+    };
+    for (const [key, value] of Object.entries(expected)) {
+      const values = metadata.get(key) ?? [];
+      if (
+        !value ||
+        values.length !== 1 ||
+        decodeHtml(values[0]) !== decodeHtml(value)
+      )
+        errors.push(`${page}: onjuiste of dubbele deelmetadata ${key}`);
+    }
+    if (!canonical?.startsWith("https://auto-pilots.io/"))
+      errors.push(
+        `${page}: canonical moet een absolute publieke HTTPS-URL zijn`,
+      );
+    if (head.includes("/og/autopilots-og.svg"))
+      errors.push(`${page}: verouderde SVG in metadata of structured data`);
+  }
   const noindex = html.includes('content="noindex');
   if (!canonical && !redirect && !noindex)
     errors.push(`${page}: canonical ontbreekt`);

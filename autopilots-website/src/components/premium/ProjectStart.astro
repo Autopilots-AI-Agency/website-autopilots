@@ -1,9 +1,11 @@
 ---
+import SocialMetadata from '../SocialMetadata.astro';
 import HomeTeam from './HomeTeam.astro';
 import SiteIcon from '../SiteIcon.astro';
 import '../../styles/projectstart.css';
 
 const { preview = false } = Astro.props;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).toString();
 
 const steps = [
   ['Kick-off', 'We bespreken jullie doelen, prioriteiten en wat we nodig hebben om te starten.'],
@@ -27,6 +29,8 @@ const cases = [
     <meta name="description" content="Welkom bij Autopilots. Plan jullie kick-off en bekijk hoe we samenwerken." />
     <meta name="theme-color" content="#101e25" />
     <title>Jullie projectstart | Autopilots</title>
+    <link rel="canonical" href={canonicalUrl} />
+    <SocialMetadata title="Jullie projectstart | Autopilots" description="Welkom bij Autopilots. Plan jullie kick-off en bekijk hoe we samenwerken." canonicalUrl={canonicalUrl} ogLocale="nl_NL" />
     <SiteIcon />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

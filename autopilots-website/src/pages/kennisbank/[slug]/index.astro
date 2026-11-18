@@ -1,4 +1,5 @@
 ---
+import { socialImage } from "../../../config/social";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { knowledgeArticles, type KnowledgeArticle } from "../../../content/knowledgeArticles";
 import type { SupportedLocale } from "../../../i18n/languages";
@@ -44,7 +45,7 @@ const articleSchema = {
   dateModified: article.modified,
   mainEntityOfPage: absoluteCanonical,
   url: absoluteCanonical,
-  image: "https://auto-pilots.io/og/autopilots-og.svg",
+  image: new URL(socialImage.path, Astro.site ?? "https://auto-pilots.io").toString(),
   inLanguage: getLocale(locale).tag,
   articleSection: article.contentCluster ?? article.category,
   author: {
