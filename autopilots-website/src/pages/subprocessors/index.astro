@@ -2,21 +2,18 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 const providers = [
-  ["Telnyx", "Telefonie en telefonische AI-assistenten", "Telefoonnummers, gespreksmetadata en, afhankelijk van de inrichting, audio en transcripties."],
-  ["ElevenLabs", "Spraaksynthese en spraakassistenten", "Tekst voor spraak en, afhankelijk van de dienst, audio en gespreksinhoud."],
-  ["OpenAI", "AI-verwerking via de API", "De tekst, documenten of gespreksfragmenten die de betreffende toepassing aan het model aanbiedt."],
-  ["GoHighLevel / LeadConnector", "CRM, afspraken en communicatie", "Contactgegevens, aanvragen, afspraken en berichten binnen de gebruikte modules."],
-  ["Hostinger", "Hosting van automatiseringen, waaronder zelfgehoste n8n", "Gegevens die de gehoste automatiseringen verwerken of opslaan, inclusief uitvoeringsgegevens."],
-  ["Supabase", "Database, authenticatie en bestandsopslag", "Applicatiegegevens, gebruikersaccounts en bestanden voor de aangesloten toepassing."],
-  ["Railway", "Hosting van applicaties en achtergrondprocessen", "Gegevens die door de betreffende applicatie worden verwerkt en de bijbehorende technische logs."],
-  ["Render", "Hosting van applicaties en achtergrondprocessen", "Gegevens die door de betreffende applicatie worden verwerkt en de bijbehorende technische logs."],
-  ["Netlify", "Websitehosting en serverfuncties", "Technische bezoekgegevens en gegevens die via de gebruikte formulieren en serverfuncties worden verwerkt."],
-  ["Rumata", "Ontwikkeling, hosting en uitvoering van applicaties en workflows", "Applicatiegegevens, workflow-inhoud en bestanden voor de projecten die op Rumata worden uitgevoerd."],
-  ["Resend", "Verzending van e-mail", "Ontvanger, berichtinhoud en verzend- en aflevergegevens."],
-  ["Pinecone", "Zoeken in een kennisbasis", "Zoekrepresentaties (embeddings), metadata en eventueel opgenomen tekstfragmenten."],
-  ["Airtable", "Gestructureerde gegevens en operationele overzichten", "De contact-, opdracht- en procesgegevens die in de gebruikte tabellen zijn opgenomen."],
-  ["ClickUp", "Projectbeheer en taakopvolging", "Contactgegevens, taken, opmerkingen en bestanden die voor de opdracht worden vastgelegd."],
-  ["Google Drive", "Documentopslag en samenwerking", "Documenten, bijlagen, deelgegevens en eventuele persoonsgegevens in de bestanden."],
+  ["Telnyx", "Telefonie en telefonische AI-assistenten", "Telefoonnummers, gespreksmetadata en, afhankelijk van de inrichting, audio en transcripties.", "https://telnyx.com/legal/data-processing-addendum"],
+  ["ElevenLabs", "Spraaksynthese en spraakassistenten", "Tekst voor spraak en, afhankelijk van de dienst, audio en gespreksinhoud.", "https://elevenlabs.io/dpa"],
+  ["OpenAI", "AI-verwerking via de API", "De tekst, documenten of gespreksfragmenten die de betreffende toepassing aan het model aanbiedt.", "https://openai.com/policies/data-processing-addendum/"],
+  ["GoHighLevel / LeadConnector", "CRM, afspraken en communicatie", "Contactgegevens, aanvragen, afspraken en berichten binnen de gebruikte modules.", "https://www.gohighlevel.com/data-processing-agreement"],
+  ["Hostinger", "Hosting van automatiseringen, waaronder zelfgehoste n8n", "Gegevens die de gehoste automatiseringen verwerken of opslaan, inclusief uitvoeringsgegevens.", "https://www.hostinger.com/legal/dpa"],
+  ["Supabase", "Database, authenticatie en bestandsopslag", "Applicatiegegevens, gebruikersaccounts en bestanden voor de aangesloten toepassing.", "https://supabase.com/legal/customer-resources/data-processing-addendum"],
+  ["Railway", "Hosting van applicaties en achtergrondprocessen", "Gegevens die door de betreffende applicatie worden verwerkt en de bijbehorende technische logs.", "https://railway.com/legal/dpa"],
+  ["Render", "Hosting van applicaties en achtergrondprocessen", "Gegevens die door de betreffende applicatie worden verwerkt en de bijbehorende technische logs.", "https://render.com/dpa"],
+  ["Netlify", "Websitehosting en serverfuncties", "Technische bezoekgegevens en gegevens die via de gebruikte formulieren en serverfuncties worden verwerkt.", "https://www.netlify.com/pdf/netlify-dpa.pdf"],
+  ["Rumata", "Ontwikkeling, hosting en uitvoering van applicaties en workflows", "Applicatiegegevens, workflow-inhoud en bestanden voor de projecten die op Rumata worden uitgevoerd.", "https://rumata.dev/data-processing-agreement/"],
+  ["Resend", "Verzending van e-mail", "Ontvanger, berichtinhoud en verzend- en aflevergegevens.", "https://resend.com/legal/dpa"],
+  ["Pinecone", "Zoeken in een kennisbasis", "Zoekrepresentaties (embeddings), metadata en eventueel opgenomen tekstfragmenten.", "https://www.pinecone.io/legal/data-processing-addendum/"],
 ];
 ---
 
@@ -26,12 +23,12 @@ const providers = [
       <div class="ap-kicker">Privacy &amp; gegevensverwerking</div>
       <h1>Onze <span class="ap-title-accent">subverwerkers.</span></h1>
       <p class="ap-lead">Welke leveranciers ondersteunen onze dienstverlening en waarvoor worden ze ingezet?</p>
-      <p class="version">Concept · 29 oktober 2026 · Nederlandse versie</p>
+      <p class="version">29 oktober 2026 · Nederlandse versie</p>
     </div></section>
     <section class="ap-section ap-soft-section"><div class="ap-container content">
-      <section class="notice" aria-labelledby="review-heading">
-        <h2 id="review-heading">Overzicht in verificatie</h2>
-        <p>Dit concept bevat de door Autopilots bevestigde leveranciers uit onze dienstverlening. Juridische contractpartijen, verwerkingslocaties en doorgifteafspraken moeten nog per dienst worden bevestigd. Dit is nog geen definitieve, volledige subverwerkersbijlage bij een verwerkersovereenkomst.</p>
+      <section class="notice" aria-labelledby="agreements-heading">
+        <h2 id="agreements-heading">Verwerkersafspraken</h2>
+        <p>Autopilots heeft voor de hieronder genoemde leveranciers de toepasselijke verwerkersvoorwaarden (DPA) aanvaard. Deze afspraken gelden voor de verwerking van persoonsgegevens binnen de overeengekomen dienstverlening. Per leverancier vind je hieronder het doel, de betrokken gegevens en een verwijzing naar de verwerkersvoorwaarden.</p>
       </section>
       <section>
         <h2>Toepassing per opdracht</h2>
@@ -40,11 +37,11 @@ const providers = [
       <section aria-labelledby="providers-heading">
         <h2 id="providers-heading">Hosting, AI en automatisering</h2>
         <div class="providers">
-          {providers.map(([name, purpose, data]) => <section class="provider">
-            <h3>{name}</h3><div><p class="purpose">{purpose}</p><p>{data}</p></div>
+          {providers.map(([name, purpose, data, dpa]) => <section class="provider">
+            <h3>{name}</h3><div><p class="purpose">{purpose}</p><p>{data}</p><p class="small"><a href={dpa}>Verwerkersvoorwaarden</a></p></div>
           </section>)}
         </div>
-        <p class="small">De namen hierboven zijn dienstnamen. De contracterende rechtspersoon, opslag- en verwerkingslanden, toegang vanuit andere landen en toepasselijke doorgiftewaarborgen zijn in dit concept nog niet vastgesteld. Een Europees opslagadres alleen is geen bewijs dat alle verwerking binnen de EER plaatsvindt.</p>
+        <p class="small">De namen hierboven zijn dienstnamen. De contractpartij volgt uit de overeenkomst met de betreffende leverancier. Opslag- en verwerkingslocaties hangen af van de leverancier, de gebruikte dienst en de gekozen inrichting. Ook ondersteuning en verdere subverwerkers kunnen verwerking buiten de EER meebrengen. Voor internationale doorgifte gelden de toepasselijke waarborgen uit de verwerkersvoorwaarden en de klantafspraken.</p>
       </section>
       <section>
         <h2>Andere leveranciers en klantsystemen</h2>
