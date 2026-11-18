@@ -1,0 +1,936 @@
+{
+  "checkedAt": "2026-11-18T05:41:37.305529+00:00",
+  "results": [
+    {
+      "path": "/",
+      "agent": "Mozilla/5.0",
+      "status": 200,
+      "finalUrl": "https://auto-pilots.io/",
+      "headers": {
+        "Cache-Control": "public,max-age=0,must-revalidate",
+        "Content-Type": "text/html; charset=UTF-8",
+        "Etag": "\"b69f3d44a31bbdcd455f83b6422f4bed-ssl\""
+      },
+      "metadata": {
+        "description": [
+          "Wij bouwen AI-medewerkers, maatwerksoftware en websites voor het mkb. Los inzetbaar. Sterker wanneer ze samenwerken."
+        ],
+        "robots": [
+          "index,follow,max-image-preview:large"
+        ],
+        "canonical": [
+          "https://auto-pilots.io/"
+        ],
+        "og:type": [
+          "website"
+        ],
+        "og:title": [
+          "Autopilots | Bouw wat jouw bedrijf nodig heeft"
+        ],
+        "og:description": [
+          "Wij bouwen AI-medewerkers, maatwerksoftware en websites voor het mkb. Los inzetbaar. Sterker wanneer ze samenwerken."
+        ],
+        "og:url": [
+          "https://auto-pilots.io/"
+        ],
+        "og:image": [
+          "https://auto-pilots.io/og/autopilots-og.svg"
+        ],
+        "og:locale": [
+          "nl_NL"
+        ],
+        "og:locale:alternate": [
+          "en_GB",
+          "es_ES",
+          "de_DE",
+          "it_IT",
+          "fr_FR"
+        ],
+        "twitter:card": [
+          "summary_large_image"
+        ],
+        "twitter:title": [
+          "Autopilots | Bouw wat jouw bedrijf nodig heeft"
+        ],
+        "twitter:description": [
+          "Wij bouwen AI-medewerkers, maatwerksoftware en websites voor het mkb. Los inzetbaar. Sterker wanneer ze samenwerken."
+        ],
+        "twitter:image": [
+          "https://auto-pilots.io/og/autopilots-og.svg"
+        ]
+      },
+      "firstImages": [
+        {
+          "src": "/samenwerkingen/animals-faith.png",
+          "alt": "Animals Faith"
+        },
+        {
+          "src": "/samenwerkingen/dakcentrale-nederland.png",
+          "alt": "Dakcentrale Nederland"
+        },
+        {
+          "src": "/samenwerkingen/h3a.png",
+          "alt": "Heeren 3 Architecten"
+        }
+      ]
+    },
+    {
+      "path": "/nl/",
+      "agent": "Mozilla/5.0",
+      "status": 200,
+      "finalUrl": "https://auto-pilots.io/nl/",
+      "headers": {
+        "Cache-Control": "public,max-age=0,must-revalidate",
+        "Content-Type": "text/html; charset=UTF-8",
+        "Etag": "\"619f94c23b9a2266c20c84ce84036ed1-ssl\""
+      },
+      "metadata": {
+        "description": [
+          "Wij bouwen AI-medewerkers, maatwerksoftware en websites voor het mkb. Los inzetbaar. Sterker wanneer ze samenwerken."
+        ],
+        "robots": [
+          "index,follow,max-image-preview:large"
+        ],
+        "canonical": [
+          "https://auto-pilots.io/nl/"
+        ],
+        "og:type": [
+          "website"
+        ],
+        "og:title": [
+          "Autopilots | AI-medewerkers, Maatwerksoftware & websites"
+        ],
+        "og:description": [
+          "Wij bouwen AI-medewerkers, maatwerksoftware en websites voor het mkb. Los inzetbaar. Sterker wanneer ze samenwerken."
+        ],
+        "og:url": [
+          "https://auto-pilots.io/nl/"
+        ],
+        "og:image": [
+          "https://auto-pilots.io/og/autopilots-og.svg"
+        ],
+        "og:locale": [
+          "nl_NL"
+        ],
+        "og:locale:alternate": [
+          "en_GB",
+          "es_ES",
+          "de_DE",
+          "it_IT",
+          "fr_FR"
+        ],
+        "twitter:card": [
+          "summary_large_image"
+        ],
+        "twitter:title": [
+          "Autopilots | AI-medewerkers, Maatwerksoftware & websites"
+        ],
+        "twitter:description": [
+          "Wij bouwen AI-medewerkers, maatwerksoftware en websites voor het mkb. Los inzetbaar. Sterker wanneer ze samenwerken."
+        ],
+        "twitter:image": [
+          "https://auto-pilots.io/og/autopilots-og.svg"
+        ]
+      },
+      "firstImages": [
+        {
+          "src": "/samenwerkingen/animals-faith.png",
+          "alt": "Animals Faith"
+        },
+        {
+          "src": "/samenwerkingen/dakcentrale-nederland.png",
+          "alt": "Dakcentrale Nederland"
+        },
+        {
+          "src": "/samenwerkingen/h3a.png",
+          "alt": "Heeren 3 Architecten"
+        }
+      ]
+    },
+    {
+      "path": "/nl/producten/",
+      "agent": "Mozilla/5.0",
+      "status": 200,
+      "finalUrl": "https://auto-pilots.io/nl/producten/",
+      "headers": {
+        "Cache-Control": "public,max-age=0,must-revalidate",
+        "Content-Type": "text/html; charset=UTF-8",
+        "Etag": "\"f467b5f46b9eb47d7922d897e77496bf-ssl\""
+      },
+      "metadata": {
+        "description": [
+          "AI Agents, AI Software en AI Websites. Los inzetbaar of verbonden met jullie bestaande systemen."
+        ],
+        "robots": [
+          "index,follow,max-image-preview:large"
+        ],
+        "canonical": [
+          "https://auto-pilots.io/nl/producten/"
+        ],
+        "og:type": [
+          "website"
+        ],
+        "og:title": [
+          "Oplossingen | Autopilots"
+        ],
+        "og:description": [
+          "AI Agents, AI Software en AI Websites. Los inzetbaar of verbonden met jullie bestaande systemen."
+        ],
+        "og:url": [
+          "https://auto-pilots.io/nl/producten/"
+        ],
+        "og:image": [
+          "https://auto-pilots.io/og/autopilots-og.svg"
+        ],
+        "og:locale": [
+          "nl_NL"
+        ],
+        "og:locale:alternate": [
+          "en_GB",
+          "es_ES",
+          "de_DE",
+          "it_IT",
+          "fr_FR"
+        ],
+        "twitter:card": [
+          "summary_large_image"
+        ],
+        "twitter:title": [
+          "Oplossingen | Autopilots"
+        ],
+        "twitter:description": [
+          "AI Agents, AI Software en AI Websites. Los inzetbaar of verbonden met jullie bestaande systemen."
+        ],
+        "twitter:image": [
+          "https://auto-pilots.io/og/autopilots-og.svg"
+        ]
+      },
+      "firstImages": []
+    },
+    {
+      "path": "/nl/crew/",
+      "agent": "Mozilla/5.0",
+      "status": 200,
+      "finalUrl": "https://auto-pilots.io/nl/crew/",
+      "headers": {
+        "Cache-Control": "public,max-age=0,must-revalidate",
+        "Content-Type": "text/html; charset=UTF-8",
+        "Etag": "\"7a45bd9563706024155ba55640f1e4c5-ssl\""
+      },
+      "metadata": {
+        "description": [
+          "Maak kennis met de Autopilots crew achter AI medewerkers, CRM-koppelingen, workflows en optimalisatie."
+        ],
+        "robots": [
+          "index,follow,max-image-preview:large"
+        ],
+        "canonical": [
+          "https://auto-pilots.io/nl/crew/"
+        ],
+        "og:type": [
+          "website"
+        ],
+        "og:title": [
+          "Crew | Autopilots"
+        ],
+        "og:description": [
+          "Maak kennis met de Autopilots crew achter AI medewerkers, CRM-koppelingen, workflows en optimalisatie."
+        ],
+        "og:url": [
+          "https://auto-pilots.io/nl/crew/"
+        ],
+        "og:image": [
+          "https://auto-pilots.io/og/autopilots-og.svg"
+        ],
+        "og:locale": [
+          "nl_NL"
+        ],
+        "og:locale:alternate": [
+          "en_GB",
+          "es_ES",
+          "de_DE",
+          "it_IT",
+          "fr_FR"
+        ],
+        "twitter:card": [
+          "summary_large_image"
+        ],
+        "twitter:title": [
+          "Crew | Autopilots"
+        ],
+        "twitter:description": [
+          "Maak kennis met de Autopilots crew achter AI medewerkers, CRM-koppelingen, workflows en optimalisatie."
+        ],
+        "twitter:image": [
+          "https://auto-pilots.io/og/autopilots-og.svg"
+        ]
+      },
+      "firstImages": [
+        {
+          "src": "/team/tim-kuiper.png",
+          "alt": "Tim Kuiper"
+        },
+        {
+          "src": "/team/larissa-rosanna-pen.webp",
+          "alt": "Larissa Rosanna Pen"
+        },
+        {
+          "src": "/team/hasan-shabbir.png",
+          "alt": "Hasan Shabbir"
+        }
+      ]
+    },
+    {
+      "path": "/nl/kennisbank/",
+      "agent": "Mozilla/5.0",
+      "status": 200,
+      "finalUrl": "https://auto-pilots.io/nl/kennisbank/",
+      "headers": {
+        "Cache-Control": "public,max-age=0,must-revalidate",
+        "Content-Type": "text/html; charset=UTF-8",
+        "Etag": "\"de369170768ee2af61bbcd377ff03b33-ssl\""
+      },
+      "metadata": {
+        "description": [
+          "Kies AI kennis of Autopilots implementatiekennis."
+        ],
+        "robots": [
+          "index,follow,max-image-preview:large"
+        ],
+        "canonical": [
+          "https://auto-pilots.io/nl/kennisbank/"
+        ],
+        "og:type": [
+          "website"
+        ],
+        "og:title": [
+          "Autopilots kennisbank | AI kennis en implementatiekennis"
+        ],
+        "og:description": [
+          "Kies AI kennis of Autopilots implementatiekennis."
+        ],
+        "og:url": [
+          "https://auto-pilots.io/nl/kennisbank/"
+        ],
+        "og:image": [
+          "https://auto-pilots.io/og/autopilots-og.svg"
+        ],
+        "og:locale": [
+          "nl_NL"
+        ],
+        "og:locale:alternate": [
+          "en_GB",
+          "es_ES",
+          "de_DE",
+          "it_IT",
+          "fr_FR"
+        ],
+        "twitter:card": [
+          "summary_large_image"
+        ],
+        "twitter:title": [
+          "Autopilots kennisbank | AI kennis en implementatiekennis"
+        ],
+        "twitter:description": [
+          "Kies AI kennis of Autopilots implementatiekennis."
+        ],
+        "twitter:image": [
+          "https://auto-pilots.io/og/autopilots-og.svg"
+        ]
+      },
+      "firstImages": []
+    },
+    {
+      "path": "/nl/voor-wie/autobedrijven/",
+      "agent": "Mozilla/5.0",
+      "status": 200,
+      "finalUrl": "https://auto-pilots.io/nl/voor-wie/autobedrijven/",
+      "headers": {
+        "Cache-Control": "public,max-age=0,must-revalidate",
+        "Content-Type": "text/html; charset=UTF-8",
+        "Etag": "\"b81919a44ec4f9175b4be0be404a80f2-ssl\""
+      },
+      "metadata": {
+        "description": [
+          "Bekijk hoe AI voor autobedrijven voorraadvragen, platformleads, inruil, werkplaatsoproepen en proefritten opvolgt en in CRM verwerkt."
+        ],
+        "robots": [
+          "index,follow,max-image-preview:large"
+        ],
+        "canonical": [
+          "https://auto-pilots.io/nl/voor-wie/autobedrijven/"
+        ],
+        "og:type": [
+          "website"
+        ],
+        "og:title": [
+          "AI-medewerker voor autobedrijven: leads, telefoon en proefritten"
+        ],
+        "og:description": [
+          "Bekijk hoe AI voor autobedrijven voorraadvragen, platformleads, inruil, werkplaatsoproepen en proefritten opvolgt en in CRM verwerkt."
+        ],
+        "og:url": [
+          "https://auto-pilots.io/nl/voor-wie/autobedrijven/"
+        ],
+        "og:image": [
+          "https://auto-pilots.io/og/autopilots-og.svg"
+        ],
+        "og:locale": [
+          "nl_NL"
+        ],
+        "og:locale:alternate": [
+          "en_GB",
+          "es_ES",
+          "de_DE",
+          "it_IT",
+          "fr_FR"
+        ],
+        "twitter:card": [
+          "summary_large_image"
+        ],
+        "twitter:title": [
+          "AI-medewerker voor autobedrijven: leads, telefoon en proefritten"
+        ],
+        "twitter:description": [
+          "Bekijk hoe AI voor autobedrijven voorraadvragen, platformleads, inruil, werkplaatsoproepen en proefritten opvolgt en in CRM verwerkt."
+        ],
+        "twitter:image": [
+          "https://auto-pilots.io/og/autopilots-og.svg"
+        ]
+      },
+      "firstImages": []
+    },
+    {
+      "path": "/nl/afspraak/",
+      "agent": "Mozilla/5.0",
+      "status": 200,
+      "finalUrl": "https://auto-pilots.io/nl/afspraak/",
+      "headers": {
+        "Cache-Control": "public,max-age=0,must-revalidate",
+        "Content-Type": "text/html; charset=UTF-8",
+        "Etag": "\"b477ce816424978375501f2d2170363c-ssl\""
+      },
+      "metadata": {
+        "description": [
+          "Plan een afspraak en ontdek waar een AI-medewerker werk kan overnemen."
+        ],
+        "robots": [
+          "index,follow,max-image-preview:large"
+        ],
+        "canonical": [
+          "https://auto-pilots.io/nl/afspraak/"
+        ],
+        "og:type": [
+          "website"
+        ],
+        "og:title": [
+          "Afspraak plannen | Autopilots"
+        ],
+        "og:description": [
+          "Plan een afspraak en ontdek waar een AI-medewerker werk kan overnemen."
+        ],
+        "og:url": [
+          "https://auto-pilots.io/nl/afspraak/"
+        ],
+        "og:image": [
+          "https://auto-pilots.io/og/autopilots-og.svg"
+        ],
+        "og:locale": [
+          "nl_NL"
+        ],
+        "og:locale:alternate": [
+          "en_GB",
+          "es_ES",
+          "de_DE",
+          "it_IT",
+          "fr_FR"
+        ],
+        "twitter:card": [
+          "summary_large_image"
+        ],
+        "twitter:title": [
+          "Afspraak plannen | Autopilots"
+        ],
+        "twitter:description": [
+          "Plan een afspraak en ontdek waar een AI-medewerker werk kan overnemen."
+        ],
+        "twitter:image": [
+          "https://auto-pilots.io/og/autopilots-og.svg"
+        ]
+      },
+      "firstImages": []
+    },
+    {
+      "path": "/en/",
+      "agent": "Mozilla/5.0",
+      "status": 200,
+      "finalUrl": "https://auto-pilots.io/en/",
+      "headers": {
+        "Cache-Control": "public,max-age=0,must-revalidate",
+        "Content-Type": "text/html; charset=UTF-8",
+        "Etag": "\"88c5c1d8d74df2b5dfee0b8672652574-ssl\""
+      },
+      "metadata": {
+        "description": [
+          "We build AI employees, custom software and websites for small and medium businesses. Useful on their own. Stronger together."
+        ],
+        "robots": [
+          "index,follow,max-image-preview:large"
+        ],
+        "canonical": [
+          "https://auto-pilots.io/en/"
+        ],
+        "og:type": [
+          "website"
+        ],
+        "og:title": [
+          "Autopilots | AI employees, Custom software & Websites & backends"
+        ],
+        "og:description": [
+          "We build AI employees, custom software and websites for small and medium businesses. Useful on their own. Stronger together."
+        ],
+        "og:url": [
+          "https://auto-pilots.io/en/"
+        ],
+        "og:image": [
+          "https://auto-pilots.io/og/autopilots-og.svg"
+        ],
+        "og:locale": [
+          "en_GB"
+        ],
+        "og:locale:alternate": [
+          "nl_NL",
+          "es_ES",
+          "de_DE",
+          "it_IT",
+          "fr_FR"
+        ],
+        "twitter:card": [
+          "summary_large_image"
+        ],
+        "twitter:title": [
+          "Autopilots | AI employees, Custom software & Websites & backends"
+        ],
+        "twitter:description": [
+          "We build AI employees, custom software and websites for small and medium businesses. Useful on their own. Stronger together."
+        ],
+        "twitter:image": [
+          "https://auto-pilots.io/og/autopilots-og.svg"
+        ]
+      },
+      "firstImages": []
+    },
+    {
+      "path": "/fr/",
+      "agent": "Mozilla/5.0",
+      "status": 200,
+      "finalUrl": "https://auto-pilots.io/fr/",
+      "headers": {
+        "Cache-Control": "public,max-age=0,must-revalidate",
+        "Content-Type": "text/html; charset=UTF-8",
+        "Etag": "\"f93d5b643757153bd6386393ac09b852-ssl\""
+      },
+      "metadata": {
+        "description": [
+          "Nous cr\u00e9ons des collaborateurs IA, des logiciels sur mesure et des sites web pour les PME. Utiles s\u00e9par\u00e9ment. Plus efficaces ensemble."
+        ],
+        "robots": [
+          "index,follow,max-image-preview:large"
+        ],
+        "canonical": [
+          "https://auto-pilots.io/fr/"
+        ],
+        "og:type": [
+          "website"
+        ],
+        "og:title": [
+          "Autopilots | Collaborateurs IA, Logiciels sur mesure & Sites web et backends"
+        ],
+        "og:description": [
+          "Nous cr\u00e9ons des collaborateurs IA, des logiciels sur mesure et des sites web pour les PME. Utiles s\u00e9par\u00e9ment. Plus efficaces ensemble."
+        ],
+        "og:url": [
+          "https://auto-pilots.io/fr/"
+        ],
+        "og:image": [
+          "https://auto-pilots.io/og/autopilots-og.svg"
+        ],
+        "og:locale": [
+          "fr_FR"
+        ],
+        "og:locale:alternate": [
+          "nl_NL",
+          "en_GB",
+          "es_ES",
+          "de_DE",
+          "it_IT"
+        ],
+        "twitter:card": [
+          "summary_large_image"
+        ],
+        "twitter:title": [
+          "Autopilots | Collaborateurs IA, Logiciels sur mesure & Sites web et backends"
+        ],
+        "twitter:description": [
+          "Nous cr\u00e9ons des collaborateurs IA, des logiciels sur mesure et des sites web pour les PME. Utiles s\u00e9par\u00e9ment. Plus efficaces ensemble."
+        ],
+        "twitter:image": [
+          "https://auto-pilots.io/og/autopilots-og.svg"
+        ]
+      },
+      "firstImages": []
+    },
+    {
+      "path": "/lp/autobedrijven/ai-medewerker/",
+      "agent": "Mozilla/5.0",
+      "status": 200,
+      "finalUrl": "https://auto-pilots.io/lp/autobedrijven/ai-medewerker/",
+      "headers": {
+        "Cache-Control": "public,max-age=0,must-revalidate",
+        "Content-Type": "text/html; charset=UTF-8",
+        "Etag": "\"eaea8abeb9a776b1b267687cf0ffe4fe-ssl\"",
+        "X-Robots-Tag": "noindex, nofollow, noarchive, nosnippet"
+      },
+      "metadata": {
+        "robots": [
+          "noindex,nofollow,noarchive,nosnippet"
+        ],
+        "description": [
+          "Beantwoord vijf korte vragen. Daarna test je de AI-medewerker zelf en zie je met jouw aantallen waar de grootste kans ligt."
+        ],
+        "canonical": [
+          "https://auto-pilots.io/nl/lp/autobedrijven/ai-medewerker/"
+        ]
+      },
+      "firstImages": []
+    },
+    {
+      "path": "/og/autopilots-og.svg",
+      "agent": "Mozilla/5.0",
+      "status": 200,
+      "finalUrl": "https://auto-pilots.io/og/autopilots-og.svg",
+      "headers": {
+        "Cache-Control": "public,max-age=0,must-revalidate",
+        "Content-Type": "image/svg+xml",
+        "Etag": "\"43e9af3c760043de8b6cf0a6f53f17cd-ssl\""
+      },
+      "body": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1200\" height=\"630\" viewBox=\"0 0 1200 630\" role=\"img\" aria-labelledby=\"title description\">\n  <title id=\"title\">Autopilots</title><desc id=\"description\">AI-medewerkers voor klantcontact en operatie.</desc>\n  <rect width=\"1200\" height=\"630\" fill=\"#f5f5f2\"/><rect x=\"60\" y=\"60\" width=\"1080\" height=\"510\" rx=\"54\" fill=\"#111111\"/>\n  <circle cx=\"1040\" cy=\"500\" r=\"210\" fill=\"#9f3826\" opacity=\".34\"/><text x=\"110\" y=\"145\" fill=\"#e4a092\" font-family=\"Arial,sans-serif\" font-size=\"24\" font-weight=\"700\" letter-spacing=\"5\">AUTOPILOTS</text>\n  <text x=\"110\" y=\"280\" fill=\"#ffffff\" font-family=\"Arial,sans-serif\" font-size=\"66\" font-weight=\"800\">AI-medewerkers voor</text><text x=\"110\" y=\"365\" fill=\"#ffffff\" font-family=\"Arial,sans-serif\" font-size=\"66\" font-weight=\"800\">klantcontact en operatie.</text>\n  <text x=\"110\" y=\"455\" fill=\"#c7c7c2\" font-family=\"Arial,sans-serif\" font-size=\"28\">Vaste producten. Ingericht op jouw branche.</text>\n</svg>\n"
+    },
+    {
+      "path": "/robots.txt",
+      "agent": "Mozilla/5.0",
+      "status": 200,
+      "finalUrl": "https://auto-pilots.io/robots.txt",
+      "headers": {
+        "Cache-Control": "public,max-age=0,must-revalidate",
+        "Content-Type": "text/plain; charset=UTF-8",
+        "Etag": "\"5c7111e6cb3eeacdbdaf18191cacdcb1-ssl\""
+      },
+      "body": "User-agent: *\nAllow: /\n\nSitemap: https://auto-pilots.io/sitemap.xml\n"
+    },
+    {
+      "path": "/.well-known/autopilots-release.json",
+      "agent": "Mozilla/5.0",
+      "status": 200,
+      "finalUrl": "https://auto-pilots.io/.well-known/autopilots-release.json",
+      "headers": {
+        "Cache-Control": "public,max-age=0,must-revalidate",
+        "Content-Type": "application/json",
+        "Etag": "\"eb2c2f63de3327f4a25b0e58b3d45a0e-ssl\""
+      },
+      "body": "{\n  \"commit\": \"894349680bfb1a6a858f1d621dde85c452155fe9\",\n  \"deployId\": \"6afc30c10c0aaaa01b999285\",\n  \"environment\": \"production\",\n  \"builtAt\": \"2026-11-17T10:47:48.167Z\"\n}"
+    },
+    {
+      "path": "/",
+      "agent": "LinkedInBot/1.0",
+      "status": 200,
+      "finalUrl": "https://auto-pilots.io/",
+      "headers": {
+        "Cache-Control": "public,max-age=0,must-revalidate",
+        "Content-Type": "text/html; charset=UTF-8",
+        "Etag": "\"b69f3d44a31bbdcd455f83b6422f4bed-ssl\""
+      },
+      "metadata": {
+        "description": [
+          "Wij bouwen AI-medewerkers, maatwerksoftware en websites voor het mkb. Los inzetbaar. Sterker wanneer ze samenwerken."
+        ],
+        "robots": [
+          "index,follow,max-image-preview:large"
+        ],
+        "canonical": [
+          "https://auto-pilots.io/"
+        ],
+        "og:type": [
+          "website"
+        ],
+        "og:title": [
+          "Autopilots | Bouw wat jouw bedrijf nodig heeft"
+        ],
+        "og:description": [
+          "Wij bouwen AI-medewerkers, maatwerksoftware en websites voor het mkb. Los inzetbaar. Sterker wanneer ze samenwerken."
+        ],
+        "og:url": [
+          "https://auto-pilots.io/"
+        ],
+        "og:image": [
+          "https://auto-pilots.io/og/autopilots-og.svg"
+        ],
+        "og:locale": [
+          "nl_NL"
+        ],
+        "og:locale:alternate": [
+          "en_GB",
+          "es_ES",
+          "de_DE",
+          "it_IT",
+          "fr_FR"
+        ],
+        "twitter:card": [
+          "summary_large_image"
+        ],
+        "twitter:title": [
+          "Autopilots | Bouw wat jouw bedrijf nodig heeft"
+        ],
+        "twitter:description": [
+          "Wij bouwen AI-medewerkers, maatwerksoftware en websites voor het mkb. Los inzetbaar. Sterker wanneer ze samenwerken."
+        ],
+        "twitter:image": [
+          "https://auto-pilots.io/og/autopilots-og.svg"
+        ]
+      },
+      "firstImages": [
+        {
+          "src": "/samenwerkingen/animals-faith.png",
+          "alt": "Animals Faith"
+        },
+        {
+          "src": "/samenwerkingen/dakcentrale-nederland.png",
+          "alt": "Dakcentrale Nederland"
+        },
+        {
+          "src": "/samenwerkingen/h3a.png",
+          "alt": "Heeren 3 Architecten"
+        }
+      ]
+    },
+    {
+      "path": "/",
+      "agent": "facebookexternalhit/1.1",
+      "status": 200,
+      "finalUrl": "https://auto-pilots.io/",
+      "headers": {
+        "Cache-Control": "public,max-age=0,must-revalidate",
+        "Content-Type": "text/html; charset=UTF-8",
+        "Etag": "\"b69f3d44a31bbdcd455f83b6422f4bed-ssl\""
+      },
+      "metadata": {
+        "description": [
+          "Wij bouwen AI-medewerkers, maatwerksoftware en websites voor het mkb. Los inzetbaar. Sterker wanneer ze samenwerken."
+        ],
+        "robots": [
+          "index,follow,max-image-preview:large"
+        ],
+        "canonical": [
+          "https://auto-pilots.io/"
+        ],
+        "og:type": [
+          "website"
+        ],
+        "og:title": [
+          "Autopilots | Bouw wat jouw bedrijf nodig heeft"
+        ],
+        "og:description": [
+          "Wij bouwen AI-medewerkers, maatwerksoftware en websites voor het mkb. Los inzetbaar. Sterker wanneer ze samenwerken."
+        ],
+        "og:url": [
+          "https://auto-pilots.io/"
+        ],
+        "og:image": [
+          "https://auto-pilots.io/og/autopilots-og.svg"
+        ],
+        "og:locale": [
+          "nl_NL"
+        ],
+        "og:locale:alternate": [
+          "en_GB",
+          "es_ES",
+          "de_DE",
+          "it_IT",
+          "fr_FR"
+        ],
+        "twitter:card": [
+          "summary_large_image"
+        ],
+        "twitter:title": [
+          "Autopilots | Bouw wat jouw bedrijf nodig heeft"
+        ],
+        "twitter:description": [
+          "Wij bouwen AI-medewerkers, maatwerksoftware en websites voor het mkb. Los inzetbaar. Sterker wanneer ze samenwerken."
+        ],
+        "twitter:image": [
+          "https://auto-pilots.io/og/autopilots-og.svg"
+        ]
+      },
+      "firstImages": [
+        {
+          "src": "/samenwerkingen/animals-faith.png",
+          "alt": "Animals Faith"
+        },
+        {
+          "src": "/samenwerkingen/dakcentrale-nederland.png",
+          "alt": "Dakcentrale Nederland"
+        },
+        {
+          "src": "/samenwerkingen/h3a.png",
+          "alt": "Heeren 3 Architecten"
+        }
+      ]
+    },
+    {
+      "path": "/",
+      "agent": "Twitterbot/1.0",
+      "status": 200,
+      "finalUrl": "https://auto-pilots.io/",
+      "headers": {
+        "Cache-Control": "public,max-age=0,must-revalidate",
+        "Content-Type": "text/html; charset=UTF-8",
+        "Etag": "\"b69f3d44a31bbdcd455f83b6422f4bed-ssl\""
+      },
+      "metadata": {
+        "description": [
+          "Wij bouwen AI-medewerkers, maatwerksoftware en websites voor het mkb. Los inzetbaar. Sterker wanneer ze samenwerken."
+        ],
+        "robots": [
+          "index,follow,max-image-preview:large"
+        ],
+        "canonical": [
+          "https://auto-pilots.io/"
+        ],
+        "og:type": [
+          "website"
+        ],
+        "og:title": [
+          "Autopilots | Bouw wat jouw bedrijf nodig heeft"
+        ],
+        "og:description": [
+          "Wij bouwen AI-medewerkers, maatwerksoftware en websites voor het mkb. Los inzetbaar. Sterker wanneer ze samenwerken."
+        ],
+        "og:url": [
+          "https://auto-pilots.io/"
+        ],
+        "og:image": [
+          "https://auto-pilots.io/og/autopilots-og.svg"
+        ],
+        "og:locale": [
+          "nl_NL"
+        ],
+        "og:locale:alternate": [
+          "en_GB",
+          "es_ES",
+          "de_DE",
+          "it_IT",
+          "fr_FR"
+        ],
+        "twitter:card": [
+          "summary_large_image"
+        ],
+        "twitter:title": [
+          "Autopilots | Bouw wat jouw bedrijf nodig heeft"
+        ],
+        "twitter:description": [
+          "Wij bouwen AI-medewerkers, maatwerksoftware en websites voor het mkb. Los inzetbaar. Sterker wanneer ze samenwerken."
+        ],
+        "twitter:image": [
+          "https://auto-pilots.io/og/autopilots-og.svg"
+        ]
+      },
+      "firstImages": [
+        {
+          "src": "/samenwerkingen/animals-faith.png",
+          "alt": "Animals Faith"
+        },
+        {
+          "src": "/samenwerkingen/dakcentrale-nederland.png",
+          "alt": "Dakcentrale Nederland"
+        },
+        {
+          "src": "/samenwerkingen/h3a.png",
+          "alt": "Heeren 3 Architecten"
+        }
+      ]
+    },
+    {
+      "path": "/",
+      "agent": "WhatsApp/2.0",
+      "status": 200,
+      "finalUrl": "https://auto-pilots.io/",
+      "headers": {
+        "Cache-Control": "public,max-age=0,must-revalidate",
+        "Content-Type": "text/html; charset=UTF-8",
+        "Etag": "\"b69f3d44a31bbdcd455f83b6422f4bed-ssl\""
+      },
+      "metadata": {
+        "description": [
+          "Wij bouwen AI-medewerkers, maatwerksoftware en websites voor het mkb. Los inzetbaar. Sterker wanneer ze samenwerken."
+        ],
+        "robots": [
+          "index,follow,max-image-preview:large"
+        ],
+        "canonical": [
+          "https://auto-pilots.io/"
+        ],
+        "og:type": [
+          "website"
+        ],
+        "og:title": [
+          "Autopilots | Bouw wat jouw bedrijf nodig heeft"
+        ],
+        "og:description": [
+          "Wij bouwen AI-medewerkers, maatwerksoftware en websites voor het mkb. Los inzetbaar. Sterker wanneer ze samenwerken."
+        ],
+        "og:url": [
+          "https://auto-pilots.io/"
+        ],
+        "og:image": [
+          "https://auto-pilots.io/og/autopilots-og.svg"
+        ],
+        "og:locale": [
+          "nl_NL"
+        ],
+        "og:locale:alternate": [
+          "en_GB",
+          "es_ES",
+          "de_DE",
+          "it_IT",
+          "fr_FR"
+        ],
+        "twitter:card": [
+          "summary_large_image"
+        ],
+        "twitter:title": [
+          "Autopilots | Bouw wat jouw bedrijf nodig heeft"
+        ],
+        "twitter:description": [
+          "Wij bouwen AI-medewerkers, maatwerksoftware en websites voor het mkb. Los inzetbaar. Sterker wanneer ze samenwerken."
+        ],
+        "twitter:image": [
+          "https://auto-pilots.io/og/autopilots-og.svg"
+        ]
+      },
+      "firstImages": [
+        {
+          "src": "/samenwerkingen/animals-faith.png",
+          "alt": "Animals Faith"
+        },
+        {
+          "src": "/samenwerkingen/dakcentrale-nederland.png",
+          "alt": "Dakcentrale Nederland"
+        },
+        {
+          "src": "/samenwerkingen/h3a.png",
+          "alt": "Heeren 3 Architecten"
+        }
+      ]
+    }
+  ]
+}

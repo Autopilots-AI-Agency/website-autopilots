@@ -1,4 +1,6 @@
 ---
+import SocialMetadata from "../components/SocialMetadata.astro";
+import { organizationLogo } from "../config/social";
 import SiteIcon from '../components/SiteIcon.astro';
 import "../styles/global.css";
 import "../styles/ecosystem.css";
@@ -17,7 +19,6 @@ interface Props {
   title: string;
   description: string;
   canonical?: string;
-  ogImage?: string;
   lang?: string;
   noindex?: boolean;
   schema?: object | object[];
@@ -30,7 +31,6 @@ const {
   title,
   description,
   canonical = Astro.url.pathname,
-  ogImage = "/og/autopilots-og.svg",
   lang,
   noindex = false,
   schema,
@@ -40,7 +40,7 @@ const {
 } = Astro.props;
 
 const canonicalUrl = new URL(canonical, Astro.site ?? Astro.url.origin).toString();
-const ogImageUrl = new URL(ogImage, Astro.site ?? Astro.url.origin).toString();
+const organizationLogoUrl = new URL(organizationLogo, Astro.site ?? Astro.url.origin).toString();
 const siteUrl = new URL("/", Astro.site ?? Astro.url.origin).toString();
 const localeConfig = getLocale(locale);
 const ui = uiCopy[locale];
@@ -52,7 +52,7 @@ const effectiveNoindex = noindex || legacyDutchRoute;
 // at page level until their full template is connected.
 const alternates = contentId ? localizedAlternates(contentId) : [];
 const globalSchema = [
-  { "@context": "https://schema.org", "@type": "Organization", name: "Autopilots", url: siteUrl, logo: ogImageUrl },
+  { "@context": "https://schema.org", "@type": "Organization", name: "Autopilots", url: siteUrl, logo: organizationLogoUrl },
   { "@context": "https://schema.org", "@type": "WebSite", name: "Autopilots", url: siteUrl, inLanguage: localeConfig.tag }
 ];
 const schemaItems = [...globalSchema, ...(schema ? (Array.isArray(schema) ? schema : [schema]) : [])];
@@ -72,17 +72,8 @@ const schemaItems = [...globalSchema, ...(schema ? (Array.isArray(schema) ? sche
     <meta name="description" content={description} />
     <meta name="robots" content={effectiveNoindex ? "noindex,follow" : "index,follow,max-image-preview:large"} />
     <link rel="canonical" href={canonicalUrl} />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonicalUrl} />
-    <meta property="og:image" content={ogImageUrl} />
-    <meta property="og:locale" content={localeConfig.og} />
+    <SocialMetadata title={title} description={description} canonicalUrl={canonicalUrl} ogLocale={localeConfig.og} />
     {alternates.filter((item) => item.locale !== locale).map((item) => <meta property="og:locale:alternate" content={getLocale(item.locale).og} />)}
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImageUrl} />
     {alternates.map((item) => <link rel="alternate" hreflang={item.tag} href={new URL(item.href, Astro.site ?? Astro.url.origin).toString()} />)}
     {alternates.length > 0 && <link rel="alternate" hreflang="x-default" href={new URL("/", Astro.site ?? Astro.url.origin).toString()} />}
     <script type="application/ld+json" set:html={JSON.stringify(schemaItems).replaceAll("<", "\\u003c")} />

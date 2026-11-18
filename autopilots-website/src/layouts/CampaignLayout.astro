@@ -1,4 +1,5 @@
 ---
+import SocialMetadata from "../components/SocialMetadata.astro";
 import Footer from '../components/layout/Footer.astro';
 import SiteIcon from '../components/SiteIcon.astro';
 import "../styles/global.css";
@@ -30,6 +31,7 @@ const campaignBackendBase = import.meta.env.VITE_AUTOPILOTS_SCAN_URL || '';
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
+    <SocialMetadata title={title} description={description} canonicalUrl={canonicalUrl} ogLocale={getLocale(locale).og} />
     {alternates.map(item=><link rel="alternate" hreflang={item.tag} href={new URL(item.href,Astro.site??Astro.url.origin).toString()} />)}
     {defaultAlternate&&<link rel="alternate" hreflang="x-default" href={new URL(defaultAlternate.href,Astro.site??Astro.url.origin).toString()} />}
   </head>
@@ -38,14 +40,14 @@ const campaignBackendBase = import.meta.env.VITE_AUTOPILOTS_SCAN_URL || '';
     <main id="campaign-content"><slot /></main>
     <Footer locale={locale}/>
     <style is:global>#campaign-content :is(.ap-entry-footer,.ap-page-footer){display:none}</style>
-    <aside class="ap-campaign-consent" data-campaign-consent hidden aria-label="Cookievoorkeuren">
+    <aside class="ap-campaign-consent" data-campaign-consent hidden aria-label={locale === "fr" ? "Préférences de cookies" : "Cookievoorkeuren"}>
       <div>
-        <strong>Wij vinden je privacy belangrijk</strong>
-        <p>Lees hoe we gegevens gebruiken in onze <a href="/privacy/" target="_blank" rel="noopener noreferrer">privacyinformatie</a>.</p>
+        <strong>{locale === "fr" ? "Votre confidentialité compte" : "Wij vinden je privacy belangrijk"}</strong>
+        <p>{locale === "fr" ? "Consultez notre politique pour savoir comment nous utilisons vos données : " : "Lees hoe we gegevens gebruiken in onze "}<a href={locale === "fr" ? "/fr/confidentialite/" : "/privacy/"} target="_blank" rel="noopener noreferrer">{locale === "fr" ? "informations de confidentialité" : "privacyinformatie"}</a>.</p>
       </div>
       <div class="ap-campaign-consent__actions">
-        <button type="button" data-consent-reject>Alleen noodzakelijk</button>
-        <button type="button" data-consent-accept>Klik hier om te accepteren</button>
+        <button type="button" data-consent-reject>{locale === "fr" ? "Uniquement nécessaires" : "Alleen noodzakelijk"}</button>
+        <button type="button" data-consent-accept>{locale === "fr" ? "Accepter" : "Klik hier om te accepteren"}</button>
       </div>
     </aside>
     <script is:inline define:vars={{ campaign, metaPixelId, campaignBackendBase }}>
