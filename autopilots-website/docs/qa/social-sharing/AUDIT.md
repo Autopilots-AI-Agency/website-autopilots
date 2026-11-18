@@ -9,7 +9,7 @@ De homepage leverde server-side:
 
 | Veld | Waarde |
 | --- | --- |
-| og:title / twitter:title | Autopilots · Bouw wat jouw bedrijf nodig heeft (scheidingsteken op website: verticale streep) |
+| og:title / twitter:title | Autopilots \| Bouw wat jouw bedrijf nodig heeft |
 | description / og:description / twitter:description | Wij bouwen AI-medewerkers, maatwerksoftware en websites voor het mkb. Los inzetbaar. Sterker wanneer ze samenwerken. |
 | canonical / og:url | https://auto-pilots.io/ |
 | og:image / twitter:image | https://auto-pilots.io/og/autopilots-og.svg |
@@ -95,3 +95,15 @@ platformchecks en worden niet gelijkgesteld aan succesvolle HTTP-crawlerchecks.
 
 - `autopilots-logo.webp`: 704550 bytes; SHA-256 `1be945cbf7697860df6da1b7d32f98d0dd3e5285e991ec38bdbe59464573b43d`.
 - `autopilots-social-20261118.png`: 638750 bytes; SHA-256 `46780a9361bea8193f7cb68a48065baea07425a89f21402cdef015374bae7e62`.
+
+## Lokale verificatie vóór pull request
+
+- Volledige build: 414 pagina's; 14.926 interne links en alle deelmetadata gecontroleerd.
+- Formatter, lint, TypeScript en 77 unit-/integratietests geslaagd.
+- Browserreeks: 162 geslaagd, 2 bestaande skips; desktop en mobiel.
+- De branch is vervolgens bijgewerkt naar actuele main `c9e3ba1` (afzonderlijke
+  portretwijziging). Die wijziging blijft behouden. Nieuwe build/releaseverificatie
+  en GitHub-releasechecks bewaken de gecombineerde toestand.
+- Het ontbreken van een release-SHA in een eerste lokale build werd terecht
+  afgewezen door release:verify. De definitieve verificatie gebruikt expliciet de
+  actuele commit-SHA; er is geen guard omzeild.
