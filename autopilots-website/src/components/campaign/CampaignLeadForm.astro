@@ -1,86 +1,168 @@
 ---
 import type { MarketingFunnelConfig } from "../../data/marketingFunnels";
-interface Props { config: MarketingFunnelConfig; experiencePath: string }
-const { config, experiencePath } = Astro.props;
+import type { SupportedLocale } from "../../i18n/languages";
+import { localizedPath } from "../../i18n/routes";
+interface Props { config: MarketingFunnelConfig; experiencePath: string; locale?: SupportedLocale }
+const { config, experiencePath, locale = "nl" } = Astro.props;
+const french: Record<string, string> = {
+  "Voortgang": "Progression",
+  "Vraag 1 van 5": "Question 1 sur 5",
+  "Eerst een snelle inschatting": "Une première estimation",
+  "Hoeveel klantvragen komen er ongeveer per maand binnen ?": "Combien de demandes clients recevez-vous environ par mois ?",
+  "Hoeveel klantvragen komen er ongeveer per maand binnen?": "Combien de demandes clients recevez-vous environ par mois ?",
+  "Denk aan telefoontjes, WhatsApp, e-mail en platformleads samen.": "Incluez les appels, WhatsApp, les e-mails et les demandes issues des plateformes.",
+  "Minder dan 100": "Moins de 100",
+  "Rustig contactvolume": "Volume de demandes modéré",
+  "Dagelijks nieuwe vragen": "De nouvelles demandes chaque jour",
+  "Meerdere kanalen actief": "Plusieurs canaux actifs",
+  "Meer dan 500": "Plus de 500",
+  "Hoog contactvolume": "Volume de demandes élevé",
+  "Jullie klantcontact": "Vos échanges clients",
+  "Waar komen de meeste vragen binnen?": "Par quel canal recevez-vous le plus de demandes ?",
+  "Dit bepaalt welke AI-medewerker je als eerste te zien krijgt.": "Cela détermine le collaborateur IA présenté en premier.",
+  "Vooral telefonisch": "Surtout par téléphone",
+  "Werkplaats, voorraad en afspraken": "Atelier, stock et rendez-vous",
+  "Vooral berichten": "Surtout par messages",
+  "E-mail, WhatsApp en portals": "E-mails, WhatsApp et portails",
+  "Vooral advertentieleads": "Surtout via les annonces",
+  "Website en voertuigplatforms": "Site web et plateformes automobiles",
+  "Een mix van alles": "Un mélange de canaux",
+  "Telefonie, berichten en leads": "Téléphone, messages et prospects",
+  "Opvolging": "Suivi",
+  "Hoeveel contacten worden nu te laat of niet opgevolgd?": "Quelle part des demandes reçoit une réponse tardive ou aucune réponse ?",
+  "Een eerlijke schatting is voldoende.": "Une estimation réaliste suffit.",
+  "Minder dan 10%": "Moins de 10 %",
+  "Vrijwel alles wordt opgepakt": "Presque toutes les demandes sont traitées",
+  "Ongeveer 10–25%": "Environ 10 à 25 %",
+  "Soms blijft contact liggen": "Certaines demandes restent sans suite",
+  "Ongeveer 25–50%": "Environ 25 à 50 %",
+  "Drukte kost aantoonbaar kansen": "La charge de travail fait perdre des occasions",
+  "Meer dan de helft": "Plus de la moitié",
+  "Veel contact krijgt geen vervolg": "De nombreuses demandes restent sans suite",
+  "Reactiesnelheid": "Délai de réponse",
+  "Hoe snel krijgt een nieuwe vraag gemiddeld antwoord?": "Quel est le délai moyen de réponse à une nouvelle demande ?",
+  "Ook buiten openingstijden en tijdens piekmomenten.": "Incluez les périodes de forte activité et les heures de fermeture.",
+  "Binnen 5 minuten": "En moins de 5 minutes",
+  "Bijna altijd direct": "Presque toujours immédiatement",
+  "Binnen één uur": "En moins d’une heure",
+  "Meestal dezelfde werkperiode": "Généralement pendant la même période de travail",
+  "Later op dezelfde dag": "Plus tard dans la journée",
+  "Afhankelijk van de drukte": "Selon la charge de travail",
+  "Vaak pas de volgende dag": "Souvent le lendemain",
+  "Opvolging loopt regelmatig achter": "Le suivi prend régulièrement du retard",
+  "Gewenste resultaat": "Résultat souhaité",
+  "Waar moet een AI-medewerker vooral ruimte maken?": "Où un collaborateur IA devrait-il surtout vous faire gagner du temps ?",
+  "Je krijgt straks een test die hierbij aansluit.": "Vous accéderez ensuite à un test adapté.",
+  "Meer afspraken": "Plus de rendez-vous",
+  "Van vraag naar proefrit of werkplaats": "De la demande à l’essai ou au rendez-vous atelier",
+  "Snellere opvolging": "Un suivi plus rapide",
+  "Iedere lead direct een volgende stap": "Une prochaine étape pour chaque prospect",
+  "Minder druk op het team": "Moins de pression sur l’équipe",
+  "Herhaalwerk en intake overnemen": "Déléguer les tâches répétitives et le premier accueil",
+  "Alles combineren": "Combiner tous ces objectifs",
+  "Eén route voor het hele klantcontact": "Un parcours pour tous vos échanges clients",
+  "Jouw eerste indicatie": "Votre première estimation",
+  "contacten per maand": "demandes par mois",
+  "kunnen mogelijk sneller of consistenter worden opgevolgd. Vul hieronder je gegevens in om de AI-medewerker zelf te testen.": "pourraient recevoir un suivi plus rapide ou plus régulier. Saisissez vos coordonnées ci-dessous pour tester le collaborateur IA.",
+  "Laatste stap": "Dernière étape",
+  "Vul je gegevens in en test direct de AI-medewerker voor autobedrijven.": "Saisissez vos coordonnées et testez le collaborateur IA pour concessions automobiles.",
+  "Daarna krijg je meteen toegang tot drie live AI-tests en jouw persoonlijke impactberekening. Zonder aankoopverplichting.": "Accédez ensuite à trois tests IA en direct et à votre estimation personnalisée. Sans obligation d’achat.",
+  "Naam": "Nom",
+  "Voor- en achternaam": "Prénom et nom",
+  "Autobedrijf": "Concession automobile",
+  "Bedrijfsnaam": "Nom de l’entreprise",
+  "Zakelijk e-mailadres": "Adresse e-mail professionnelle",
+  "Telefoonnummer": "Numéro de téléphone",
+  "naam@autobedrijf.nl": "nom@entreprise.fr",
+  "06 12 34 56 78": "+33 6 12 34 56 78",
+  "Stuur mij de AI-test, mijn berekening en praktische opvolging over AI voor autobedrijven. Afmelden kan altijd. Bekijk de": "Je souhaite recevoir le test IA, mon estimation et un suivi pratique sur l’IA pour concessions automobiles. Je peux me désinscrire à tout moment. Consultez les",
+  "privacyinformatie": "informations de confidentialité",
+  "Bekijk mijn resultaat & test de AI": "Voir mon résultat et tester l’IA",
+  "Direct toegang · Geen aankoopverplichting · Geen generieke mailing": "Accès immédiat · Sans obligation d’achat · Aucun envoi générique",
+  "← Vorige": "← Précédent",
+  "± 60 seconden": "Environ 60 secondes"
+};
+const t = (value: string) => locale === "fr" ? (french[value] ?? value) : value;
 ---
 
-<form class="ap-funnel" data-campaign-lead-form data-campaign-attribution data-experience-path={experiencePath} novalidate>
+<form class="ap-funnel" data-campaign-lead-form data-locale={locale} data-campaign-attribution data-experience-path={experiencePath} novalidate>
   <input type="hidden" name="intent" value="demo" />
   <input type="hidden" name="campaignName" value={config.campaignName} />
   <input type="hidden" name="niche" value={config.niche} />
   <input type="hidden" name="funnelAnswers" value="" />
-  <div class="ap-funnel-progress" aria-label="Voortgang"><div><span data-progress-fill></span></div><p><b data-progress-label>Vraag 1 van 5</b><span data-progress-percent>17%</span></p></div>
+  <div class="ap-funnel-progress" aria-label={t("Voortgang")}><div><span data-progress-fill></span></div><p><b data-progress-label>{t("Vraag 1 van 5")}</b><span data-progress-percent>17%</span></p></div>
 
   <div class="ap-funnel-stage is-active" data-stage="0">
-    <p class="ap-funnel-kicker">Eerst een snelle inschatting</p><h2>Hoeveel klantvragen komen er ongeveer per maand binnen?</h2><p class="ap-funnel-help">Denk aan telefoontjes, WhatsApp, e-mail en platformleads samen.</p>
+    <p class="ap-funnel-kicker">{t("Eerst een snelle inschatting")}</p><h2>{t("Hoeveel klantvragen komen er ongeveer per maand binnen?")}</h2><p class="ap-funnel-help">{t("Denk aan telefoontjes, WhatsApp, e-mail en platformleads samen.")}</p>
     <div class="ap-answer-grid">
-      <label><input type="radio" name="volume" value="75" data-label="Minder dan 100" /><span><b>Minder dan 100</b><small>Rustig contactvolume</small></span></label>
-      <label><input type="radio" name="volume" value="175" data-label="100–250" /><span><b>100–250</b><small>Dagelijks nieuwe vragen</small></span></label>
-      <label><input type="radio" name="volume" value="375" data-label="250–500" /><span><b>250–500</b><small>Meerdere kanalen actief</small></span></label>
-      <label><input type="radio" name="volume" value="650" data-label="Meer dan 500" /><span><b>Meer dan 500</b><small>Hoog contactvolume</small></span></label>
+      <label><input type="radio" name="volume" value="75" data-label={t("Minder dan 100")} /><span><b>{t("Minder dan 100")}</b><small>{t("Rustig contactvolume")}</small></span></label>
+      <label><input type="radio" name="volume" value="175" data-label="100–250" /><span><b>100–250</b><small>{t("Dagelijks nieuwe vragen")}</small></span></label>
+      <label><input type="radio" name="volume" value="375" data-label="250–500" /><span><b>250–500</b><small>{t("Meerdere kanalen actief")}</small></span></label>
+      <label><input type="radio" name="volume" value="650" data-label={t("Meer dan 500")} /><span><b>{t("Meer dan 500")}</b><small>{t("Hoog contactvolume")}</small></span></label>
     </div>
   </div>
   <div class="ap-funnel-stage" data-stage="1" hidden>
-    <p class="ap-funnel-kicker">Jullie klantcontact</p><h2>Waar komen de meeste vragen binnen?</h2><p class="ap-funnel-help">Dit bepaalt welke AI-medewerker je als eerste te zien krijgt.</p>
+    <p class="ap-funnel-kicker">{t("Jullie klantcontact")}</p><h2>{t("Waar komen de meeste vragen binnen?")}</h2><p class="ap-funnel-help">{t("Dit bepaalt welke AI-medewerker je als eerste te zien krijgt.")}</p>
     <div class="ap-answer-grid">
-      <label><input type="radio" name="channel" value="phone" data-label="Vooral telefonisch" /><span><b>Vooral telefonisch</b><small>Werkplaats, voorraad en afspraken</small></span></label>
-      <label><input type="radio" name="channel" value="messages" data-label="Vooral berichten" /><span><b>Vooral berichten</b><small>E-mail, WhatsApp en portals</small></span></label>
-      <label><input type="radio" name="channel" value="leads" data-label="Vooral advertentieleads" /><span><b>Vooral advertentieleads</b><small>Website en voertuigplatforms</small></span></label>
-      <label><input type="radio" name="channel" value="mixed" data-label="Een mix van alles" /><span><b>Een mix van alles</b><small>Telefonie, berichten en leads</small></span></label>
+      <label><input type="radio" name="channel" value="phone" data-label={t("Vooral telefonisch")} /><span><b>{t("Vooral telefonisch")}</b><small>{t("Werkplaats, voorraad en afspraken")}</small></span></label>
+      <label><input type="radio" name="channel" value="messages" data-label={t("Vooral berichten")} /><span><b>{t("Vooral berichten")}</b><small>{t("E-mail, WhatsApp en portals")}</small></span></label>
+      <label><input type="radio" name="channel" value="leads" data-label={t("Vooral advertentieleads")} /><span><b>{t("Vooral advertentieleads")}</b><small>{t("Website en voertuigplatforms")}</small></span></label>
+      <label><input type="radio" name="channel" value="mixed" data-label={t("Een mix van alles")} /><span><b>{t("Een mix van alles")}</b><small>{t("Telefonie, berichten en leads")}</small></span></label>
     </div>
   </div>
   <div class="ap-funnel-stage" data-stage="2" hidden>
-    <p class="ap-funnel-kicker">Opvolging</p><h2>Hoeveel contacten worden nu te laat of niet opgevolgd?</h2><p class="ap-funnel-help">Een eerlijke schatting is voldoende.</p>
+    <p class="ap-funnel-kicker">{t("Opvolging")}</p><h2>{t("Hoeveel contacten worden nu te laat of niet opgevolgd?")}</h2><p class="ap-funnel-help">{t("Een eerlijke schatting is voldoende.")}</p>
     <div class="ap-answer-grid">
-      <label><input type="radio" name="missed" value="10" data-label="Minder dan 10%" /><span><b>Minder dan 10%</b><small>Vrijwel alles wordt opgepakt</small></span></label>
-      <label><input type="radio" name="missed" value="20" data-label="Ongeveer 10–25%" /><span><b>Ongeveer 10–25%</b><small>Soms blijft contact liggen</small></span></label>
-      <label><input type="radio" name="missed" value="38" data-label="Ongeveer 25–50%" /><span><b>Ongeveer 25–50%</b><small>Drukte kost aantoonbaar kansen</small></span></label>
-      <label><input type="radio" name="missed" value="60" data-label="Meer dan de helft" /><span><b>Meer dan de helft</b><small>Veel contact krijgt geen vervolg</small></span></label>
+      <label><input type="radio" name="missed" value="10" data-label={t("Minder dan 10%")} /><span><b>{t("Minder dan 10%")}</b><small>{t("Vrijwel alles wordt opgepakt")}</small></span></label>
+      <label><input type="radio" name="missed" value="20" data-label={t("Ongeveer 10–25%")} /><span><b>{t("Ongeveer 10–25%")}</b><small>{t("Soms blijft contact liggen")}</small></span></label>
+      <label><input type="radio" name="missed" value="38" data-label={t("Ongeveer 25–50%")} /><span><b>{t("Ongeveer 25–50%")}</b><small>{t("Drukte kost aantoonbaar kansen")}</small></span></label>
+      <label><input type="radio" name="missed" value="60" data-label={t("Meer dan de helft")} /><span><b>{t("Meer dan de helft")}</b><small>{t("Veel contact krijgt geen vervolg")}</small></span></label>
     </div>
   </div>
   <div class="ap-funnel-stage" data-stage="3" hidden>
-    <p class="ap-funnel-kicker">Reactiesnelheid</p><h2>Hoe snel krijgt een nieuwe vraag gemiddeld antwoord?</h2><p class="ap-funnel-help">Ook buiten openingstijden en tijdens piekmomenten.</p>
+    <p class="ap-funnel-kicker">{t("Reactiesnelheid")}</p><h2>{t("Hoe snel krijgt een nieuwe vraag gemiddeld antwoord?")}</h2><p class="ap-funnel-help">{t("Ook buiten openingstijden en tijdens piekmomenten.")}</p>
     <div class="ap-answer-grid">
-      <label><input type="radio" name="responseTime" value="under-5" data-label="Binnen 5 minuten" /><span><b>Binnen 5 minuten</b><small>Bijna altijd direct</small></span></label>
-      <label><input type="radio" name="responseTime" value="under-60" data-label="Binnen één uur" /><span><b>Binnen één uur</b><small>Meestal dezelfde werkperiode</small></span></label>
-      <label><input type="radio" name="responseTime" value="same-day" data-label="Later op dezelfde dag" /><span><b>Later op dezelfde dag</b><small>Afhankelijk van de drukte</small></span></label>
-      <label><input type="radio" name="responseTime" value="next-day" data-label="Vaak pas de volgende dag" /><span><b>Vaak pas de volgende dag</b><small>Opvolging loopt regelmatig achter</small></span></label>
+      <label><input type="radio" name="responseTime" value="under-5" data-label={t("Binnen 5 minuten")} /><span><b>{t("Binnen 5 minuten")}</b><small>{t("Bijna altijd direct")}</small></span></label>
+      <label><input type="radio" name="responseTime" value="under-60" data-label={t("Binnen één uur")} /><span><b>{t("Binnen één uur")}</b><small>{t("Meestal dezelfde werkperiode")}</small></span></label>
+      <label><input type="radio" name="responseTime" value="same-day" data-label={t("Later op dezelfde dag")} /><span><b>{t("Later op dezelfde dag")}</b><small>{t("Afhankelijk van de drukte")}</small></span></label>
+      <label><input type="radio" name="responseTime" value="next-day" data-label={t("Vaak pas de volgende dag")} /><span><b>{t("Vaak pas de volgende dag")}</b><small>{t("Opvolging loopt regelmatig achter")}</small></span></label>
     </div>
   </div>
   <div class="ap-funnel-stage" data-stage="4" hidden>
-    <p class="ap-funnel-kicker">Gewenste resultaat</p><h2>Waar moet een AI-medewerker vooral ruimte maken?</h2><p class="ap-funnel-help">Je krijgt straks een test die hierbij aansluit.</p>
+    <p class="ap-funnel-kicker">{t("Gewenste resultaat")}</p><h2>{t("Waar moet een AI-medewerker vooral ruimte maken?")}</h2><p class="ap-funnel-help">{t("Je krijgt straks een test die hierbij aansluit.")}</p>
     <div class="ap-answer-grid">
-      <label><input type="radio" name="goal" value="appointments" data-label="Meer afspraken" /><span><b>Meer afspraken</b><small>Van vraag naar proefrit of werkplaats</small></span></label>
-      <label><input type="radio" name="goal" value="speed" data-label="Snellere opvolging" /><span><b>Snellere opvolging</b><small>Iedere lead direct een volgende stap</small></span></label>
-      <label><input type="radio" name="goal" value="workload" data-label="Minder druk op het team" /><span><b>Minder druk op het team</b><small>Herhaalwerk en intake overnemen</small></span></label>
-      <label><input type="radio" name="goal" value="all" data-label="Alles combineren" /><span><b>Alles combineren</b><small>Eén route voor het hele klantcontact</small></span></label>
+      <label><input type="radio" name="goal" value="appointments" data-label={t("Meer afspraken")} /><span><b>{t("Meer afspraken")}</b><small>{t("Van vraag naar proefrit of werkplaats")}</small></span></label>
+      <label><input type="radio" name="goal" value="speed" data-label={t("Snellere opvolging")} /><span><b>{t("Snellere opvolging")}</b><small>{t("Iedere lead direct een volgende stap")}</small></span></label>
+      <label><input type="radio" name="goal" value="workload" data-label={t("Minder druk op het team")} /><span><b>{t("Minder druk op het team")}</b><small>{t("Herhaalwerk en intake overnemen")}</small></span></label>
+      <label><input type="radio" name="goal" value="all" data-label={t("Alles combineren")} /><span><b>{t("Alles combineren")}</b><small>{t("Eén route voor het hele klantcontact")}</small></span></label>
     </div>
   </div>
   <div class="ap-funnel-stage ap-contact-stage" data-stage="5" hidden>
-    <div class="ap-result-preview"><span>Jouw eerste indicatie</span><strong><b data-opportunity>0</b> contacten per maand</strong><p>kunnen mogelijk sneller of consistenter worden opgevolgd. Vul hieronder je gegevens in om de AI-medewerker zelf te testen.</p></div>
-    <p class="ap-funnel-kicker">Laatste stap</p><h2>Vul je gegevens in en test direct de AI-medewerker voor autobedrijven.</h2>
-    <p class="ap-funnel-help">Daarna krijg je meteen toegang tot drie live AI-tests en jouw persoonlijke impactberekening. Zonder aankoopverplichting.</p>
+    <div class="ap-result-preview"><span>{t("Jouw eerste indicatie")}</span><strong><b data-opportunity>0</b> {t("contacten per maand")}</strong><p>{t("kunnen mogelijk sneller of consistenter worden opgevolgd. Vul hieronder je gegevens in om de AI-medewerker zelf te testen.")}</p></div>
+    <p class="ap-funnel-kicker">{t("Laatste stap")}</p><h2>{t("Vul je gegevens in en test direct de AI-medewerker voor autobedrijven.")}</h2>
+    <p class="ap-funnel-help">{t("Daarna krijg je meteen toegang tot drie live AI-tests en jouw persoonlijke impactberekening. Zonder aankoopverplichting.")}</p>
     <div class="ap-entry-fields">
-      <label><span>Naam</span><input name="name" autocomplete="name" required maxlength="100" placeholder="Voor- en achternaam" /></label>
-      <label><span>Autobedrijf</span><input name="company" autocomplete="organization" required maxlength="120" placeholder="Bedrijfsnaam" /></label>
-      <label><span>Zakelijk e-mailadres</span><input name="email" type="email" autocomplete="email" inputmode="email" required maxlength="160" placeholder="naam@autobedrijf.nl" /></label>
-      <label><span>Telefoonnummer</span><input name="phone" type="tel" autocomplete="tel" inputmode="tel" required maxlength="40" placeholder="06 12 34 56 78" /></label>
+      <label><span>{t("Naam")}</span><input name="name" autocomplete="name" required maxlength="100" placeholder={t("Voor- en achternaam")} /></label>
+      <label><span>{t("Autobedrijf")}</span><input name="company" autocomplete="organization" required maxlength="120" placeholder={t("Bedrijfsnaam")} /></label>
+      <label><span>{t("Zakelijk e-mailadres")}</span><input name="email" type="email" autocomplete="email" inputmode="email" required maxlength="160" placeholder={t("naam@autobedrijf.nl")} /></label>
+      <label><span>{t("Telefoonnummer")}</span><input name="phone" type="tel" autocomplete="tel" inputmode="tel" required maxlength="40" placeholder={t("06 12 34 56 78")} /></label>
     </div>
     <label class="ap-honeypot" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off" /></label>
-    <label class="ap-entry-consent"><input name="consent" type="checkbox" required /><span>Stuur mij de AI-test, mijn berekening en praktische opvolging over AI voor autobedrijven. Afmelden kan altijd. Bekijk de <a href="/privacy/" target="_blank" rel="noopener noreferrer">privacyinformatie</a>.</span></label>
-    <button class="ap-entry-submit" type="submit" data-submit-label>Bekijk mijn resultaat & test de AI <span aria-hidden="true">→</span></button>
-    <p class="ap-entry-note">Direct toegang · Geen aankoopverplichting · Geen generieke mailing</p><p class="ap-entry-status" data-form-status aria-live="polite"></p>
+    <label class="ap-entry-consent"><input name="consent" type="checkbox" required /><span>{t("Stuur mij de AI-test, mijn berekening en praktische opvolging over AI voor autobedrijven. Afmelden kan altijd. Bekijk de")} <a href={locale === "fr" ? localizedPath("page.privacy", locale) : "/privacy/"} target="_blank" rel="noopener noreferrer">{t("privacyinformatie")}</a>.</span></label>
+    <button class="ap-entry-submit" type="submit" data-submit-label>{t("Bekijk mijn resultaat & test de AI")} <span aria-hidden="true">→</span></button>
+    <p class="ap-entry-note">{t("Direct toegang · Geen aankoopverplichting · Geen generieke mailing")}</p><p class="ap-entry-status" data-form-status aria-live="polite"></p>
   </div>
-  <div class="ap-funnel-controls"><button type="button" class="ap-funnel-back" data-back hidden>← Vorige</button><span>± 60 seconden</span></div>
+  <div class="ap-funnel-controls"><button type="button" class="ap-funnel-back" data-back hidden>{t("← Vorige")}</button><span>{t("± 60 seconden")}</span></div>
 </form>
 
 <script>
   document.querySelectorAll("[data-campaign-lead-form]").forEach((form) => {
+    const isFrench = form.dataset.locale === "fr";
     const stages=[...form.querySelectorAll("[data-stage]")],back=form.querySelector("[data-back]"),fill=form.querySelector("[data-progress-fill]"),progressLabel=form.querySelector("[data-progress-label]"),progressPercent=form.querySelector("[data-progress-percent]"),submit=form.querySelector("[data-submit-label]"),status=form.querySelector("[data-form-status]");let active=0;const answers={};
     window.apCampaign?.emit?.("funnel_started",{step:1});
-    const show=(index)=>{active=Math.max(0,Math.min(index,stages.length-1));stages.forEach((stage,i)=>{stage.hidden=i!==active;stage.classList.toggle("is-active",i===active)});const percent=Math.round(((active+1)/stages.length)*100);fill.style.width=`${percent}%`;progressPercent.textContent=`${percent}%`;progressLabel.textContent=active<5?`Vraag ${active+1} van 5`:"Je resultaat is klaar";back.hidden=active===0;if(active===5){const opportunity=Math.round(Number(answers.volume?.value||0)*Number(answers.missed?.value||0)/100);form.querySelector("[data-opportunity]").textContent=new Intl.NumberFormat("nl-NL").format(opportunity);form.elements.funnelAnswers.value=JSON.stringify(answers);window.apCampaign?.emit?.("funnel_diagnosis_completed",{volume:answers.volume?.value,missed:answers.missed?.value,channel:answers.channel?.value,goal:answers.goal?.value})}stages[active].querySelector("h2")?.focus?.({preventScroll:true})};
+    const show=(index)=>{active=Math.max(0,Math.min(index,stages.length-1));stages.forEach((stage,i)=>{stage.hidden=i!==active;stage.classList.toggle("is-active",i===active)});const percent=Math.round(((active+1)/stages.length)*100);fill.style.width=`${percent}%`;progressPercent.textContent=`${percent}%`;progressLabel.textContent=active<5?(isFrench?`Question ${active+1} sur 5`:`Vraag ${active+1} van 5`):(isFrench?"Votre résultat est prêt":"Je resultaat is klaar");back.hidden=active===0;if(active===5){const opportunity=Math.round(Number(answers.volume?.value||0)*Number(answers.missed?.value||0)/100);form.querySelector("[data-opportunity]").textContent=new Intl.NumberFormat(isFrench ? "fr-FR" : "nl-NL").format(opportunity);form.elements.funnelAnswers.value=JSON.stringify(answers);window.apCampaign?.emit?.("funnel_diagnosis_completed",{volume:answers.volume?.value,missed:answers.missed?.value,channel:answers.channel?.value,goal:answers.goal?.value})}stages[active].querySelector("h2")?.focus?.({preventScroll:true})};
     form.querySelectorAll('.ap-answer-grid input[type="radio"]').forEach(input=>input.addEventListener("change",()=>{const questionLabel=input.closest("[data-stage]")?.querySelector("h2")?.textContent?.trim()||input.name;answers[input.name]={value:input.value,label:input.dataset.label,question:questionLabel};window.apCampaign?.emit?.("funnel_question_answered",{question:input.name,questionLabel,answer:input.value,answerLabel:input.dataset.label,step:active+1});setTimeout(()=>show(active+1),180)}));back.addEventListener("click",()=>show(active-1));show(0);
-    form.addEventListener("submit",async(event)=>{event.preventDefault();status.textContent="";if(!form.reportValidity())return;submit.disabled=true;submit.setAttribute("aria-busy","true");const payload=Object.fromEntries(new FormData(form).entries());payload.consent=form.elements.consent.checked;payload.sessionId=window.apCampaign?.sessionId||"";const target=new URL(form.dataset.experiencePath,location.origin);target.searchParams.set("volume",String(answers.volume?.value||180));target.searchParams.set("issue",String(answers.missed?.value||32));target.searchParams.set("channel",String(answers.channel?.value||"mixed"));const attribution=window.apCampaign?.attribution||{};["utm_source","utm_medium","utm_campaign","utm_term","utm_content","gclid","fbclid","msclkid"].forEach(key=>{if(attribution[key])target.searchParams.set(key,attribution[key])});try{window.apCampaign?.emit?.("lead_form_submitted",{intent:"combined"});const response=await fetch((import.meta.env.VITE_AUTOPILOTS_SCAN_URL||"").replace(/\/$/,"")+"/api/funnel-lead",{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(payload)});const result=await response.json().catch(()=>({}));if(!response.ok||!result.ok)throw new Error(result.message||"Versturen is nu niet gelukt.");window.apCampaign?.emit?.("lead_form_succeeded",{intent:"combined"});location.assign(`${target.pathname}${target.search}`)}catch(error){if(["localhost","127.0.0.1"].includes(location.hostname)){status.textContent="Lokale preview: de ervaring wordt geopend zonder CRM-opslag.";setTimeout(()=>location.assign(`${target.pathname}${target.search}`),500);return}window.apCampaign?.emit?.("lead_form_failed",{intent:"combined"});status.textContent=error.message||"Versturen is nu niet gelukt. Probeer het opnieuw.";submit.disabled=false;submit.removeAttribute("aria-busy")}});
+    form.addEventListener("submit",async(event)=>{event.preventDefault();status.textContent="";if(!form.reportValidity())return;submit.disabled=true;submit.setAttribute("aria-busy","true");const payload=Object.fromEntries(new FormData(form).entries());payload.consent=form.elements.consent.checked;payload.sessionId=window.apCampaign?.sessionId||"";const target=new URL(form.dataset.experiencePath,location.origin);target.searchParams.set("volume",String(answers.volume?.value||180));target.searchParams.set("issue",String(answers.missed?.value||32));target.searchParams.set("channel",String(answers.channel?.value||"mixed"));const attribution=window.apCampaign?.attribution||{};["utm_source","utm_medium","utm_campaign","utm_term","utm_content","gclid","fbclid","msclkid"].forEach(key=>{if(attribution[key])target.searchParams.set(key,attribution[key])});try{window.apCampaign?.emit?.("lead_form_submitted",{intent:"combined"});const response=await fetch((import.meta.env.VITE_AUTOPILOTS_SCAN_URL||"").replace(/\/$/,"")+"/api/funnel-lead",{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(payload)});const result=await response.json().catch(()=>({}));if(!response.ok||!result.ok)throw new Error(result.message||"Versturen is nu niet gelukt.");window.apCampaign?.emit?.("lead_form_succeeded",{intent:"combined"});location.assign(`${target.pathname}${target.search}`)}catch(error){if(["localhost","127.0.0.1"].includes(location.hostname)){status.textContent=isFrench ? "Aperçu local : ouverture du test sans enregistrement dans le CRM." : "Lokale preview: de ervaring wordt geopend zonder CRM-opslag.";setTimeout(()=>location.assign(`${target.pathname}${target.search}`),500);return}window.apCampaign?.emit?.("lead_form_failed",{intent:"combined"});status.textContent=isFrench ? "L’envoi a échoué. Veuillez réessayer." : error.message||"Versturen is nu niet gelukt. Probeer het opnieuw.";submit.disabled=false;submit.removeAttribute("aria-busy")}});
   });
 </script>
 

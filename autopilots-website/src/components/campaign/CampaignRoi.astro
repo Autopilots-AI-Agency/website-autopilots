@@ -1,22 +1,44 @@
 ---
 import type { MarketingFunnelConfig } from "../../data/marketingFunnels";
-interface Props { config: MarketingFunnelConfig }
-const { config } = Astro.props;
+import type { SupportedLocale } from "../../i18n/languages";
+interface Props { config: MarketingFunnelConfig; locale?: SupportedLocale }
+const { config, locale = "nl" } = Astro.props;
 const payload=JSON.stringify(config.roi).replaceAll("<","\\u003c");
+const french: Record<string, string> = {
+  "Welke rol wil je berekenen?": "Quel rôle souhaitez-vous évaluer ?",
+  "Inboxmedewerker": "Assistant messagerie",
+  "Telefoniste": "Standardiste",
+  "Leadopvolger": "Suivi des prospects",
+  "Nieuwe leads en vragen per maand": "Nouveaux prospects et demandes par mois",
+  "Nu te laat of niet opgevolgd (%)": "Réponse tardive ou absence de suivi (%)",
+  "Naar proefrit of concrete afspraak (%)": "Vers un essai ou un rendez-vous concret (%)",
+  "Van afspraak naar klant (%)": "Conversion des rendez-vous en clients (%)",
+  "Gemiddelde waarde per resultaat (€)": "Valeur moyenne par résultat (€)",
+  "Herstel voorbeeld": "Réinitialiser l’exemple",
+  "Indicatief verschil per maand": "Différence indicative par mois",
+  "Zonder gekozen AI-rol": "Sans le rôle IA choisi",
+  "Met gekozen AI-rol": "Avec le rôle IA choisi",
+  "Mogelijke extra waarde": "Valeur supplémentaire possible",
+  "extra vragen op tijd verwerkt,": "demandes supplémentaires traitées à temps,",
+  "extra afspraken en": "rendez-vous supplémentaires et",
+  "extra resultaten.": "résultats supplémentaires.",
+  "Indicatie op basis van je invoer en vaste rekenregels. Geen garantie op conversie, omzet of resultaat.": "Estimation fondée sur vos données et des règles de calcul fixes. Aucune garantie de conversion, de chiffre d’affaires ou de résultat."
+};
+const t = (value: string) => locale === "fr" ? (french[value] ?? value) : value;
 ---
-<div class="ap-campaign-roi" data-campaign-roi>
+<div class="ap-campaign-roi" data-campaign-roi data-locale={locale}>
   <form data-campaign-roi-form>
-    <fieldset><legend>Welke rol wil je berekenen?</legend><div class="ap-roi-roles">{[["inbox","Inboxmedewerker"],["telefoniste","Telefoniste"],["leadopvolger","Leadopvolger"]].map((item,index)=><label><input type="radio" name="packageKey" value={item[0]} checked={index===0}/><span>{String(index+1).padStart(2,"0")}</span><strong>{item[1]}</strong><i>✓</i></label>)}</div></fieldset>
-    <div class="ap-roi-fields"><label><span>Nieuwe leads en vragen per maand</span><input name="volume" type="number" min="0" max="100000" value={config.roi.volume}/></label><label><span>Nu te laat of niet opgevolgd (%)</span><input name="issue" type="number" min="0" max="100" value={config.roi.issue}/></label><label><span>Naar proefrit of concrete afspraak (%)</span><input name="appointment" type="number" min="0" max="100" value={config.roi.appointment}/></label><label><span>Van afspraak naar klant (%)</span><input name="close" type="number" min="0" max="100" value={config.roi.close}/></label><label><span>Gemiddelde waarde per resultaat (€)</span><input name="value" type="number" min="0" max="1000000" value={config.roi.value}/></label></div>
-    <button class="ap-campaign-button is-secondary" type="reset">Herstel voorbeeld</button>
+    <fieldset><legend>{t("Welke rol wil je berekenen?")}</legend><div class="ap-roi-roles">{[["inbox","Inboxmedewerker"],["telefoniste","Telefoniste"],["leadopvolger","Leadopvolger"]].map((item,index)=><label><input type="radio" name="packageKey" value={item[0]} checked={index===0}/><span>{String(index+1).padStart(2,"0")}</span><strong>{t(item[1])}</strong><i>✓</i></label>)}</div></fieldset>
+    <div class="ap-roi-fields"><label><span>{t("Nieuwe leads en vragen per maand")}</span><input name="volume" type="number" min="0" max="100000" value={config.roi.volume}/></label><label><span>{t("Nu te laat of niet opgevolgd (%)")}</span><input name="issue" type="number" min="0" max="100" value={config.roi.issue}/></label><label><span>{t("Naar proefrit of concrete afspraak (%)")}</span><input name="appointment" type="number" min="0" max="100" value={config.roi.appointment}/></label><label><span>{t("Van afspraak naar klant (%)")}</span><input name="close" type="number" min="0" max="100" value={config.roi.close}/></label><label><span>{t("Gemiddelde waarde per resultaat (€)")}</span><input name="value" type="number" min="0" max="1000000" value={config.roi.value}/></label></div>
+    <button class="ap-campaign-button is-secondary" type="reset">{t("Herstel voorbeeld")}</button>
   </form>
-  <aside aria-live="polite"><div class="ap-campaign-kicker">Indicatief verschil per maand</div><div class="ap-roi-compare"><article><span>Zonder gekozen AI-rol</span><strong data-roi-manual>0</strong></article><article><span>Met gekozen AI-rol</span><strong data-roi-ai>0</strong></article></div><div class="ap-roi-impact"><span>Mogelijke extra waarde</span><strong data-roi-value>€ 0</strong><p><b data-roi-extra>0</b> extra vragen op tijd verwerkt, <b data-roi-actions>0</b> extra afspraken en <b data-roi-results>0</b> extra resultaten.</p></div><small>Indicatie op basis van je invoer en vaste rekenregels. Geen garantie op conversie, omzet of resultaat.</small></aside>
+  <aside aria-live="polite"><div class="ap-campaign-kicker">{t("Indicatief verschil per maand")}</div><div class="ap-roi-compare"><article><span>{t("Zonder gekozen AI-rol")}</span><strong data-roi-manual>0</strong></article><article><span>{t("Met gekozen AI-rol")}</span><strong data-roi-ai>0</strong></article></div><div class="ap-roi-impact"><span>{t("Mogelijke extra waarde")}</span><strong data-roi-value>€ 0</strong><p><b data-roi-extra>0</b> {t("extra vragen op tijd verwerkt,")} <b data-roi-actions>0</b> {t("extra afspraken en")} <b data-roi-results>0</b> {t("extra resultaten.")}</p></div><small>{t("Indicatie op basis van je invoer en vaste rekenregels. Geen garantie op conversie, omzet of resultaat.")}</small></aside>
   <script type="application/json" data-roi-defaults set:html={payload}></script>
 </div>
 
 <script>
   import { calculateRoi } from "../../lib/roi";
-  document.querySelectorAll("[data-campaign-roi]").forEach(root=>{const form=root.querySelector("form");const params=new URLSearchParams(location.search);const initialVolume=Number(params.get("volume")),initialIssue=Number(params.get("issue"));if(Number.isFinite(initialVolume)&&initialVolume>=0&&initialVolume<=100000)form.elements.volume.value=String(initialVolume);if(Number.isFinite(initialIssue)&&initialIssue>=0&&initialIssue<=100)form.elements.issue.value=String(initialIssue);const channel=params.get("channel");if(channel==="phone")form.elements.packageKey.value="telefoniste";else if(channel==="leads")form.elements.packageKey.value="leadopvolger";const value=name=>Number(form.elements[name]?.value||0);const format=(number,digits=1)=>new Intl.NumberFormat("nl-NL",{maximumFractionDigits:digits}).format(number||0);const euro=number=>new Intl.NumberFormat("nl-NL",{style:"currency",currency:"EUR",maximumFractionDigits:0}).format(number||0);const set=(selector,text)=>root.querySelector(selector).textContent=text;const update=(interaction=false)=>{const result=calculateRoi({packageKey:form.elements.packageKey.value,volume:value("volume"),issuePercent:value("issue"),peakPercent:0,appointmentPercent:value("appointment"),closePercent:value("close"),valuePerCustomer:value("value")});set("[data-roi-manual]",format(result.handledWithoutAi));set("[data-roi-ai]",format(result.handledWithAi));set("[data-roi-extra]",format(result.extraHandled));set("[data-roi-actions]",format(result.extraAppointments));set("[data-roi-results]",format(result.extraCustomers));set("[data-roi-value]",euro(result.indicativeValue));window.apCampaign?.emit?.("roi_calculated",{product:form.elements.packageKey.value,interaction})};form.querySelectorAll("input").forEach(input=>{input.addEventListener("input",()=>update(true));input.addEventListener("change",()=>update(true))});form.addEventListener("reset",()=>requestAnimationFrame(()=>update(true)));update()});
+  document.querySelectorAll("[data-campaign-roi]").forEach(root=>{const numberLocale = root.dataset.locale === "fr" ? "fr-FR" : "nl-NL";const form=root.querySelector("form");const params=new URLSearchParams(location.search);const initialVolume=Number(params.get("volume")),initialIssue=Number(params.get("issue"));if(Number.isFinite(initialVolume)&&initialVolume>=0&&initialVolume<=100000)form.elements.volume.value=String(initialVolume);if(Number.isFinite(initialIssue)&&initialIssue>=0&&initialIssue<=100)form.elements.issue.value=String(initialIssue);const channel=params.get("channel");if(channel==="phone")form.elements.packageKey.value="telefoniste";else if(channel==="leads")form.elements.packageKey.value="leadopvolger";const value=name=>Number(form.elements[name]?.value||0);const format=(number,digits=1)=>new Intl.NumberFormat(numberLocale,{maximumFractionDigits:digits}).format(number||0);const euro=number=>new Intl.NumberFormat(numberLocale,{style:"currency",currency:"EUR",maximumFractionDigits:0}).format(number||0);const set=(selector,text)=>root.querySelector(selector).textContent=text;const update=(interaction=false)=>{const result=calculateRoi({packageKey:form.elements.packageKey.value,volume:value("volume"),issuePercent:value("issue"),peakPercent:0,appointmentPercent:value("appointment"),closePercent:value("close"),valuePerCustomer:value("value")});set("[data-roi-manual]",format(result.handledWithoutAi));set("[data-roi-ai]",format(result.handledWithAi));set("[data-roi-extra]",format(result.extraHandled));set("[data-roi-actions]",format(result.extraAppointments));set("[data-roi-results]",format(result.extraCustomers));set("[data-roi-value]",euro(result.indicativeValue));window.apCampaign?.emit?.("roi_calculated",{product:form.elements.packageKey.value,interaction})};form.querySelectorAll("input").forEach(input=>{input.addEventListener("input",()=>update(true));input.addEventListener("change",()=>update(true))});form.addEventListener("reset",()=>requestAnimationFrame(()=>update(true)));update()});
 </script>
 
 <style>
