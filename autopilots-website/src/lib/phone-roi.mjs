@@ -1,13 +1,13 @@
 /** Transparent workload-value calculator. No revenue forecasts or provider calls. */
 export const phoneRoiDefaults = {
   minutes: 3000,
-  automation: 85,
+  automation: 90,
   followup: 0,
   fte: 1,
   weeklyHours: 40,
   phoneShare: 100,
   costMode: "total",
-  hourlyCost: 50,
+  hourlyCost: 20,
   grossHourly: 22,
   holiday: 0,
   employer: 0,
@@ -53,8 +53,7 @@ export const phoneRoiFirstMonthFactor = 0.5;
  * @property {string[]} missing
  * @property {number} [hourlyCost]
  * @property {number} [availableHours]
- * @property {number} [volumeHours]
- * @property {number} [baselineHours]
+ * @property {number} [fullAutomation]
  * @property {number} [automatedHours]
  * @property {number} [savedHours]
  * @property {number} [remainingHours]
@@ -67,7 +66,6 @@ export const phoneRoiFirstMonthFactor = 0.5;
  * @property {number} [usageCost]
  * @property {number} [baselineValue]
  * @property {number} [remainingValue]
- * @property {boolean} [capacityLimited]
  * @property {boolean} [followupExceedsAutomation]
  * @property {number} [aiMonthly]
  * @property {number} [monthlyNet]
@@ -128,13 +126,13 @@ export function calculatePhoneRoi(input) {
   );
   const availableHours =
     (((values.fte * values.weeklyHours * 52) / 12) * values.phoneShare) / 100;
-  const volumeHours = values.minutes / 60;
-  // Current labour value follows the entered staff capacity. Only the hours
-  // eligible for AI time savings are capped by the entered call volume.
-  const baselineHours = Math.min(volumeHours, availableHours);
-  const automatedHours = (baselineHours * values.automation) / 100;
+  // Phone work includes preparation, registration and follow-up, not only
+  // time on the phone. Billable minutes determine cost, not the workload cap.
+  // With no AI call usage we do not assume any work is automated.
+  const fullAutomation = values.minutes > 0 ? values.automation : 0;
+  const automatedHours = (availableHours * fullAutomation) / 100;
   const savedHours = Math.max(0, automatedHours - values.followup);
-  const remainingHours = baselineHours - automatedHours + values.followup;
+  const remainingHours = availableHours - automatedHours + values.followup;
   const grossCapacityValue = money(savedHours * hourlyCost);
   const netWorkloadValue = money(
     (automatedHours - values.followup) * hourlyCost,
@@ -162,14 +160,13 @@ export function calculatePhoneRoi(input) {
     missing,
     hourlyCost,
     availableHours,
-    volumeHours,
-    baselineHours,
+    fullAutomation,
     automatedHours,
     savedHours,
     remainingHours,
     grossCapacityValue,
     valuedBenefit,
-    firstMonthAutomation: values.automation * phoneRoiFirstMonthFactor,
+    firstMonthAutomation: fullAutomation * phoneRoiFirstMonthFactor,
     firstMonthSavedHours: Math.max(
       0,
       firstMonthAutomatedHours - values.followup,
@@ -179,7 +176,6 @@ export function calculatePhoneRoi(input) {
     aiMonthly,
     baselineValue: money(availableHours * hourlyCost),
     remainingValue: money(money(availableHours * hourlyCost) - valuedBenefit),
-    capacityLimited: volumeHours > availableHours + 0.000001,
     followupExceedsAutomation: values.followup > automatedHours,
   };
   if (missing.length) return common;

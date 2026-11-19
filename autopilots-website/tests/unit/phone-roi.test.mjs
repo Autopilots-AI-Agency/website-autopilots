@@ -14,8 +14,8 @@ const calc = (changes = {}) =>
     management: 100,
     ...changes,
   });
-test("Tim's EUR 1895 AI quote remains separate from EUR 4457.50 combined workload value", () => {
-  const r = calc({
+test("Tim's AI quote stays fixed; 85% and 100% apply to all telephone work", () => {
+  const input = {
     fte: 1,
     weeklyHours: 40,
     phoneShare: 100,
@@ -25,78 +25,88 @@ test("Tim's EUR 1895 AI quote remains separate from EUR 4457.50 combined workloa
     automation: 85,
     implementation: 10000,
     management: 795,
-  });
+  };
+  const r = calc(input);
   assert.equal(r.usageCost, 1100);
   assert.equal(r.aiMonthly, 1895);
   assert.equal(r.baselineValue, 4333.33);
-  assert.equal(r.valuedBenefit, 1770.83);
-  assert.equal(r.remainingValue, 2562.5);
-  assert.equal(r.withAiValue, 4457.5);
-  assert.equal(r.monthlyNet, -124.17);
+  assert.equal(r.valuedBenefit, 3683.33);
+  assert.equal(r.remainingHours, 26);
+  assert.equal(r.remainingValue, 650);
+  assert.equal(r.withAiValue, 2545);
+  assert.equal(r.monthlyNet, 1788.33);
+  assert.equal(r.firstMonthNet, -53.33);
   assert.equal(r.remainingValue + r.aiMonthly, r.withAiValue);
   assert.equal(
     Math.round((r.baselineValue - r.withAiValue) * 100),
     Math.round(r.monthlyNet * 100),
   );
   const partial = calc({ management: null });
-  assert.equal(partial.remainingValue, 1201.67);
+  assert.equal(partial.remainingValue, 728);
   assert.equal(partial.withAiValue, undefined);
+  const full = calc({ ...input, automation: 100 });
+  assert.equal(full.savedHours, full.availableHours);
+  assert.equal(full.remainingHours, 0);
+  assert.equal(full.remainingValue, 0);
+  assert.equal(full.withAiValue, full.aiMonthly);
+  assert.equal(full.monthlyNet, 2438.33);
+  assert.equal(full.firstMonthAutomation, 50);
+  assert.equal(full.firstMonthNet, 271.67);
 });
-test("requested website defaults use 100% telephone time, 85% AI and EUR 50 per hour", () => {
+test("requested website defaults use 100% telephone time, 90% AI and EUR 20 per hour", () => {
   assert.equal(phoneRoiDefaults.phoneShare, 100);
-  assert.equal(phoneRoiDefaults.automation, 85);
-  assert.equal(phoneRoiDefaults.hourlyCost, 50);
+  assert.equal(phoneRoiDefaults.automation, 90);
+  assert.equal(phoneRoiDefaults.hourlyCost, 20);
   const result = calculatePhoneRoi({
     ...phoneRoiDefaults,
     implementation: 1000,
     management: 100,
   });
-  assert.equal(result.savedHours, 42.5);
-  assert.equal(result.monthlyNet, 1155);
-  assert.equal(result.firstMonthAutomation, 42.5);
-  assert.equal(result.firstMonthSavedHours, 21.25);
-  assert.equal(result.firstMonthNet, 92.5);
-  assert.equal(result.yearOne, 11797.5);
+  assert.ok(Math.abs(result.savedHours - 156) < 1e-8);
+  assert.equal(result.monthlyNet, 2150);
+  assert.equal(result.firstMonthAutomation, 45);
+  assert.ok(Math.abs(result.firstMonthSavedHours - 78) < 1e-8);
+  assert.equal(result.firstMonthNet, 590);
+  assert.equal(result.yearOne, 23240);
   assert.equal(result.breakEvenWholeMonth, 2);
 });
 test("known capacity example includes usage, residual work and implementation once", () => {
   const r = calc();
-  assert.equal(r.baselineHours, 50);
-  assert.equal(r.savedHours, 35);
+  assert.ok(Math.abs(r.savedHours - 48.5333333333) < 1e-8);
   assert.equal(r.usageCost, 870);
   assert.equal(r.aiMonthly, 970);
-  assert.equal(r.monthlyNet, 255);
-  assert.equal(r.remainingHours, 15);
+  assert.equal(r.monthlyNet, 728.67);
+  assert.ok(Math.abs(r.remainingHours - 20.8) < 1e-8);
   assert.equal(r.baselineValue, 2426.67);
-  assert.equal(r.withAiValue, 2171.67);
-  assert.equal(r.firstMonthNet, -357.5);
-  assert.equal(r.yearOne, 1447.5);
-  assert.equal(r.followingYear, 3060);
-  assert.equal(r.breakEvenWholeMonth, 7);
+  assert.equal(r.withAiValue, 1698);
+  assert.equal(r.firstMonthNet, -120.67);
+  assert.equal(r.yearOne, 6894.7);
+  assert.equal(r.followingYear, 8744.04);
+  assert.equal(r.breakEvenWholeMonth, 3);
   assert.equal(r.cumulative[0].value, -1000);
   assert.equal(r.cumulative[12].value, r.yearOne);
 });
-test("current labour value scales with fractional FTE and contract hours without inflating AI savings", () => {
+test("phone-work value and potential time savings scale with fractional FTE and contract hours", () => {
   const input = { ...phoneRoiDefaults, implementation: 1000, management: 100 };
   const base = calculatePhoneRoi(input);
   const fractional = calculatePhoneRoi({ ...input, fte: 1.2 });
   const longerWeek = calculatePhoneRoi({ ...input, weeklyHours: 48 });
-  assert.equal(base.baselineValue, 8666.67);
+  assert.equal(base.baselineValue, 3466.67);
   assert.equal(fractional.availableHours, 208);
-  assert.equal(fractional.baselineValue, 10400);
-  assert.equal(longerWeek.baselineValue, 10400);
-  for (const result of [base, fractional, longerWeek]) {
-    assert.equal(result.savedHours, 42.5);
-    assert.equal(result.monthlyNet, 1155);
+  assert.equal(fractional.baselineValue, 4160);
+  assert.equal(longerWeek.baselineValue, 4160);
+  for (const result of [fractional, longerWeek]) {
+    assert.equal(result.savedHours, 187.2);
+    assert.equal(result.monthlyNet, 2774);
     assert.equal(result.usageCost, 870);
     assert.equal(
       Math.round((result.baselineValue - result.withAiValue) * 100),
-      115500,
+      277400,
     );
   }
   assert.equal(
     calculatePhoneRoi({ ...input, phoneShare: 50 }).baselineValue,
-    4333.33,
+    1733.33,
   );
   assert.equal(calculatePhoneRoi({ ...input, fte: 0 }).baselineValue, 0);
 });
@@ -115,7 +125,7 @@ test("known monthly AI costs remain visible even before implementation is entere
   assert.equal(partial.monthlyNet, undefined);
   assert.equal(calc({ management: null }).aiMonthly, undefined);
 });
-test("available telephone FTE hours cap savings and never double-count FTE plus minutes", () => {
+test("positive billable minutes only affect cost, and unrelated work is never included", () => {
   const r = calc({
     fte: 0.25,
     weeklyHours: 24,
@@ -123,11 +133,27 @@ test("available telephone FTE hours cap savings and never double-count FTE plus 
     minutes: 6000,
     automation: 100,
   });
-  assert.equal(r.baselineHours, 13);
+  assert.equal(r.availableHours, 13);
   assert.equal(r.savedHours, 13);
-  assert.equal(r.capacityLimited, true);
+  assert.equal(r.remainingHours, 0);
   assert.equal(r.usageCost, 1740);
+  const lowUsage = calc({
+    fte: 0.25,
+    weeklyHours: 24,
+    phoneShare: 50,
+    minutes: 300,
+    automation: 100,
+  });
+  assert.equal(lowUsage.savedHours, r.savedHours);
+  assert.equal(lowUsage.baselineValue, r.baselineValue);
+  assert.equal(lowUsage.withAiValue, 187);
   assert.equal(calc({ fte: 0 }).savedHours, 0);
+  assert.equal(calc({ phoneShare: 0 }).savedHours, 0);
+  const noUsage = calc({ minutes: 0, automation: 100 });
+  assert.equal(noUsage.savedHours, 0);
+  assert.equal(noUsage.fullAutomation, 0);
+  assert.equal(noUsage.firstMonthAutomation, 0);
+  assert.equal(noUsage.remainingHours, noUsage.availableHours);
 });
 test("cash mode only counts the explicitly avoidable share of released workload", () => {
   assert.equal(
@@ -136,19 +162,19 @@ test("cash mode only counts the explicitly avoidable share of released workload"
   );
   assert.equal(
     calc({ benefitMode: "cash", avoidedPercent: 50 }).monthlyNet,
-    -357.5,
+    -120.66,
   );
   assert.equal(
     calc({ benefitMode: "cash", avoidedPercent: 100 }).monthlyNet,
-    255,
+    728.67,
   );
 });
 test("human follow-up is retained and excessive follow-up creates a warning, not savings", () => {
-  const r = calc({ followup: 40 });
+  const r = calc({ followup: 60 });
   assert.equal(r.savedHours, 0);
-  assert.equal(r.valuedBenefit, -175);
+  assert.equal(r.valuedBenefit, -401.33);
   assert.equal(r.followupExceedsAutomation, true);
-  assert.equal(r.monthlyNet, -1145);
+  assert.equal(r.monthlyNet, -1371.33);
 });
 test("salary breakdown adds each percentage to gross hourly pay, never to the loaded rate", () => {
   const r = calc({
@@ -167,11 +193,11 @@ test("salary breakdown adds each percentage to gross hourly pay, never to the lo
   );
 });
 test("no positive advantage has no payback; zero implementation and exact month boundaries", () => {
-  assert.equal(calc({ management: 355 }).breakEvenMonths, null);
+  assert.equal(calc({ management: 828.67 }).breakEvenMonths, null);
   assert.equal(calc({ management: 1000 }).breakEvenMonths, null);
-  assert.equal(calc({ implementation: 0 }).breakEvenWholeMonth, 3);
-  assert.equal(calc({ implementation: 765 }).breakEvenWholeMonth, 6);
-  assert.equal(calc({ implementation: 152.5 }).breakEvenWholeMonth, 3);
+  assert.equal(calc({ implementation: 0 }).breakEvenWholeMonth, 2);
+  assert.equal(calc({ implementation: 608 }).breakEvenWholeMonth, 2);
+  assert.equal(calc({ implementation: 608.01 }).breakEvenWholeMonth, 3);
   assert.equal(
     calc({ minutes: 0, implementation: 0, management: 0 }).breakEvenWholeMonth,
     null,
@@ -187,7 +213,7 @@ test("reject malformed, negative, infinite, excessive and unknown-mode input", (
 
 test("first-year ROI uses all AI costs and is undefined for a zero-cost scenario", () => {
   const r = calc();
-  assert.ok(Math.abs(r.roiYearOne - (1447.5 / 12640) * 100) < 1e-9);
+  assert.ok(Math.abs(r.roiYearOne - (6894.7 / 12640) * 100) < 1e-9);
   assert.equal(
     calc({ implementation: 0, management: 0, minuteRate: 0 }).roiYearOne,
     null,
@@ -201,35 +227,40 @@ test("first-year ROI uses all AI costs and is undefined for a zero-cost scenario
 test("launch month halves automated work, keeps full costs and reconciles every chart point", () => {
   const r = calc({ followup: 2 });
   assert.equal(r.firstMonthAutomation, 35);
-  assert.equal(r.firstMonthSavedHours, 15.5);
-  assert.equal(r.firstMonthBenefit, 542.5);
-  assert.equal(r.firstMonthNet, -427.5);
+  assert.ok(Math.abs(r.firstMonthSavedHours - 22.2666666667) < 1e-8);
+  assert.equal(r.firstMonthBenefit, 779.33);
+  assert.equal(r.firstMonthNet, -190.67);
   assert.equal(r.aiMonthly, 970);
   assert.equal(r.cumulative[0].value, -1000);
-  assert.equal(r.cumulative[1].value, -1427.5);
-  assert.equal(r.cumulative[2].value, -1242.5);
+  assert.equal(r.cumulative[1].value, -1190.67);
+  assert.equal(r.cumulative[2].value, -532);
   assert.equal(r.cumulative[12].value, r.yearOne);
-  assert.equal(r.followingYear, 12 * r.monthlyNet);
+  assert.equal(r.followingYear, 7904.04);
   const m = r.breakEvenWholeMonth;
   assert.ok(r.firstMonthNet + (m - 2) * r.monthlyNet - 1000 < 0);
   assert.ok(r.firstMonthNet + (m - 1) * r.monthlyNet - 1000 >= 0);
   const cash = calc({ benefitMode: "cash", avoidedPercent: 50 });
-  assert.equal(cash.firstMonthBenefit, 306.25);
-  assert.equal(cash.firstMonthNet, -663.75);
+  assert.equal(cash.firstMonthBenefit, 424.67);
+  assert.equal(cash.firstMonthNet, -545.33);
 });
 
 test("payback within month one and zero setup use the launch month instead of the steady month", () => {
-  const base = { ...phoneRoiDefaults, management: 100 };
+  const base = {
+    weeklyHours: 30,
+    automation: 100,
+    hourlyCost: 30,
+    management: 100,
+  };
   assert.equal(
-    calculatePhoneRoi({ ...base, implementation: 92.5 }).breakEvenWholeMonth,
+    calculatePhoneRoi({ ...base, implementation: 980 }).breakEvenWholeMonth,
     1,
   );
   assert.equal(
-    calculatePhoneRoi({ ...base, implementation: 92.51 }).breakEvenWholeMonth,
+    calculatePhoneRoi({ ...base, implementation: 980.01 }).breakEvenWholeMonth,
     2,
   );
   assert.equal(
-    calculatePhoneRoi({ ...base, implementation: 46.25 }).breakEvenMonths,
+    calculatePhoneRoi({ ...base, implementation: 490 }).breakEvenMonths,
     0.5,
   );
   assert.equal(
