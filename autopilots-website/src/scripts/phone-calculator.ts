@@ -70,9 +70,13 @@ if (container) {
         messages.push(
           "Vul inrichting en maandbeheer in. Niet van toepassing? Vul 0 in.",
         );
-      if (result.capacityLimited)
+      if (
+        input.minutes === 0 &&
+        Number(input.automation) > 0 &&
+        result.availableHours! > 0
+      )
         messages.push(
-          "Tijdwinst is begrensd door jullie beschikbare telefonie-uren.",
+          "Zonder AI-belminuten rekenen we geen tijdwinst.",
         );
       if (result.followupExceedsAutomation)
         messages.push("Extra opvolging vraagt meer tijd dan de AI vrijmaakt.");
@@ -106,7 +110,7 @@ if (container) {
     for (const key of ["net", "yearOne", "followingYear"]) resultState(key);
     if (result.valid) {
       output("firstAutomation", `${number(result.firstMonthAutomation!)}%`);
-      output("fullAutomation", `${number(Number(input.automation))}%`);
+      output("fullAutomation", `${number(result.fullAutomation!)}%`);
       output("minutes", number(Number(input.minutes)));
       output(
         "minuteRate",
@@ -148,7 +152,6 @@ if (container) {
         }).format(result.hourlyCost!),
       );
       output("available", `${number(result.availableHours!)} uur`);
-      output("baseline", `${number(result.baselineHours!)} uur`);
       output("gross", currency(result.valuedBenefit!));
       output("usage", currency(result.usageCost!));
     } else
@@ -158,7 +161,6 @@ if (container) {
         "remaining",
         "hourly",
         "available",
-        "baseline",
         "gross",
         "usage",
       ])
@@ -180,12 +182,6 @@ if (container) {
           : result.breakEvenWholeMonth === 0
             ? "Direct"
             : `${number(result.breakEvenWholeMonth!)} ${result.breakEvenWholeMonth === 1 ? "maand" : "maanden"}`,
-      );
-      set(
-        "[data-payback-note]",
-        result.breakEvenWholeMonth === null
-          ? "Geen terugverdientijd met deze invoer."
-          : "Inclusief de opstartmaand, op basis van tijdwaarde.",
       );
       set(
         "[data-chart-caption]",
@@ -239,7 +235,6 @@ if (container) {
         "#rc-chart-desc",
         "Nog geen complete, geldige invoer. Er wordt geen voordeel berekend.",
       );
-      set("[data-payback-note]", "Vul de ontbrekende kosten in.");
     }
   }
   root.addEventListener("input", render);

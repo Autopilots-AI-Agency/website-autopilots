@@ -18,26 +18,26 @@ test("proposal costs remain blank until entered; known calculation is exact", as
   await expect(page.locator("#rc-implementation")).toHaveValue("");
   await expect(page.locator("#rc-minuteRate")).toHaveValue("0.29");
   await expect(page.locator("#rc-phoneShare")).toHaveValue("100");
-  await expect(page.locator("#rc-automation")).toHaveValue("85");
-  await expect(page.locator("#rc-hourlyCost")).toHaveValue("50");
+  await expect(page.locator("#rc-automation")).toHaveValue("90");
+  await expect(page.locator("#rc-hourlyCost")).toHaveValue("20");
   await page.locator("#rc-implementation").fill("1000");
   await page.locator("#rc-management").fill("100");
-  await expect(page.locator('[data-output="hours"]')).toHaveText("42,5 uur");
-  await expect(page.locator('[data-output="net"]')).toHaveText(/1.155/);
+  await expect(page.locator('[data-output="hours"]')).toHaveText("156 uur");
+  await expect(page.locator('[data-output="net"]')).toHaveText(/2.150/);
   await expect(page.locator('[data-output="payback"]')).toHaveText("2 maanden");
-  await expect(page.locator('[data-output="yearOne"]')).toHaveText(/11.798/);
+  await expect(page.locator('[data-output="yearOne"]')).toHaveText(/23.240/);
   await expect(page.locator('[data-output="followingYear"]')).toHaveText(
-    /13.860/,
+    /25.800/,
   );
   await expect(page.locator('[data-output="roi"]')).toHaveCount(0);
   await expect(page.locator("#ap-phone-calculator")).not.toContainText(
     "Rendement jaar 1",
   );
   await expect(page.locator('[data-output="firstAutomation"]')).toHaveText(
-    "42,5%",
+    "45%",
   );
   await expect(page.locator('[data-output="fullAutomation"]')).toHaveText(
-    "85%",
+    "90%",
   );
   await expect(page.locator(".rc-launch")).toContainText(
     "Volledige maandkosten",
@@ -48,52 +48,56 @@ test("proposal costs remain blank until entered; known calculation is exact", as
   );
   await expect(page.locator("#rc-status")).toBeHidden();
   await expect(page.locator("[data-chart-line]")).toHaveAttribute("d", /^M24/);
+  await page.locator("#rc-hourlyCost").fill("31");
+  await page.locator("#rc-automation").fill("72");
   await page.getByRole("button", { name: "Herstel voorbeeldinvoer" }).click();
   await expect(page.locator("#rc-implementation")).toHaveValue("");
   await expect(page.locator("#rc-phoneShare")).toHaveValue("100");
-  await expect(page.locator("#rc-automation")).toHaveValue("85");
-  await expect(page.locator("#rc-hourlyCost")).toHaveValue("50");
+  await expect(page.locator("#rc-automation")).toHaveValue("90");
+  await expect(page.locator("#rc-hourlyCost")).toHaveValue("20");
   await expect(page.locator('[data-output="net"]')).toHaveText("—");
   await expect(page.locator("[data-chart-line]")).not.toHaveAttribute("d");
 });
 
-test("current labour value follows fractional FTE and contract hours; AI savings keep their volume limit", async ({
+test("phone workload and AI time savings follow FTE, contract hours and phone share", async ({
   page,
 }) => {
   await page.locator("#rc-implementation").fill("1000");
   await page.locator("#rc-management").fill("100");
   const current = page.locator('[data-output="current"]');
   const withAi = page.locator('[data-output="with"]');
-  await expect(current).toHaveText(/8.667/);
-  await expect(withAi).toHaveText(/7.512/);
+  await expect(current).toHaveText(/3.467/);
+  await expect(withAi).toHaveText(/1.317/);
   await page.locator("#rc-fte").fill("1.2");
-  await expect(current).toHaveText(/10.400/);
-  await expect(withAi).toHaveText(/9.245/);
-  await expect(page.locator('[data-output="net"]')).toHaveText(/1.155/);
+  await expect(current).toHaveText(/4.160/);
+  await expect(withAi).toHaveText(/1.386/);
+  await expect(page.locator('[data-output="net"]')).toHaveText(/2.774/);
   await page.locator("#rc-fte").fill("1");
   await page.locator("#rc-weeklyHours").fill("48");
-  await expect(current).toHaveText(/10.400/);
-  await expect(withAi).toHaveText(/9.245/);
-  await expect(page.locator('[data-output="hours"]')).toHaveText("42,5 uur");
+  await expect(current).toHaveText(/4.160/);
+  await expect(withAi).toHaveText(/1.386/);
+  await expect(page.locator('[data-output="hours"]')).toHaveText("187,2 uur");
   await page.locator("#rc-phoneShare").fill("50");
-  await expect(current).toHaveText(/5.200/);
-  await expect(page.locator('[data-output="net"]')).toHaveText(/1.155/);
+  await expect(current).toHaveText(/2.080/);
+  await expect(page.locator('[data-output="net"]')).toHaveText(/902/);
 });
 
-test("visible usage equation and monthly breakdown follow minutes and tariff", async ({
+test("expandable AI cost breakdown follows minutes and tariff", async ({
   page,
 }) => {
   const summary = page.locator("[data-usage-summary]");
+  const monthlyCost = page.locator('.rc-summary [data-output="ai"]');
+  await expect(summary).toBeHidden();
+  await page.getByText("Bekijk de berekening", { exact: true }).click();
+  await expect(summary).toBeVisible();
   await expect(summary.locator('[data-output="minutes"]')).toHaveText("3.000");
   await expect(summary.locator('[data-output="minuteRate"]')).toHaveText(
     /0,29/,
   );
   await expect(summary.locator('[data-output="usage"]')).toHaveText(/870/);
-  await expect(summary.locator('[data-output="ai"]')).toHaveText(
-    "Nog invullen",
-  );
+  await expect(monthlyCost).toHaveText("Nog invullen");
   await page.locator("#rc-management").fill("100");
-  await expect(summary.locator('[data-output="ai"]')).toHaveText(/970/);
+  await expect(monthlyCost).toHaveText(/970/);
   await expect(page.locator('[data-output="net"]')).toHaveText("—");
   await page.locator("#rc-implementation").fill("1000");
   await page.locator("#rc-minutes").fill("4000");
@@ -101,13 +105,13 @@ test("visible usage equation and monthly breakdown follow minutes and tariff", a
   await page.locator("#rc-otherMonthly").fill("50");
   await expect(summary.locator('[data-output="minutes"]')).toHaveText("4.000");
   await expect(summary.locator('[data-output="usage"]')).toHaveText(/1.200/);
-  await expect(summary.locator('[data-output="ai"]')).toHaveText(/1.350/);
+  await expect(monthlyCost).toHaveText(/1.350/);
   await expect(page.locator(".rc-case")).toHaveCount(0);
   await expect(page.locator("fieldset legend").first()).toContainText(
     "huidige personeelskosten",
   );
 });
-test("AI price is visibly separated from remaining team work and the full-work total", async ({
+test("85% and 100% automate the full phone workload, not just the billed minutes", async ({
   page,
 }) => {
   for (const [name, value] of Object.entries({
@@ -123,35 +127,51 @@ test("AI price is visibly separated from remaining team work and the full-work t
   })) {
     await page.locator(`#rc-${name}`).fill(value);
   }
-  const cost = page.locator("[data-usage-summary]");
-  await expect(cost.getByRole("heading")).toHaveText(
-    "Jullie AI-kosten per maand",
-  );
+  const cost = page.locator(".rc-summary");
+  await expect(cost).toContainText("AI-kosten per maand");
   await expect(cost.locator('[data-output="ai"]')).toHaveText(/1.895/);
-  await expect(cost).not.toContainText("4.458");
+  await expect(cost).not.toContainText("2.545");
   const comparison = page.locator(".rc-comparison");
-  await expect(comparison).toContainText("AI + resterend teamwerk");
+  await expect(comparison).toBeHidden();
+  await page.getByText("Bekijk de berekening", { exact: true }).click();
+  await expect(comparison.getByRole("heading")).toHaveText(
+    "Telefoniewerk vanaf maand 2",
+  );
+  await expect(comparison.locator("dl > div > dt")).toHaveText([
+    "Zonder AI",
+    /Met AI · totaal\s*AI-kosten \+ resterend werk/,
+    "Waarde resterend werk",
+    "Tijdwinst per maand",
+    "Waarde van vrijgekomen tijd",
+    "Uren telefoniewerk per maand",
+    "Werkgeversuurtarief",
+  ]);
   await expect(comparison.locator('[data-output="current"]')).toHaveText(
     /4.333/,
   );
   await expect(comparison.locator('[data-output="remaining"]')).toHaveText(
-    /2.563/,
+    /650/,
   );
-  await expect(comparison.locator('[data-output="ai"]')).toHaveText(/1.895/);
-  await expect(comparison.locator('[data-output="with"]')).toHaveText(/4.458/);
-  await expect(page.locator("[data-comparison-note]")).toContainText(
-    "géén AI-factuur",
+  await expect(comparison.locator('[data-output="with"]')).toHaveText(/2.545/);
+  await expect(comparison.locator('[data-output="gross"]')).toHaveText(/3.683/);
+  await expect(page.locator('[data-output="net"]')).toHaveText(/1.788/);
+  await expect(page.locator("#rc-phoneShare-help")).toContainText(
+    "administratie",
   );
-  await expect(
-    page.locator('.rc-net-equation [data-output="gross"]'),
-  ).toHaveText(/1.771/);
-  await expect(page.locator('.rc-net-equation [data-output="ai"]')).toHaveText(
-    /1.895/,
+  await expect(page.locator("#rc-status")).toBeHidden();
+  await page.locator("#rc-automation").fill("100");
+  await expect(page.locator('[data-output="hours"]')).toHaveText("173,3 uur");
+  await expect(page.locator('[data-output="firstAutomation"]')).toHaveText(
+    "50%",
   );
-  await expect(page.locator('[data-output="net"]')).toHaveText(/-124/);
-  await expect(page.locator("#rc-status")).toContainText(
-    "AI-kosten zijn hoger",
+  await expect(comparison.locator('[data-output="remaining"]')).toHaveText(
+    /^€\s*0$/,
   );
+  await expect(comparison.locator('[data-output="with"]')).toHaveText(/1.895/);
+  await expect(page.locator('[data-output="net"]')).toHaveText(/2.438/);
+  await page.locator("#rc-minutes").fill("3000");
+  await expect(page.locator('[data-output="hours"]')).toHaveText("173,3 uur");
+  await expect(comparison.locator('[data-output="with"]')).toHaveText(/1.455/);
   await page.locator("#rc-hourlyCost").fill("-1");
   await expect(comparison.locator('[data-output="remaining"]')).toHaveText("—");
   await expect(comparison.locator('[data-output="with"]')).toHaveText("—");
@@ -170,12 +190,12 @@ test("one overview follows earlier answers without another benefit choice", asyn
   ).toHaveCount(0);
   await page.locator("#rc-implementation").fill("1000");
   await page.locator("#rc-management").fill("100");
-  await expect(page.locator('[data-output="net"]')).toHaveText(/1.155/);
+  await expect(page.locator('[data-output="net"]')).toHaveText(/2.150/);
   await page.locator("#rc-automation").fill("60");
-  await expect(page.locator('[data-output="hours"]')).toHaveText("30 uur");
-  await expect(page.locator('[data-output="net"]')).toHaveText(/530/);
-  await expect(page.locator('[data-output="payback"]')).toHaveText("4 maanden");
-  await expect(page.locator('[data-output="yearOne"]')).toHaveText(/4.610/);
+  await expect(page.locator('[data-output="hours"]')).toHaveText("104 uur");
+  await expect(page.locator('[data-output="net"]')).toHaveText(/1.110/);
+  await expect(page.locator('[data-output="payback"]')).toHaveText("2 maanden");
+  await expect(page.locator('[data-output="yearOne"]')).toHaveText(/11.280/);
   await expect(page.locator('[data-output="firstAutomation"]')).toHaveText(
     "30%",
   );
@@ -189,7 +209,7 @@ test("one overview follows earlier answers without another benefit choice", asyn
   await page.locator("#rc-employer").fill("20");
   await page.locator("#rc-pension").fill("5");
   await page.locator("#rc-otherHourly").fill("2");
-  await expect(page.locator('[data-output="net"]')).toHaveText(/174/);
+  await expect(page.locator('[data-output="net"]')).toHaveText(/2.996/);
   await page.locator("#rc-minutes").fill("-1");
   await expect(page.locator("#rc-minutes")).toHaveAttribute(
     "aria-invalid",
@@ -209,11 +229,14 @@ test("removed follow-up input and positive, negative, zero and incomplete result
   await page.locator("#rc-management").fill("100");
   await expect(net).toHaveAttribute("data-result-state", "positive");
   await expect(net).toHaveCSS("color", "rgb(158, 215, 182)");
-  await page.locator("#rc-management").fill("2000");
+  await page.locator("#rc-management").fill("2753");
   await expect(net).toHaveAttribute("data-result-state", "negative");
   await expect(net).toHaveCSS("color", "rgb(255, 170, 161)");
-  await expect(net).toHaveText(/-.*745/);
-  await page.locator("#rc-management").fill("1255");
+  await expect(net).toHaveText(/-.*503/);
+  await expect(page.locator("#rc-status")).toContainText(
+    "AI-kosten zijn hoger",
+  );
+  await page.locator("#rc-management").fill("2250");
   await expect(net).toHaveAttribute("data-result-state", "neutral");
   await expect(net).toHaveText(/0/);
   await page.locator("#rc-management").fill("");
@@ -235,16 +258,16 @@ test("yearly value colors follow their own positive, negative and neutral outcom
   for (const key of ["yearOne", "followingYear"])
     await check(key, "positive", "rgb(158, 215, 182)");
   // A high setup cost makes year one negative without changing the following years.
-  await page.locator("#rc-implementation").fill("20000");
+  await page.locator("#rc-implementation").fill("100000");
   await check("yearOne", "negative", "rgb(255, 170, 161)");
   await check("followingYear", "positive", "rgb(158, 215, 182)");
-  await page.locator("#rc-management").fill("2000");
+  await page.locator("#rc-management").fill("2753");
   for (const key of ["yearOne", "followingYear"])
     await check(key, "negative", "rgb(255, 170, 161)");
-  await page.locator("#rc-implementation").fill("12797.5");
+  await page.locator("#rc-implementation").fill("24240");
   await page.locator("#rc-management").fill("100");
   await check("yearOne", "neutral");
-  await page.locator("#rc-management").fill("1255");
+  await page.locator("#rc-management").fill("2250");
   await check("followingYear", "neutral");
   await page.locator("#rc-management").fill("");
   for (const key of ["yearOne", "followingYear"]) {
@@ -261,6 +284,10 @@ test("zero and extreme workload produce no fictitious return", async ({
   await page.locator("#rc-minutes").fill("0");
   await expect(page.locator('[data-output="hours"]')).toHaveText("0 uur");
   await expect(page.locator('[data-output="payback"]')).toHaveText("Geen");
+  await expect(page.locator('[data-output="fullAutomation"]')).toHaveText("0%");
+  await expect(page.locator("#rc-status")).toContainText(
+    "Zonder AI-belminuten",
+  );
   await expect(page.locator('[data-output="roi"]')).toHaveCount(0);
   await page.locator("#rc-minutes").fill("6000");
   await page.locator("#rc-fte").fill("0.25");
@@ -268,7 +295,9 @@ test("zero and extreme workload produce no fictitious return", async ({
   await page.locator("#rc-phoneShare").fill("50");
   await page.locator("#rc-automation").fill("100");
   await expect(page.locator('[data-output="hours"]')).toHaveText("13 uur");
-  await expect(page.locator("#rc-status")).toContainText("begrensd");
+  await expect(page.locator("#rc-status")).toContainText(
+    "AI-kosten zijn hoger",
+  );
 });
 
 test("calculator never sends entered data and scan starts at branch", async ({
@@ -301,11 +330,15 @@ test("concise copy retains cost and launch assumptions without repeated group in
   expect(
     (await note.innerText()).trim().split(/\s+/).length,
   ).toBeLessThanOrEqual(24);
-  await expect(page.locator(".rc-featured")).toContainText(
-    "geen automatische loonkostenbesparing",
+  await expect(page.locator(".rc-summary-note")).toContainText(
+    "verlaagt niet automatisch jullie loonkosten",
   );
   const assumptions = page.locator("details.rc-assumptions");
   await expect(assumptions).not.toHaveAttribute("open");
+  await expect(page.locator(".rc-results [data-output]:visible")).toHaveCount(
+    3,
+  );
+  await expect(page.locator(".rc-summary dd")).toHaveCount(3);
   await expect(assumptions).toContainText(
     "Alle ingevoerde minuten worden betaald",
   );

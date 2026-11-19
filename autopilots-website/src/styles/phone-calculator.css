@@ -305,6 +305,7 @@
   text-underline-offset: 4px;
 }
 #ap-phone-calculator .rc-results {
+  scroll-margin-top: 104px;
   padding: 27px;
   border: 1px solid #b88a5e55;
   border-radius: 22px;
@@ -316,12 +317,6 @@
   font-size: 29px;
   margin-top: 13px;
 }
-#ap-phone-calculator .rc-result-heading > p:last-child {
-  font-size: 12px;
-  line-height: 1.7;
-  color: var(--rc-muted);
-  margin-top: 12px;
-}
 #ap-phone-calculator .rc-notice {
   padding: 13px 15px;
   background: #d6e4e80a;
@@ -332,176 +327,65 @@
   font-size: 11px;
   line-height: 1.75;
 }
-#ap-phone-calculator .rc-launch {
-  margin-top: 22px;
-  padding: 20px 0 4px;
-  border-top: 1px solid var(--rc-border);
-}
-#ap-phone-calculator .rc-launch h3 {
-  font-size: 19px;
-  line-height: 1.3;
-  margin: 0 0 10px;
-}
-#ap-phone-calculator .rc-launch > p:not(.rc-eyebrow) {
-  font-size: 11px;
-  line-height: 1.7;
-  color: var(--rc-muted);
-}
-#ap-phone-calculator .rc-launch dl {
-  margin: 16px 0 12px;
-  display: grid;
-  gap: 12px;
-  font-size: 11px;
-}
-#ap-phone-calculator .rc-launch dl > div {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 14px;
-}
-#ap-phone-calculator .rc-launch dt {
-  color: var(--rc-muted);
-}
-#ap-phone-calculator .rc-launch dd {
-  margin: 0;
-  color: var(--rc-ink);
-  font-weight: 700;
-  white-space: nowrap;
-}
 #ap-phone-calculator .rc-notice[data-error="true"] {
   color: #ffd2c5;
   border-color: #f1a18b;
 }
-#ap-phone-calculator .rc-metrics {
-  margin-top: 8px;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 0 22px;
+#ap-phone-calculator .rc-summary {
+  margin: 20px 0 0;
 }
-#ap-phone-calculator .rc-metrics .rc-featured {
-  grid-column: 1/-1;
-  grid-row: 1;
-}
-#ap-phone-calculator .rc-usage-summary {
-  margin-top: 23px;
-  padding: 18px;
-  background: #0c2028;
-  border: 1px solid var(--rc-border);
-  border-radius: 13px;
-}
-#ap-phone-calculator .rc-usage-summary h3 {
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1.6;
-  color: var(--rc-muted);
-}
-#ap-phone-calculator .rc-usage-equation {
+#ap-phone-calculator .rc-summary > div,
+#ap-phone-calculator .rc-detail-group dl > div {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px 16px;
-  margin-top: 12px;
-  font-size: 13px;
-  line-height: 1.7;
+  gap: 12px;
 }
-#ap-phone-calculator .rc-usage-equation b {
-  font-weight: 600;
-  color: var(--rc-ink);
-}
-#ap-phone-calculator .rc-usage-equation strong {
-  font-size: 21px;
-  color: var(--rc-bronze);
-  white-space: nowrap;
-}
-#ap-phone-calculator .rc-usage-summary dl {
-  margin: 14px 0 0;
-}
-#ap-phone-calculator .rc-usage-summary dl > div {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 16px;
-  padding-block: 9px;
-  font-size: 11px;
-  color: var(--rc-muted);
-}
-#ap-phone-calculator .rc-usage-summary dt {
-  font-weight: 400;
-  line-height: 1.7;
-}
-#ap-phone-calculator .rc-usage-summary dd {
-  margin: 0;
-  color: var(--rc-ink);
-  white-space: nowrap;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
-#ap-phone-calculator .rc-usage-summary .rc-cost-total {
+#ap-phone-calculator .rc-summary > div {
+  padding-block: 13px;
   border-top: 1px solid var(--rc-border);
-  margin-top: 6px;
-  padding-top: 13px;
 }
-#ap-phone-calculator .rc-cost-total dt,
-#ap-phone-calculator .rc-cost-total dd {
-  font-weight: 700;
-  color: var(--rc-bronze);
-}
-#ap-phone-calculator .rc-cost-total dd {
-  font-size: 23px;
-}
-#ap-phone-calculator .rc-net-equation {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px 12px;
-  margin-top: 12px;
+#ap-phone-calculator .rc-summary dt,
+#ap-phone-calculator .rc-detail-group dt {
+  min-width: 0;
   font-size: 14px;
-  line-height: 1.7;
-  color: var(--rc-muted);
+  line-height: 1.45;
 }
-#ap-phone-calculator .rc-net-equation b {
-  color: var(--rc-ink);
+#ap-phone-calculator .rc-summary dt {
   font-weight: 650;
 }
-#ap-phone-calculator .rc-usage-summary .rc-help {
-  font-size: 10px;
-}
-#ap-phone-calculator .rc-metrics article {
-  padding: 22px 0;
-  border-bottom: 1px solid var(--rc-border);
-}
-#ap-phone-calculator .rc-metrics article > span {
+#ap-phone-calculator .rc-summary small,
+#ap-phone-calculator .rc-detail-group small {
   display: block;
+  margin-top: 3px;
+  color: var(--rc-muted);
   font-size: 12px;
-  color: var(--rc-muted);
-  line-height: 1.6;
+  font-weight: 400;
 }
-#ap-phone-calculator .rc-metrics strong {
-  display: block;
-  font-family: Syne, "Public Sans", sans-serif;
-  font-size: 29px;
-  font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -0.04em;
-  margin-top: 7px;
-  font-variant-numeric: tabular-nums;
+#ap-phone-calculator .rc-summary dd,
+#ap-phone-calculator .rc-detail-group dd {
+  margin: 0;
+  flex: 0 0 auto;
+  max-width: 58%;
+  text-align: right;
   overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
 }
-#ap-phone-calculator .rc-metrics strong small {
-  font:
-    500 15px "Public Sans",
-    sans-serif;
-  letter-spacing: 0;
+#ap-phone-calculator .rc-summary dd {
+  font-family: Syne, "Public Sans", sans-serif;
+  font-size: clamp(19px, 2.6vw, 24px);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
 }
-#ap-phone-calculator .rc-metrics article > small {
-  display: block;
-  font-size: 10px;
+#ap-phone-calculator .rc-summary-cost dd {
+  color: var(--rc-bronze);
+}
+#ap-phone-calculator .rc-summary-note {
+  margin-top: 1px;
   color: var(--rc-muted);
-  line-height: 1.7;
-  margin-top: 8px;
-}
-#ap-phone-calculator .rc-metrics .rc-featured strong {
-  font-size: 43px;
+  font-size: 12px;
+  line-height: 1.55;
 }
 #ap-phone-calculator [data-output][data-result-state="positive"] {
   color: #9ed7b6;
@@ -512,110 +396,42 @@
 #ap-phone-calculator [data-output][data-result-state="neutral"] {
   color: var(--rc-ink);
 }
-#ap-phone-calculator .rc-comparison {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 13px;
-  margin-top: 24px;
-}
-#ap-phone-calculator .rc-comparison article {
-  min-width: 0;
-  background: #0c202880;
-  padding: 15px 12px;
-  border: 1px solid var(--rc-border);
-  border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-}
-#ap-phone-calculator .rc-comparison h3 {
-  font-size: 16px;
-  line-height: 1.5;
-  color: #e7e9e5;
-}
-#ap-phone-calculator .rc-comparison p {
-  font-size: 14px;
-  color: var(--rc-muted);
-  line-height: 1.6;
-  margin: 7px 0 10px;
-  min-height: 32px;
-}
-#ap-phone-calculator .rc-comparison strong {
-  font-size: 20px;
-  font-weight: 650;
-  letter-spacing: -0.03em;
-  display: block;
-  overflow-wrap: anywhere;
-}
-#ap-phone-calculator .rc-comparison small {
-  display: block;
-  font-size: 10px;
-  color: var(--rc-muted);
-  margin-top: 5px;
-}
-#ap-phone-calculator .rc-comparison dl {
-  margin: 12px 0 18px;
-  font-size: 14px;
-  line-height: 1.6;
-}
-#ap-phone-calculator .rc-comparison dl > div {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 12px;
-  padding-block: 5px;
-}
-#ap-phone-calculator .rc-comparison dt {
-  color: var(--rc-muted);
-}
-#ap-phone-calculator .rc-comparison dd {
-  margin: 0;
-  font-weight: 600;
-  white-space: nowrap;
-}
-#ap-phone-calculator .rc-comparison-total {
-  margin-top: auto;
-  border-top: 1px solid var(--rc-border);
-  padding-top: 12px;
-}
-#ap-phone-calculator .rc-comparison-total > span {
-  font-size: 14px;
-  color: var(--rc-muted);
-}
 #ap-phone-calculator .rc-assumptions {
   border-top: 1px solid var(--rc-border);
-  margin-top: 22px;
-  padding-top: 18px;
+  margin-top: 14px;
   color: var(--rc-muted);
-  font-size: 11px;
-  line-height: 1.8;
+  font-size: 13px;
+  line-height: 1.6;
 }
 #ap-phone-calculator .rc-assumptions summary {
   cursor: pointer;
-  color: #e3dfd6;
+  color: var(--rc-ink);
+  font-size: 14px;
+  font-weight: 650;
+  padding-block: 12px;
+}
+#ap-phone-calculator .rc-detail-group {
+  padding-block: 13px;
+  border-top: 1px solid var(--rc-border);
+}
+#ap-phone-calculator .rc-detail-group h3 {
+  color: var(--rc-ink);
+  font-size: 14px;
+  line-height: 1.45;
+}
+#ap-phone-calculator .rc-detail-group dl {
+  margin: 6px 0 0;
+}
+#ap-phone-calculator .rc-detail-group dl > div {
+  padding-block: 5px;
+}
+#ap-phone-calculator .rc-detail-group dd {
+  color: var(--rc-ink);
+  font-size: 14px;
   font-weight: 600;
-  padding: 3px 0;
-}
-#ap-phone-calculator .rc-assumptions dl {
-  margin: 16px 0;
-}
-#ap-phone-calculator .rc-assumptions dl > div {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 12px;
-  padding: 7px 0;
-  border-bottom: 1px solid #ffffff0c;
-}
-#ap-phone-calculator .rc-assumptions dt {
-  font-weight: 400;
-}
-#ap-phone-calculator .rc-assumptions dd {
-  margin: 0;
-  color: #f1c9a4;
-  white-space: nowrap;
 }
 #ap-phone-calculator .rc-assumptions p {
-  margin-top: 12px;
+  margin-top: 6px;
 }
 #ap-phone-calculator .rc-impact {
   padding-block: 78px 64px;
@@ -841,21 +657,6 @@
   #ap-phone-calculator .rc-results {
     padding: 26px;
   }
-  #ap-phone-calculator .rc-metrics {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0 22px;
-  }
-  #ap-phone-calculator .rc-metrics .rc-featured {
-    grid-column: 1/-1;
-    grid-row: 1;
-  }
-  #ap-phone-calculator .rc-metrics strong {
-    font-size: 29px;
-  }
-  #ap-phone-calculator .rc-comparison p {
-    min-height: 0;
-  }
   #ap-phone-calculator .rc-impact-head {
     align-items: start;
   }
@@ -969,40 +770,6 @@
   }
   #ap-phone-calculator .rc-result-heading h2 {
     font-size: 27px;
-  }
-  #ap-phone-calculator .rc-metrics {
-    gap: 0 16px;
-  }
-  #ap-phone-calculator .rc-metrics article > span {
-    font-size: 10px;
-  }
-  #ap-phone-calculator .rc-metrics .rc-featured strong {
-    font-size: 36px;
-  }
-  #ap-phone-calculator .rc-metrics strong {
-    font-size: 25px;
-  }
-  #ap-phone-calculator .rc-metrics article {
-    padding-block: 19px;
-  }
-  #ap-phone-calculator .rc-metrics article > small {
-    font-size: 9px;
-  }
-  #ap-phone-calculator .rc-comparison {
-    gap: 10px;
-    grid-template-columns: 1fr;
-  }
-  #ap-phone-calculator .rc-comparison article {
-    padding: 13px 10px;
-  }
-  #ap-phone-calculator .rc-comparison h3 {
-    font-size: 16px;
-  }
-  #ap-phone-calculator .rc-comparison p {
-    min-height: 32px;
-  }
-  #ap-phone-calculator .rc-comparison strong {
-    font-size: 18px;
   }
   #ap-phone-calculator .rc-impact {
     padding-block: 43px 35px;
