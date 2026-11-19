@@ -76,8 +76,10 @@ if (container) {
         );
       if (result.followupExceedsAutomation)
         messages.push("Extra opvolging vraagt meer tijd dan de AI vrijmaakt.");
-      if (result.complete && result.monthlyNet! <= 0)
-        messages.push("Geen positief netto voordeel met deze invoer.");
+      if (result.complete && result.monthlyNet! < 0)
+        messages.push(
+          "De AI-kosten zijn hoger dan de waarde van de berekende tijdwinst.",
+        );
     }
     clearTimeout(announcement);
     announcement = setTimeout(() => {
@@ -136,6 +138,7 @@ if (container) {
       );
       output("hours", `${number(result.savedHours!)} uur`);
       output("current", currency(result.baselineValue!));
+      output("remaining", currency(result.remainingValue!));
       output(
         "hourly",
         new Intl.NumberFormat("nl-NL", {
@@ -152,6 +155,7 @@ if (container) {
       for (const key of [
         "hours",
         "current",
+        "remaining",
         "hourly",
         "available",
         "baseline",

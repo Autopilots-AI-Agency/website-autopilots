@@ -66,6 +66,7 @@ export const phoneRoiFirstMonthFactor = 0.5;
  * @property {number} [firstMonthNet]
  * @property {number} [usageCost]
  * @property {number} [baselineValue]
+ * @property {number} [remainingValue]
  * @property {boolean} [capacityLimited]
  * @property {boolean} [followupExceedsAutomation]
  * @property {number} [aiMonthly]
@@ -177,6 +178,7 @@ export function calculatePhoneRoi(input) {
     usageCost,
     aiMonthly,
     baselineValue: money(availableHours * hourlyCost),
+    remainingValue: money(money(availableHours * hourlyCost) - valuedBenefit),
     capacityLimited: volumeHours > availableHours + 0.000001,
     followupExceedsAutomation: values.followup > automatedHours,
   };
