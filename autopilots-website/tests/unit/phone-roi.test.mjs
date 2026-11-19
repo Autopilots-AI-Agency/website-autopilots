@@ -14,6 +14,34 @@ const calc = (changes = {}) =>
     management: 100,
     ...changes,
   });
+test("Tim's EUR 1895 AI quote remains separate from EUR 4457.50 combined workload value", () => {
+  const r = calc({
+    fte: 1,
+    weeklyHours: 40,
+    phoneShare: 100,
+    hourlyCost: 25,
+    minutes: 5000,
+    minuteRate: 0.22,
+    automation: 85,
+    implementation: 10000,
+    management: 795,
+  });
+  assert.equal(r.usageCost, 1100);
+  assert.equal(r.aiMonthly, 1895);
+  assert.equal(r.baselineValue, 4333.33);
+  assert.equal(r.valuedBenefit, 1770.83);
+  assert.equal(r.remainingValue, 2562.5);
+  assert.equal(r.withAiValue, 4457.5);
+  assert.equal(r.monthlyNet, -124.17);
+  assert.equal(r.remainingValue + r.aiMonthly, r.withAiValue);
+  assert.equal(
+    Math.round((r.baselineValue - r.withAiValue) * 100),
+    Math.round(r.monthlyNet * 100),
+  );
+  const partial = calc({ management: null });
+  assert.equal(partial.remainingValue, 1201.67);
+  assert.equal(partial.withAiValue, undefined);
+});
 test("requested website defaults use 100% telephone time, 85% AI and EUR 50 per hour", () => {
   assert.equal(phoneRoiDefaults.phoneShare, 100);
   assert.equal(phoneRoiDefaults.automation, 85);

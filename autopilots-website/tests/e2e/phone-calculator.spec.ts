@@ -107,6 +107,55 @@ test("visible usage equation and monthly breakdown follow minutes and tariff", a
     "huidige personeelskosten",
   );
 });
+test("AI price is visibly separated from remaining team work and the full-work total", async ({
+  page,
+}) => {
+  for (const [name, value] of Object.entries({
+    fte: "1",
+    weeklyHours: "40",
+    phoneShare: "100",
+    hourlyCost: "25",
+    minutes: "5000",
+    minuteRate: "0.22",
+    automation: "85",
+    implementation: "10000",
+    management: "795",
+  })) {
+    await page.locator(`#rc-${name}`).fill(value);
+  }
+  const cost = page.locator("[data-usage-summary]");
+  await expect(cost.getByRole("heading")).toHaveText(
+    "Jullie AI-kosten per maand",
+  );
+  await expect(cost.locator('[data-output="ai"]')).toHaveText(/1.895/);
+  await expect(cost).not.toContainText("4.458");
+  const comparison = page.locator(".rc-comparison");
+  await expect(comparison).toContainText("AI + resterend teamwerk");
+  await expect(comparison.locator('[data-output="current"]')).toHaveText(
+    /4.333/,
+  );
+  await expect(comparison.locator('[data-output="remaining"]')).toHaveText(
+    /2.563/,
+  );
+  await expect(comparison.locator('[data-output="ai"]')).toHaveText(/1.895/);
+  await expect(comparison.locator('[data-output="with"]')).toHaveText(/4.458/);
+  await expect(page.locator("[data-comparison-note]")).toContainText(
+    "géén AI-factuur",
+  );
+  await expect(
+    page.locator('.rc-net-equation [data-output="gross"]'),
+  ).toHaveText(/1.771/);
+  await expect(page.locator('.rc-net-equation [data-output="ai"]')).toHaveText(
+    /1.895/,
+  );
+  await expect(page.locator('[data-output="net"]')).toHaveText(/-124/);
+  await expect(page.locator("#rc-status")).toContainText(
+    "AI-kosten zijn hoger",
+  );
+  await page.locator("#rc-hourlyCost").fill("-1");
+  await expect(comparison.locator('[data-output="remaining"]')).toHaveText("—");
+  await expect(comparison.locator('[data-output="with"]')).toHaveText("—");
+});
 
 test("one overview follows earlier answers without another benefit choice", async ({
   page,

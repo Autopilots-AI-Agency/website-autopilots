@@ -4,6 +4,8 @@ Status: publicatie door Tim aangevraagd op 18 november 2026. Releasebranch: `cod
 
 ## Invoer en privacy
 
+Verduidelijking op 19 november: het AI-maandbedrag wordt nadrukkelijk gescheiden van de arbeidswaarde van resterend teamwerk. De kaart ‘AI + resterend teamwerk’ toont beide bedragen apart, met daaronder hun totaal; dat totaal is geen AI-factuur. De netto tijdwaarde toont de aftrekking vrijgespeelde arbeidswaarde minus AI-kosten. Rekenbasis, begrenzing, eerste maand en terugverdientijd veranderen niet. Bij 5.000 minuten à € 0,22, € 795 beheer, 1 FTE/40 uur/100% telefonie, € 25/uur en 85% afhandeling: AI € 1.895, vrijgemaakte arbeidswaarde € 1.770,83, resterend werk € 2.562,50, totaal € 4.457,50, netto € -124,17. Geen automatische volledige FTE-vervanging. De UI rondt bedragen af op hele euro’s.
+
 De door Tim gekozen voorbeeldinvoer is 3.000 factureerbare minuten, 85% zelfstandige afhandeling, 1 FTE, 40 uur/week, 100% telefonie en € 50 volledig werkgeversuurtarief. Dit zijn aanpasbare aannames, geen gemeten klantresultaten. Het door Tim opgegeven minuuttarief is € 0,29. Implementatie en maandbeheer beginnen leeg: de bezoeker vult het eigen voorstel in. Expliciete nulbedragen zijn toegestaan. De resetknop herstelt ook deze drie gekozen standaardwaarden.
 
 De calculator verwerkt alleen getallen in de browser. Geen API, formuliertoezending, opslag, trackingevent met invoer of externe rekenservice. De bestaande algemene toestemmingsbanner blijft behouden.
