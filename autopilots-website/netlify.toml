@@ -13,6 +13,14 @@
 [functions]
   node_bundler = "esbuild"
 
+[context.production.environment]
+  VITE_AUTOPILOTS_SCAN_BRIDGE = "true"
+
+[[redirects]]
+  from = "/ai-scan-runtime/health"
+  to = "https://backend-b05f7168-a0d2-46df-a25a-818ec27416d6.rumata.dev/backend-api/b05f7168-a0d2-46df-a25a-818ec27416d6/health"
+  status = 200
+
 [[headers]]
   for = "/*"
   [headers.values]

@@ -1,6 +1,11 @@
 import { analyze, websiteUrl } from "./_shared/website-analysis.mjs";
 import { signAssessment } from "./_shared/assessment-token.mjs";
 import { reserveAnalysis } from "./_shared/analysis-quota.mjs";
+import {
+  requestRumataScan,
+  rumataIntake,
+  validRumataScan,
+} from "./_shared/rumata-analysis.mjs";
 import { scanLocale, scanLocales, scanError } from "./_shared/intake-i18n.mjs";
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), {
@@ -22,17 +27,53 @@ export default async (request, context) => {
         : body,
       status,
     );
-  if (request.method !== "POST")
+  const url = new URL(request.url);
+  const browserCapability = request.headers.get("x-scan-token");
+  const useRumata = request.method === "GET" || Boolean(browserCapability);
+  if (request.method !== "POST" && request.method !== "GET")
     return reply({ message: "Methode niet toegestaan." }, 405);
   if (
     process.env.AUTOPILOTS_ANALYSIS_ENABLED !== "true" ||
-    !process.env.OPENAI_API_KEY ||
+    (!useRumata && !process.env.OPENAI_API_KEY) ||
     !process.env.ANALYSIS_SIGNING_SECRET
   )
     return reply({ message: "De analyse is nog niet beschikbaar." }, 503);
   const origin = request.headers.get("origin");
-  if (origin && origin !== new URL(request.url).origin)
+  if (origin && origin !== url.origin)
     return reply({ message: "Ongeldige herkomst." }, 403);
+  if (request.method === "GET") {
+    const id = url.searchParams.get("id");
+    if (!validRumataScan(id, browserCapability))
+      return reply({ message: "Ongeldige aanvraag." }, 400);
+    try {
+      const { status, scan } = await requestRumataScan({
+        id,
+        token: browserCapability,
+      });
+      if (!scan) return reply({ message: "Analyse niet beschikbaar." }, status);
+      if (scan.state !== "succeeded") return reply({ state: scan.state });
+      const token = signAssessment({
+        id,
+        locale: scan.locale,
+        report: scan.result,
+        answers: scan.answers,
+        sources: scan.sources,
+        website: scan.sources?.[0] || "",
+        generatedAt: scan.generatedAt,
+        assessmentMode: scan.assessmentMode,
+        expires: Date.now() + 60 * 60 * 1000,
+      });
+      return reply({ ...scan, token });
+    } catch {
+      return reply(
+        {
+          message:
+            "De scan is tijdelijk niet beschikbaar. Probeer later opnieuw.",
+        },
+        503,
+      );
+    }
+  }
   let input;
   try {
     const body = await request.text();
@@ -48,6 +89,8 @@ export default async (request, context) => {
     return reply({ message: "Ongeldige aanvraag." }, 400);
   }
   const id = request.headers.get("idempotency-key");
+  if (useRumata && !validRumataScan(id, browserCapability))
+    return reply({ message: "Ongeldige aanvraag." }, 400);
   if (input.locale !== undefined && !scanLocales.includes(input.locale))
     return reply({ message: "Ongeldige aanvraag." }, 422);
   locale = scanLocale(input.locale ?? locale);
@@ -92,6 +135,7 @@ export default async (request, context) => {
       clean[key] = input.answers[key];
   }
   if (input.uploadText) {
+    if (useRumata) return reply({ message: "Ongeldige aanvraag." }, 422);
     if (typeof input.uploadText !== "string" || input.uploadText.length > 50000)
       return reply(
         { message: "Gebruik een tekstbestand van maximaal 50 KB." },
@@ -110,6 +154,7 @@ export default async (request, context) => {
     uploadText: input.uploadText,
     noWebsite: input.noWebsite === true,
     answers: clean,
+    ...(useRumata ? { capability: browserCapability } : {}),
   });
   const existing = cache.get(id);
   if (existing) {
@@ -160,6 +205,16 @@ export default async (request, context) => {
           },
           429,
         );
+      if (useRumata) {
+        const { status, scan } = await requestRumataScan({
+          id,
+          token: browserCapability,
+          intake: rumataIntake(input, clean),
+        });
+        return scan
+          ? reply(scan, status)
+          : reply({ message: "Analyse niet beschikbaar." }, status);
+      }
       const result = await analyze({ ...input, answers: clean });
       const token = signAssessment({
         id,

@@ -1,22 +1,45 @@
 import { ensureBackendReady } from './backend-readiness.mjs';
 const base=(import.meta.env.VITE_AUTOPILOTS_SCAN_URL||'').replace(/\/$/,'');
-export const usingRumata=Boolean(base);
+const bridge = !base && import.meta.env.VITE_AUTOPILOTS_SCAN_BRIDGE === 'true';
+const bridgePath = '/.netlify/functions/website-analysis';
+export const usingRumata = Boolean(base) || bridge;
 const legacyMailRequests=new WeakMap<object,string>();
 export async function consultantRequest(action:string,input:Record<string,unknown>={}) {
  await ensureBackendReady(base);
- const response=await fetch(base?base+'/consultant':'/.netlify/functions/consultant',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action,input}),signal:AbortSignal.timeout(25000)});
+ const { scanId, ...legacyInput } = input;
+ const response = await fetch(base ? base + '/consultant' : '/.netlify/functions/consultant', {
+  method: 'POST',
+  headers: { 'content-type': 'application/json' },
+  body: JSON.stringify({ action, input: base ? input : legacyInput }),
+  signal: AbortSignal.timeout(25000),
+ });
  const data=await response.json();if(!response.ok||!data.ok)throw new Error(data.error||'failed');return data;
 }
 interface ScanReference {id:string;token:string}
 export async function scanRequest(path:string,token:string,body?:unknown,id?:string) {
- await ensureBackendReady(base);
- const response=await fetch(base+path,{method:body!==undefined?'POST':'GET',headers:{...(body!==undefined?{'content-type':'application/json'}:{}),'x-scan-token':token,'x-autopilots-locale':document.documentElement.lang.split('-')[0],...(id?{'idempotency-key':id}:{})},...(body!==undefined?{body:JSON.stringify(body)}:{}),signal:AbortSignal.timeout(25000)});
+ await ensureBackendReady(bridge ? '/ai-scan-runtime' : base);
+ const submitting = body !== undefined;
+ const pollId = encodeURIComponent(path.slice('/scans/'.length));
+ const endpoint = bridge
+  ? submitting ? bridgePath : `${bridgePath}?id=${pollId}`
+  : base + path;
+ const response = await fetch(endpoint, {
+  method: submitting ? 'POST' : 'GET',
+  headers: {
+   ...(submitting ? { 'content-type': 'application/json' } : {}),
+   'x-scan-token': token,
+   'x-autopilots-locale': document.documentElement.lang.split('-')[0],
+   ...(id ? { 'idempotency-key': id } : {}),
+  },
+  ...(submitting ? { body: JSON.stringify(body) } : {}),
+  signal: AbortSignal.timeout(25000),
+ });
  const data=await response.json();
  if(!response.ok)throw new Error('De analyse is niet beschikbaar. Probeer opnieuw.');
  return data;
 }
 export async function createScan(input:{locale:string;website:string;noWebsite:boolean;answers:Record<string,string|string[]>;consent:boolean},id:string){
- if(!base){
+ if(!usingRumata){
   const response=await fetch('/.netlify/functions/website-analysis',{method:'POST',headers:{'Content-Type':'application/json','X-Autopilots-Locale':input.locale,'Idempotency-Key':id},body:JSON.stringify(input)});
   const data=await response.json();if(!response.ok)throw new Error(data.message||'De analyse is niet beschikbaar.');return data;
  }
@@ -25,14 +48,30 @@ export async function createScan(input:{locale:string;website:string;noWebsite:b
  const ref={id,token};
  sessionStorage.setItem('autopilots-scan-reference',JSON.stringify({...ref,locale:input.locale}));
  const a=input.answers;
- await scanRequest('/scans',token,{...input,industry:String(a.sector||''),goal:Array.isArray(a.goal)?a.goal.join('; '):String(a.goal||''),focusRoute:String(a.focusRoute||'combined'),systems:Array.isArray(a.systems)?a.systems.join('; '):String(a.systems||''),channels:Array.isArray(a.channels)?a.channels:[]},id);
+ const request = bridge ? input : {
+  ...input,
+  industry: String(a.sector || ''),
+  goal: Array.isArray(a.goal) ? a.goal.join('; ') : String(a.goal || ''),
+  focusRoute: String(a.focusRoute || 'combined'),
+  systems: Array.isArray(a.systems) ? a.systems.join('; ') : String(a.systems || ''),
+  channels: Array.isArray(a.channels) ? a.channels : [],
+ };
+ await scanRequest('/scans',token,request,id);
  return await awaitScan(ref);
 }
 export async function awaitScan(ref:ScanReference){
  const until=Date.now()+150000;
  while(Date.now()<until){
  const data=await scanRequest('/scans/'+ref.id,ref.token);
- if(data.state==='succeeded')return {report:data.result,sources:data.sources||[],generatedAt:data.generatedAt,token:ref.token,scanId:ref.id,assessmentMode:data.assessmentMode,answers:data.answers};
+ if(data.state==='succeeded')return {
+  report: data.result,
+  sources: data.sources || [],
+  generatedAt: data.generatedAt,
+  token: bridge ? data.token : ref.token,
+  scanId: ref.id,
+  assessmentMode: data.assessmentMode,
+  answers: data.answers,
+ };
  if(['failed','cancelled','invalid_result','submission_unknown'].includes(data.state))throw new Error('De analyse is niet beschikbaar. Probeer opnieuw.');
  await new Promise(resolve=>setTimeout(resolve,2000));
  }

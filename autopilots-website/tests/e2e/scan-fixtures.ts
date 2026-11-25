@@ -1,11 +1,14 @@
 import type { Page, Route } from "@playwright/test";
 
 export async function mockBackendHealth(page: Page) {
-  await page.route("**/backend-api/*/health", (route) => {
-    if (route.request().method() !== "GET" || route.request().postData())
-      throw new Error("Readiness must remain a bodyless read-only probe");
-    return route.fulfill({ json: { status: "ready" } });
-  });
+  await page.route(
+    /\/(?:backend-api\/[^/]+|ai-scan-runtime)\/health$/,
+    (route) => {
+      if (route.request().method() !== "GET" || route.request().postData())
+        throw new Error("Readiness must remain a bodyless read-only probe");
+      return route.fulfill({ json: { status: "ready" } });
+    },
+  );
 }
 
 // Synthetic HTTP receipts only; this adapter exercises both real client transports.
@@ -13,8 +16,16 @@ export async function mockScan(page: Page, handler: (route: Route) => unknown) {
   await mockBackendHealth(page);
   let report: any;
   let input: any;
-  await page.route("**/.netlify/functions/website-analysis", handler);
-  await page.route("**/backend-api/*/scans", async (route) => {
+  const result = () => ({
+    state: "succeeded",
+    result: report.report,
+    sources: report.sources,
+    generatedAt: report.generatedAt,
+    assessmentMode: "INTAKE_ONLY",
+    answers: input.answers,
+    token: report.token,
+  });
+  const submit = async (route: Route) => {
     input = route.request().postDataJSON();
     const proxy = new Proxy(route, {
       get(target, property) {
@@ -34,23 +45,35 @@ export async function mockScan(page: Page, handler: (route: Route) => unknown) {
       },
     });
     await handler(proxy);
-  });
+  };
+  await page.route(
+    /\/\.netlify\/functions\/website-analysis(?:\?|$)/,
+    async (route) => {
+      const request = route.request();
+      if (!request.headers()["x-scan-token"]) return handler(route);
+      if (!/^[A-Za-z0-9_-]{43}$/.test(request.headers()["x-scan-token"]))
+        throw new Error("The production bridge requires a visitor capability");
+      if (request.method() === "GET") {
+        if (
+          request.postData() ||
+          !new URL(request.url()).searchParams.get("id")
+        )
+          throw new Error(
+            "The production bridge must poll the submitted scan ID",
+          );
+        return route.fulfill({ json: result() });
+      }
+      return submit(route);
+    },
+  );
+  await page.route("**/backend-api/*/scans", submit);
   await page.route("**/backend-api/*/scans/*", (route) => {
     if (route.request().method() !== "GET") return route.fallback();
     if (route.request().headers()["content-type"])
       throw new Error(
         "Bodyless scan polling must not send a JSON content-type",
       );
-    return route.fulfill({
-      json: {
-        state: "succeeded",
-        result: report.report,
-        sources: report.sources,
-        generatedAt: report.generatedAt,
-        assessmentMode: "INTAKE_ONLY",
-        answers: input.answers,
-      },
-    });
+    return route.fulfill({ json: result() });
   });
 }
 
