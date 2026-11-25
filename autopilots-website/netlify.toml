@@ -14,7 +14,7 @@
   node_bundler = "esbuild"
 
 [context.production.environment]
-  VITE_AUTOPILOTS_SCAN_BRIDGE = "true"
+  PUBLIC_AUTOPILOTS_SCAN_BRIDGE = "true"
 
 [[redirects]]
   from = "/ai-scan-runtime/health"

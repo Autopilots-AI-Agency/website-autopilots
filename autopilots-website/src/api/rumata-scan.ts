@@ -1,6 +1,6 @@
 import { ensureBackendReady } from './backend-readiness.mjs';
 const base=(import.meta.env.VITE_AUTOPILOTS_SCAN_URL||'').replace(/\/$/,'');
-const bridge = !base && import.meta.env.VITE_AUTOPILOTS_SCAN_BRIDGE === 'true';
+const bridge = !base && import.meta.env.PUBLIC_AUTOPILOTS_SCAN_BRIDGE === 'true';
 const bridgePath = '/.netlify/functions/website-analysis';
 export const usingRumata = Boolean(base) || bridge;
 const legacyMailRequests=new WeakMap<object,string>();

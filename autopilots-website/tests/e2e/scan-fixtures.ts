@@ -50,7 +50,11 @@ export async function mockScan(page: Page, handler: (route: Route) => unknown) {
     /\/\.netlify\/functions\/website-analysis(?:\?|$)/,
     async (route) => {
       const request = route.request();
-      if (!request.headers()["x-scan-token"]) return handler(route);
+    if (!request.headers()["x-scan-token"]) {
+      if (process.env.PUBLIC_AUTOPILOTS_SCAN_BRIDGE === "true")
+        throw new Error("The production build unexpectedly used the legacy scan");
+      return handler(route);
+    }
       if (!/^[A-Za-z0-9_-]{43}$/.test(request.headers()["x-scan-token"]))
         throw new Error("The production bridge requires a visitor capability");
       if (request.method() === "GET") {
