@@ -1,7 +1,9 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { extname, join, normalize, relative, resolve } from "node:path";
+import { siteOrigin } from "../src/config/site-origin.mjs";
 
 const root = resolve("dist");
+const origin = siteOrigin(process.env.PUBLIC_SITE_URL);
 const htmlFiles = [];
 const walk = (directory) => {
   for (const entry of readdirSync(directory, { withFileTypes: true })) {
@@ -32,7 +34,7 @@ const decodeHtml = (value) =>
     .replaceAll("&lt;", "<")
     .replaceAll("&gt;", ">");
 const shareImagePath = "/og/autopilots-social-20261118.png";
-const shareImageUrl = `https://auto-pilots.io${shareImagePath}`;
+const shareImageUrl = `${origin}${shareImagePath}`;
 const shareImage = readFileSync(join(root, shareImagePath));
 if (
   shareImage.subarray(0, 8).toString("hex") !== "89504e470d0a1a0a" ||
@@ -95,9 +97,9 @@ for (const file of htmlFiles) {
       )
         errors.push(`${page}: onjuiste of dubbele deelmetadata ${key}`);
     }
-    if (!canonical?.startsWith("https://auto-pilots.io/"))
+    if (!canonical?.startsWith(`${origin}/`))
       errors.push(
-        `${page}: canonical moet een absolute publieke HTTPS-URL zijn`,
+        `${page}: canonical moet een absolute HTTPS-URL op ${origin} zijn`,
       );
     if (head.includes("/og/autopilots-og.svg"))
       errors.push(`${page}: verouderde SVG in metadata of structured data`);
@@ -154,10 +156,7 @@ for (const file of htmlFiles) {
     if (checked.has(key)) continue;
     checked.add(key);
     const clean = href.split("#")[0].split("?")[0];
-    const sourceUrl = new URL(
-      page,
-      process.env.PUBLIC_SITE_URL || "https://auto-pilots.io",
-    );
+    const sourceUrl = new URL(page, origin);
     const targetUrl = new URL(clean, sourceUrl);
     let target = join(root, decodeURIComponent(targetUrl.pathname));
     if (targetUrl.pathname.endsWith("/")) target = join(target, "index.html");
